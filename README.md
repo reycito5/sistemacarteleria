@@ -21,7 +21,8 @@ Construcción por fases (sección 31 del prompt maestro).
 | 5 | Reproductor (kiosco, autoplay, repetición) | ✅ consume manifiesto real |
 | 6 | Sincronización por hora oficial | ✅ motor + pruebas |
 | 7 | Offline (caché local del manifiesto) | ✅ caché local + respaldo anterior |
-| 8 | Monitoreo (heartbeats) | ✅ API + centro de pantallas |
+| 8 | Monitoreo (heartbeats) | ✅ centro de pantallas en vivo + dashboard real |
+| — | Calendario de programación | ✅ programaciones por días/franja/prioridad |
 | 9 | Emergencias | ✅ vista + prioridad + activación desde el panel |
 | 10 | Integración portal de oferta | ⏳ |
 | 11 | Instalación mini PC | ✅ documentación |

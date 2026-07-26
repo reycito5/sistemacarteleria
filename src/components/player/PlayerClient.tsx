@@ -32,6 +32,17 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
   const manifestRef = useRef<PlayerManifest | null>(null);
   const indexRef = useRef(0);
 
+  // Identidad de la pantalla: prop de la URL o la guardada al activarse.
+  const [resolvedCode] = useState<string | undefined>(() => {
+    if (screenCode) return screenCode;
+    if (typeof window === "undefined") return undefined;
+    try {
+      return window.localStorage.getItem("sicd.screen.code") ?? undefined;
+    } catch {
+      return undefined;
+    }
+  });
+
   // Offline-first: parte de la caché local y refresca el manifiesto de red.
   useEffect(() => {
     let cancelled = false;
@@ -90,7 +101,7 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
 
   // Heartbeats de estado (sección 27).
   const sendHeartbeat = useCallback(async () => {
-    if (!screenCode) return;
+    if (!resolvedCode) return;
     const m = manifestRef.current;
     const current = m?.items[indexRef.current];
     try {
@@ -98,7 +109,7 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          screenCode,
+          screenCode: resolvedCode,
           currentContentId: current?.contentItemId ?? null,
           currentPositionSeconds: 0,
           playlistVersion: m?.version ?? null,
@@ -108,14 +119,14 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
     } catch {
       // La pérdida de red no debe afectar la reproducción.
     }
-  }, [screenCode, online]);
+  }, [resolvedCode, online]);
 
   useEffect(() => {
-    if (!screenCode) return;
+    if (!resolvedCode) return;
     sendHeartbeat();
     const id = setInterval(sendHeartbeat, HEARTBEAT_MS);
     return () => clearInterval(id);
-  }, [screenCode, sendHeartbeat]);
+  }, [resolvedCode, sendHeartbeat]);
 
   // --- Render -------------------------------------------------------------
   // 1) Emergencia: prioridad absoluta.

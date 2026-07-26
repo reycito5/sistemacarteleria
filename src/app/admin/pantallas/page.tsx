@@ -1,5 +1,6 @@
 import { listScreensStatus, type ScreenStatusView } from "@/lib/data/admin";
 import { AutoRefresh } from "@/components/admin/AutoRefresh";
+import { ActivateScreenForm } from "./ActivateScreenForm";
 
 export const dynamic = "force-dynamic";
 
@@ -92,6 +93,12 @@ export default async function PantallasPage() {
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {screens !== null && (
+        <div className="mt-8 max-w-2xl">
+          <ActivateScreenForm />
         </div>
       )}
     </div>

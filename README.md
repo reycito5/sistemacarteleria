@@ -23,6 +23,7 @@ Construcción por fases (sección 31 del prompt maestro).
 | 7 | Offline (caché local del manifiesto) | ✅ caché local + respaldo anterior |
 | 8 | Monitoreo (heartbeats) | ✅ centro de pantallas en vivo + dashboard real |
 | — | Calendario de programación | ✅ programaciones por días/franja/prioridad |
+| 11 | Activación de pantallas por código | ✅ código temporal + confirmación en panel |
 | 9 | Emergencias | ✅ vista + prioridad + activación desde el panel |
 | 10 | Integración portal de oferta | ⏳ |
 | 11 | Instalación mini PC | ✅ documentación |
@@ -65,6 +66,7 @@ Rutas principales:
 | ---- | ----------- |
 | `/` | Portada y accesos |
 | `/player?screen=REC-01` | Reproductor a pantalla completa (modo kiosco) |
+| `/player/activar` | Activación de la pantalla por código (sección 22) |
 | `/preview` | Galería de plantillas institucionales |
 | `/admin` | Panel de administración |
 | `/admin/login` | Acceso |

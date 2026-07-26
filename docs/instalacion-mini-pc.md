@@ -16,16 +16,25 @@ maestro). **Un mini PC por televisor.**
 - Navegador Chrome / Chromium actualizado.
 - Zona horaria correcta (crítico para la sincronización por hora oficial).
 
-## 3. URL del reproductor
+## 3. Activación de la pantalla (primera vez)
 
-Cada pantalla abre la ruta del reproductor con su código:
+La primera vez, cada mini PC abre la ruta de activación:
 
 ```
-https://carteleria-posgrado.vercel.app/player
+https://carteleria-posgrado.vercel.app/player/activar
 ```
 
-En la fase de activación (sección 22) cada pantalla obtiene su token individual
-y queda asociada al grupo `PANTALLAS GENERALES POSGRADO`.
+La pantalla mostrará un **código de 6 dígitos**. En el panel, vaya a
+**Centro de pantallas → Activar una pantalla**, introduzca el código y asigne
+nombre y ubicación. La pantalla queda asociada al grupo
+`PANTALLAS GENERALES POSGRADO`, guarda su identidad y arranca sola en:
+
+```
+https://carteleria-posgrado.vercel.app/player?screen=SU-CODIGO
+```
+
+Tras la activación, el reproductor recuerda su identidad; en arranques
+posteriores basta con abrir `/player`.
 
 ## 4. Modo kiosco a pantalla completa
 

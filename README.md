@@ -17,10 +17,10 @@ Construcción por fases (sección 31 del prompt maestro).
 | 1 | Base técnica: Next.js 16 + Supabase + Auth + RLS + diseño V11.6 | ✅ |
 | 2 | Biblioteca multimedia | 🚧 andamiaje |
 | 3 | Plantillas (vistas 1–16) | ✅ plantillas base 1–5, 14, 16 + respaldo |
-| 4 | Playlist general | 🚧 andamiaje |
-| 5 | Reproductor (kiosco, autoplay, repetición) | ✅ demo sincronizado |
+| 4 | Playlist general | 🚧 pipeline y manifiesto listos; editor UI pendiente |
+| 5 | Reproductor (kiosco, autoplay, repetición) | ✅ consume manifiesto real |
 | 6 | Sincronización por hora oficial | ✅ motor + pruebas |
-| 7 | Offline (Service Worker / IndexedDB) | ⏳ |
+| 7 | Offline (caché local del manifiesto) | ✅ caché local + respaldo anterior |
 | 8 | Monitoreo (heartbeats) | ✅ API + centro de pantallas |
 | 9 | Emergencias | ✅ vista + prioridad |
 | 10 | Integración portal de oferta | ⏳ |
@@ -62,10 +62,11 @@ Rutas principales:
 | Ruta | Descripción |
 | ---- | ----------- |
 | `/` | Portada y accesos |
-| `/player` | Reproductor a pantalla completa (modo kiosco) |
+| `/player?screen=REC-01` | Reproductor a pantalla completa (modo kiosco) |
 | `/preview` | Galería de plantillas institucionales |
 | `/admin` | Panel de administración |
 | `/admin/login` | Acceso |
+| `/api/player/manifest` | Manifiesto de la playlist activa para las pantallas (GET) |
 | `/api/heartbeat` | Telemetría de reproductores (POST) |
 
 ---

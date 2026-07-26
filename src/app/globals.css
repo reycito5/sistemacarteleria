@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/*
+ * ============================================================================
+ * LÍNEA GRÁFICA INSTITUCIONAL V11.6 — SICD UABJB POSGRADO
+ * ----------------------------------------------------------------------------
+ * Estos tokens son la fuente única de verdad del sistema visual institucional.
+ * La cabecera, el pie, los colores y la tipografía están BLOQUEADOS: no deben
+ * modificarse desde el panel de administración ni desde plantillas.
+ * ============================================================================
+ */
+
+@theme {
+  /* Paleta institucional (bloqueada) */
+  --color-inst-blue: #0505fd;
+  --color-inst-blue-top: #03037a;
+  --color-inst-blue-bottom: #02024d;
+  --color-inst-red: #c52322;
+  --color-inst-gold: #d4a017;
+  --color-inst-gold-strong: #f2b705;
+  --color-inst-white: #ffffff;
+
+  /* Neutros de apoyo (solo UI de panel, no institucionales) */
+  --color-panel-bg: #f4f5f7;
+  --color-panel-border: #d9dce3;
+  --color-panel-ink: #1b1f2a;
+  --color-panel-muted: #5b6172;
+
+  /* Tipografía institucional */
+  --font-sans: var(--font-inst-sans), "Inter", "Helvetica Neue", Arial,
+    sans-serif;
+
+  /* Radios y filetes */
+  --radius-inst: 4px;
+}
+
+:root {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #1b1f2a;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Filete dorado fino institucional */
+.inst-rule-gold {
+  height: 3px;
+  background: var(--color-inst-gold);
+}
+
+/*
+ * Contenedor de reproductor a pantalla completa (modo kiosco).
+ * El lienzo institucional trabaja siempre sobre 1920x1080 (16:9) y se escala
+ * proporcionalmente al televisor real.
+ */
+.kiosk-root {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  overflow: hidden;
+}

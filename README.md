@@ -15,7 +15,7 @@ Construcción por fases (sección 31 del prompt maestro).
 | Fase | Descripción | Estado |
 | ---- | ----------- | ------ |
 | 1 | Base técnica: Next.js 16 + Supabase + Auth + RLS + diseño V11.6 | ✅ |
-| 2 | Biblioteca multimedia | 🚧 andamiaje |
+| 2 | Biblioteca multimedia | ✅ subida a Storage + validación + biblioteca |
 | 3 | Plantillas (vistas 1–16) | ✅ plantillas base 1–5, 14, 16 + respaldo |
 | 4 | Playlist general | ✅ editor + orden + duraciones + publicación real |
 | 5 | Reproductor (kiosco, autoplay, repetición) | ✅ consume manifiesto real |
@@ -52,6 +52,7 @@ cp .env.example .env.local   # y complete los valores de Supabase
 #    supabase/migrations/0001_init_schema.sql
 #    supabase/migrations/0002_rls_policies.sql
 #    supabase/migrations/0003_seed.sql
+#    supabase/migrations/0004_storage.sql
 
 # 4. Desarrollo
 npm run dev

@@ -1,10 +1,55 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
+import { publicEnv } from "@/lib/env";
 import type {
   ContentItemRow,
+  MediaAssetRow,
   PlaylistRow,
   PlaylistItemRow,
 } from "@/lib/supabase/database.types";
+
+/** URL pública de un archivo del bucket 'media'. */
+export function publicMediaUrl(storagePath: string): string {
+  const base = publicEnv.NEXT_PUBLIC_SUPABASE_URL;
+  return `${base}/storage/v1/object/public/media/${storagePath}`;
+}
+
+export interface MediaAssetSummary {
+  id: string;
+  title: string;
+  type: MediaAssetRow["type"];
+  status: MediaAssetRow["status"];
+  url: string;
+  thumbnailUrl: string | null;
+  width: number | null;
+  height: number | null;
+  durationSeconds: number | null;
+  fileSize: number | null;
+}
+
+/** Biblioteca multimedia, más reciente primero. */
+export async function listMediaAssets(): Promise<MediaAssetSummary[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("media_assets")
+    .select(
+      "id, title, type, status, storage_path, thumbnail_path, width, height, duration_seconds, file_size",
+    )
+    .order("created_at", { ascending: false });
+
+  return (data ?? []).map((a) => ({
+    id: a.id,
+    title: a.title,
+    type: a.type,
+    status: a.status,
+    url: publicMediaUrl(a.storage_path),
+    thumbnailUrl: a.thumbnail_path ? publicMediaUrl(a.thumbnail_path) : null,
+    width: a.width,
+    height: a.height,
+    durationSeconds: a.duration_seconds,
+    fileSize: a.file_size,
+  }));
+}
 
 export interface ContentItemSummary {
   id: string;

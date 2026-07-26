@@ -16,7 +16,7 @@ Construcción por fases (sección 31 del prompt maestro).
 | ---- | ----------- | ------ |
 | 1 | Base técnica: Next.js 16 + Supabase + Auth + RLS + diseño V11.6 | ✅ |
 | 2 | Biblioteca multimedia | ✅ subida a Storage + validación + biblioteca |
-| 3 | Plantillas (vistas 1–16) | ✅ plantillas base 1–5, 14, 16 + respaldo |
+| 3 | Plantillas (vistas 1–16) | ✅ plantillas + editor de contenido con vista previa |
 | 4 | Playlist general | ✅ editor + orden + duraciones + publicación real |
 | 5 | Reproductor (kiosco, autoplay, repetición) | ✅ consume manifiesto real |
 | 6 | Sincronización por hora oficial | ✅ motor + pruebas |

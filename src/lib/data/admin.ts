@@ -101,6 +101,53 @@ export async function listContentItems(): Promise<ContentItemSummary[]> {
   });
 }
 
+export interface ContentItemFull {
+  id: string;
+  title: string;
+  kind: string;
+  contentData: Record<string, unknown>;
+}
+
+/** Un contenido para edición, con su content_data completo. */
+export async function getContentItem(id: string): Promise<ContentItemFull | null> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("content_items")
+    .select("id, title, content_data")
+    .eq("id", id)
+    .maybeSingle();
+  if (!data) return null;
+  const cd = (data.content_data ?? {}) as Record<string, unknown>;
+  return {
+    id: data.id,
+    title: data.title,
+    kind: (cd.kind as string) ?? "",
+    contentData: cd,
+  };
+}
+
+/** Opciones de la biblioteca para el selector de medios (id, título, url, tipo). */
+export interface MediaOption {
+  id: string;
+  title: string;
+  url: string;
+  type: MediaAssetRow["type"];
+}
+
+export async function listMediaOptions(): Promise<MediaOption[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("media_assets")
+    .select("id, title, type, storage_path")
+    .order("created_at", { ascending: false });
+  return (data ?? []).map((a) => ({
+    id: a.id,
+    title: a.title,
+    type: a.type,
+    url: publicMediaUrl(a.storage_path),
+  }));
+}
+
 /** Todas las playlists, más reciente primero. */
 export async function listPlaylists(): Promise<PlaylistRow[]> {
   const supabase = await createClient();

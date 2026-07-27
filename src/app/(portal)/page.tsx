@@ -99,10 +99,9 @@ export default function PortalHome() {
           </h1>
 
           <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-white/75 sm:text-base">
-            Cuatro televisores del {INSTITUTION.vicerrectorate.toLowerCase()}{" "}
-            muestran la misma oferta académica, agenda y comunicados, con la
-            línea gráfica institucional bloqueada y administrados desde un solo
-            panel web.
+            Cuatro televisores del Vicerrectorado de Posgrado muestran la misma
+            oferta académica, agenda y comunicados, con la línea gráfica
+            institucional bloqueada y administrados desde un solo panel web.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-3">

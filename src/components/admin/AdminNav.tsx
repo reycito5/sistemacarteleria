@@ -47,7 +47,7 @@ export function AdminNav() {
         <span className="block text-[10px] font-bold tracking-[0.22em] text-inst-gold">
           {INSTITUTION.systemName}
         </span>
-        <span className="mt-0.5 block truncate text-[15px] font-black leading-tight text-inst-white">
+        <span className="mt-0.5 block text-[14px] font-black leading-tight text-inst-white">
           {INSTITUTION.commercialName}
         </span>
       </span>

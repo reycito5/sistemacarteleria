@@ -31,9 +31,8 @@ export function PortalFooter() {
               </div>
             </div>
             <p className="mt-4 max-w-sm text-[13px] leading-relaxed text-white/65">
-              Sistema institucional de cartelería digital del{" "}
-              {INSTITUTION.vicerrectorate.toLowerCase()} de la{" "}
-              {INSTITUTION.university}.
+              Sistema institucional de cartelería digital del Vicerrectorado de
+              Posgrado de la Universidad Autónoma del Beni «José Ballivián».
             </p>
           </div>
 

@@ -78,9 +78,9 @@ export default function PantallasPublicPage() {
             Cuatro pantallas, una sola programación
           </h1>
           <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-white/75">
-            Las cuatro pantallas del {INSTITUTION.vicerrectorate.toLowerCase()}{" "}
-            pertenecen a un único grupo y emiten exactamente el mismo contenido,
-            en el mismo orden y al mismo tiempo.
+            Las cuatro pantallas del Vicerrectorado de Posgrado pertenecen a un
+            único grupo y emiten exactamente el mismo contenido, en el mismo
+            orden y al mismo tiempo.
           </p>
         </div>
       </section>

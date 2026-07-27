@@ -8,6 +8,7 @@ const MODULES = [
   { href: "/admin/playlist", label: "Playlist general" },
   { href: "/admin/calendario", label: "Calendario" },
   { href: "/admin/comunicados", label: "Comunicados urgentes" },
+  { href: "/admin/oferta", label: "Portal de oferta" },
   { href: "/admin/pantallas", label: "Centro de pantallas" },
 ];
 

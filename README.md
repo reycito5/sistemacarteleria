@@ -25,7 +25,7 @@ Construcción por fases (sección 31 del prompt maestro).
 | — | Calendario de programación | ✅ programaciones por días/franja/prioridad |
 | 11 | Activación de pantallas por código | ✅ código temporal + confirmación en panel |
 | 9 | Emergencias | ✅ vista + prioridad + activación desde el panel |
-| 10 | Integración portal de oferta | ⏳ |
+| 10 | Integración portal de oferta | ✅ importación de programas → plantillas |
 | 11 | Instalación mini PC | ✅ documentación |
 
 ---

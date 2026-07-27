@@ -45,15 +45,18 @@ export function ScreenFrame({
   }, []);
 
   return (
-    <div ref={hostRef} className="grid h-full w-full place-items-center bg-black">
+    <div ref={hostRef} className="absolute inset-0 overflow-hidden bg-black">
       <div
         style={{
           width: CANVAS.width,
           height: CANVAS.height,
-          transform: `scale(${scale})`,
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: `translate(-50%, -50%) scale(${scale})`,
           transformOrigin: "center",
         }}
-        className="relative flex flex-col overflow-hidden bg-inst-white"
+        className="flex flex-col overflow-hidden bg-inst-white"
       >
         {!bare && <InstitutionalHeader />}
         <main className="relative flex-1 overflow-hidden">{children}</main>

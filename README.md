@@ -29,6 +29,19 @@ Construcción por fases (sección 31 del prompt maestro).
 | 10 | Integración portal de oferta | ✅ importación de programas → plantillas |
 | 11 | Instalación mini PC | ✅ documentación |
 
+### Endurecimiento (sección 29)
+
+| Área | Estado |
+| ---- | ------ |
+| URLs firmadas para Storage (bucket privado) | ✅ firma en servidor + caché SW por ruta |
+| Token de dispositivo verificado en heartbeats | ✅ hash SHA-256, comparación en tiempo constante |
+| Verificación en dos pasos (TOTP) | ✅ enrolamiento + reto en el acceso |
+| Vistas del catálogo | ✅ 12 vistas + editores; subtítulos (.vtt) |
+
+Pendiente (infraestructura externa, ver [`docs/despliegue.md`](docs/despliegue.md)):
+conexión a un Supabase de producción, despliegue en Vercel y validación E2E
+con las cuatro pantallas físicas (sección 32).
+
 ---
 
 ## Tecnologías
@@ -102,3 +115,8 @@ de encendido. Diferencia esperada entre pantallas: 1–3 s.
 ## Instalación de los mini PC
 
 Ver [`docs/instalacion-mini-pc.md`](docs/instalacion-mini-pc.md).
+
+## Despliegue en producción
+
+Ver [`docs/despliegue.md`](docs/despliegue.md): Supabase, migraciones, variables,
+Vercel y la lista de pruebas obligatorias (sección 32).

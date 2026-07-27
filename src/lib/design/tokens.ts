@@ -10,12 +10,15 @@
  */
 
 export const INSTITUTIONAL_COLORS = {
-  blue: "#0505FD",
-  blueTop: "#03037A",
-  blueBottom: "#02024D",
-  red: "#C52322",
-  gold: "#D4A017",
-  goldStrong: "#F2B705",
+  blue: "#1D4ED8",
+  blueTop: "#10205F",
+  blueBottom: "#0A1440",
+  red: "#C8102E",
+  redStrong: "#E11D38",
+  // Dorado retirado: se mantienen las claves como alias del acento rojo para
+  // no romper referencias heredadas mientras se migran las vistas.
+  gold: "#C8102E",
+  goldStrong: "#E11D38",
   white: "#FFFFFF",
 } as const;
 

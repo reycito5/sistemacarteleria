@@ -17,13 +17,16 @@
  */
 
 @theme {
-  /* --- Paleta institucional (bloqueada) ----------------------------------- */
-  --color-inst-blue: #0505fd;
-  --color-inst-blue-top: #03037a;
-  --color-inst-blue-bottom: #02024d;
-  --color-inst-red: #c52322;
-  --color-inst-gold: #d4a017;
-  --color-inst-gold-strong: #f2b705;
+  /* --- Paleta institucional (editorial: azul marino · rojo · blanco) ------ */
+  --color-inst-blue: #1d4ed8;
+  --color-inst-blue-top: #10205f;
+  --color-inst-blue-bottom: #0a1440;
+  --color-inst-red: #c8102e;
+  --color-inst-red-strong: #e11d38;
+  /* El dorado queda retirado. Los tokens `gold` se mantienen como alias del
+   * acento rojo para no romper usos heredados mientras se migran las vistas. */
+  --color-inst-gold: #c8102e;
+  --color-inst-gold-strong: #e11d38;
   --color-inst-white: #ffffff;
 
   /* --- Superficies de la interfaz de gestión ------------------------------ */
@@ -92,10 +95,16 @@ body {
   border-radius: 4px;
 }
 
-/* Filete dorado fino institucional */
+/* Filete de acento institucional (rojo). Nombre heredado por compatibilidad. */
 .inst-rule-gold {
   height: 3px;
-  background: var(--color-inst-gold);
+  background: var(--color-inst-red);
+}
+
+/* Filete de acento fino para cabeceras y tarjetas. */
+.inst-rule {
+  height: 3px;
+  background: var(--color-inst-red);
 }
 
 /*
@@ -117,28 +126,28 @@ body {
 /* Degradado institucional para cabeceras y barras destacadas. */
 .ui-gradient-inst {
   background: linear-gradient(
-    135deg,
+    160deg,
     var(--color-inst-blue-bottom) 0%,
-    var(--color-inst-blue-top) 55%,
-    #0a0aa8 100%
+    var(--color-inst-blue-top) 60%,
+    #1a2f7a 100%
   );
 }
 
-/* Trama diagonal sutil sobre el degradado institucional. */
+/* Trama con destellos azul y rojo sobre el fondo marino (editorial). */
 .ui-gradient-inst-mesh {
   background:
     radial-gradient(
-      ellipse 80% 60% at 85% 0%,
-      rgb(5 5 253 / 0.45),
+      ellipse 70% 60% at 88% -5%,
+      rgb(37 99 235 / 0.55),
       transparent 60%
     ),
     radial-gradient(
-      ellipse 60% 50% at 0% 100%,
-      rgb(212 160 23 / 0.18),
-      transparent 65%
+      ellipse 55% 55% at 5% 105%,
+      rgb(200 16 46 / 0.35),
+      transparent 62%
     ),
     linear-gradient(
-      135deg,
+      155deg,
       var(--color-inst-blue-bottom) 0%,
       var(--color-inst-blue-top) 100%
     );

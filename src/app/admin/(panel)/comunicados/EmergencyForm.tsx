@@ -2,10 +2,16 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { CheckCircle2, Siren } from "lucide-react";
 import {
   activateEmergency,
   deactivateEmergency,
 } from "@/lib/actions/emergency";
+import { Button } from "@/components/ui/Button";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { Field, Input, Select, Textarea } from "@/components/ui/Field";
+import { Alert } from "@/components/ui/Alert";
+import { Badge } from "@/components/ui/Badge";
 
 export interface ActiveEmergency {
   id: string;
@@ -22,12 +28,19 @@ export function EmergencyForm({ active }: { active: ActiveEmergency | null }) {
   const [title, setTitle] = useState("");
   const [message, setMessage] = useState("");
   const [instructions, setInstructions] = useState("");
-  const [severity, setSeverity] = useState<"alerta" | "urgente" | "critico">("urgente");
+  const [severity, setSeverity] = useState<"alerta" | "urgente" | "critico">(
+    "urgente",
+  );
 
   const submit = () => {
     setError(null);
     startTransition(async () => {
-      const res = await activateEmergency({ title, message, instructions, severity });
+      const res = await activateEmergency({
+        title,
+        message,
+        instructions,
+        severity,
+      });
       if (!res.ok) setError(res.error);
       else {
         setTitle("");
@@ -50,102 +63,138 @@ export function EmergencyForm({ active }: { active: ActiveEmergency | null }) {
 
   if (active) {
     return (
-      <div
-        className="rounded-md border-l-4 bg-white p-5"
-        style={{ borderColor: "var(--color-inst-red)" }}
-      >
-        <p className="text-sm font-bold text-inst-red">
-          ⚠ Emergencia activa en las cuatro pantallas
-        </p>
-        <p className="mt-1 text-lg font-extrabold text-inst-blue-top">{active.title}</p>
-        <p className="text-xs text-ui-muted">Severidad: {active.severity}</p>
-        {error && <p className="mt-2 text-sm text-inst-red">{error}</p>}
-        <button
+      <Card className="border-danger/30">
+        <div className="flex items-start gap-3">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-inst-red text-inst-white">
+            <Siren size={20} aria-hidden />
+          </span>
+          <div className="min-w-0">
+            <Badge tone="danger" dot>
+              Emitiendo ahora en las 4 pantallas
+            </Badge>
+            <h2 className="mt-2 text-xl font-black leading-tight text-inst-blue-top">
+              {active.title}
+            </h2>
+            <p className="mt-1 text-sm capitalize text-ui-muted">
+              Severidad: {active.severity}
+            </p>
+          </div>
+        </div>
+
+        {error && (
+          <Alert tone="danger" className="mt-4">
+            {error}
+          </Alert>
+        )}
+
+        <Button
+          className="mt-5"
+          size="lg"
           onClick={() => deactivate(active.id)}
           disabled={pending}
-          className="mt-4 rounded px-4 py-2 text-sm font-bold text-inst-white disabled:opacity-60"
-          style={{ background: "var(--color-inst-blue-bottom)" }}
         >
-          Desactivar y volver a la programación
-        </button>
-      </div>
+          <CheckCircle2 size={17} aria-hidden />
+          {pending ? "Desactivando…" : "Desactivar y volver a la programación"}
+        </Button>
+      </Card>
     );
   }
 
   return (
-    <div
-      className="max-w-xl rounded-md border bg-white p-5"
-      style={{ borderColor: "var(--color-ui-border)" }}
-    >
-      <div className="space-y-3">
-        <Field label="Título del aviso">
-          <input
+    <Card>
+      <CardHeader
+        icon={<Siren size={18} />}
+        title="Redactar un comunicado urgente"
+        description="Al activarlo, este aviso tapa la programación de las cuatro pantallas de inmediato."
+      />
+
+      <div className="mt-6 space-y-5">
+        <Field
+          label="Título del aviso"
+          htmlFor="em-title"
+          required
+          hint="Es el texto grande que se lee desde lejos. Sea breve y directo."
+        >
+          <Input
+            id="em-title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded border px-3 py-2 text-sm"
-            style={{ borderColor: "var(--color-ui-border)" }}
+            placeholder="Ej.: Suspensión de actividades"
           />
         </Field>
-        <Field label="Mensaje">
-          <textarea
+
+        <Field
+          label="Mensaje"
+          htmlFor="em-message"
+          hint="Explique la situación en una o dos frases."
+        >
+          <Textarea
+            id="em-message"
+            rows={3}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            rows={2}
-            className="w-full rounded border px-3 py-2 text-sm"
-            style={{ borderColor: "var(--color-ui-border)" }}
           />
         </Field>
-        <Field label="Instrucciones">
-          <textarea
+
+        <Field
+          label="Instrucciones"
+          htmlFor="em-instructions"
+          hint="Qué debe hacer quien lee el aviso."
+        >
+          <Textarea
+            id="em-instructions"
+            rows={3}
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
-            rows={2}
-            className="w-full rounded border px-3 py-2 text-sm"
-            style={{ borderColor: "var(--color-ui-border)" }}
           />
         </Field>
-        <Field label="Severidad">
-          <select
+
+        <Field
+          label="Severidad"
+          htmlFor="em-severity"
+          hint="Determina el color y el énfasis del aviso en pantalla."
+        >
+          <Select
+            id="em-severity"
             value={severity}
             onChange={(e) => setSeverity(e.target.value as typeof severity)}
-            className="w-full rounded border px-3 py-2 text-sm"
-            style={{ borderColor: "var(--color-ui-border)" }}
           >
-            <option value="alerta">Alerta</option>
-            <option value="urgente">Urgente</option>
-            <option value="critico">Crítico</option>
-          </select>
+            <option value="alerta">Alerta — informativo</option>
+            <option value="urgente">Urgente — requiere atención</option>
+            <option value="critico">Crítico — riesgo inmediato</option>
+          </Select>
         </Field>
       </div>
 
-      {error && <p className="mt-3 text-sm text-inst-red">{error}</p>}
+      {error && (
+        <Alert tone="danger" className="mt-5" title="No se pudo activar">
+          {error}
+        </Alert>
+      )}
 
-      <label className="mt-4 flex items-center gap-2 text-sm text-ui-ink">
+      <label className="mt-6 flex cursor-pointer items-start gap-3 rounded-[12px] border border-danger/25 bg-danger-soft p-4">
         <input
           type="checkbox"
           checked={confirm}
           onChange={(e) => setConfirm(e.target.checked)}
+          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-inst-red)]"
         />
-        Confirmo que deseo interrumpir las cuatro pantallas con este aviso.
+        <span className="text-sm font-semibold leading-relaxed text-danger">
+          Confirmo que deseo interrumpir la programación de las cuatro pantallas
+          con este aviso.
+        </span>
       </label>
 
-      <button
+      <Button
+        variant="danger"
+        size="lg"
+        className="mt-5"
         onClick={submit}
         disabled={pending || !confirm || title.trim().length < 3}
-        className="mt-4 rounded px-5 py-2.5 text-sm font-bold text-inst-white disabled:opacity-50"
-        style={{ background: "var(--color-inst-red)" }}
       >
-        Activar emergencia
-      </button>
-    </div>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label className="block">
-      <span className="block text-sm font-semibold text-ui-ink">{label}</span>
-      <div className="mt-1">{children}</div>
-    </label>
+        <Siren size={17} aria-hidden />
+        {pending ? "Activando…" : "Activar comunicado urgente"}
+      </Button>
+    </Card>
   );
 }

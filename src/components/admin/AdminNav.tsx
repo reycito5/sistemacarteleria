@@ -18,11 +18,7 @@ import { AdminIcon } from "./AdminIcon";
 export function AdminNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-
-  // Cierra el cajón al cambiar de ruta.
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  const close = () => setOpen(false);
 
   // Bloquea el scroll del fondo mientras el cajón está abierto.
   useEffect(() => {
@@ -72,6 +68,7 @@ export function AdminNav() {
                 <li key={m.href}>
                   <Link
                     href={m.href}
+                    onClick={close}
                     aria-current={active ? "page" : undefined}
                     className={[
                       "group relative flex items-center gap-3 rounded-[10px] px-3 py-2.5",
@@ -109,6 +106,7 @@ export function AdminNav() {
       <Link
         href="/player"
         target="_blank"
+        onClick={close}
         className="flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 text-[13px] font-semibold text-white/70 transition hover:bg-white/10 hover:text-inst-white"
       >
         <ExternalLink size={16} className="text-white/55" aria-hidden />

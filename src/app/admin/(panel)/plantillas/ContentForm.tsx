@@ -2,12 +2,18 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, Monitor, Plus, Save, Trash2 } from "lucide-react";
 import { ScreenFrame } from "@/components/institutional/ScreenFrame";
 import { ViewRenderer, isBareView } from "@/components/views/ViewRenderer";
 import { viewContentSchema } from "@/lib/views/schemas";
 import { FORM_SCHEMAS, type EditableKind } from "@/lib/views/formSchema";
 import { createContentItem, updateContentItem } from "@/lib/actions/content";
 import type { MediaOption } from "@/lib/data/admin";
+import { Button } from "@/components/ui/Button";
+import { Field, Input, Textarea } from "@/components/ui/Field";
+import { Alert } from "@/components/ui/Alert";
+import { Card } from "@/components/ui/Card";
+import { MediaPicker, type SelectedMedia } from "./MediaPicker";
 
 interface ContentFormProps {
   kind: EditableKind;
@@ -48,7 +54,12 @@ export function ContentForm({
   const setField = (key: string, value: unknown) =>
     setValues((v) => ({ ...v, [key]: value }));
 
-  const setListItem = (key: string, idx: number, itemKey: string, value: string) =>
+  const setListItem = (
+    key: string,
+    idx: number,
+    itemKey: string,
+    value: string,
+  ) =>
     setValues((v) => {
       const list = [...((v[key] as Record<string, string>[]) ?? [])];
       list[idx] = { ...list[idx], [itemKey]: value };
@@ -70,7 +81,10 @@ export function ContentForm({
     });
 
   // Vista previa en vivo (nunca rompe: si es inválida, muestra aviso).
-  const preview = useMemo(() => viewContentSchema.safeParse({ ...values, kind }), [values, kind]);
+  const preview = useMemo(
+    () => viewContentSchema.safeParse({ ...values, kind }),
+    [values, kind],
+  );
 
   const submit = () => {
     setError(null);
@@ -84,187 +98,214 @@ export function ContentForm({
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2">
+    <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       {/* Editor */}
-      <div>
-        <div className="space-y-4">
+      <Card>
+        <h2 className="text-base font-extrabold text-inst-blue-top">
+          Contenido editable
+        </h2>
+        <p className="mt-1 text-sm text-ui-muted">
+          Sólo textos, fechas y medios. La cabecera, el pie, los colores y la
+          tipografía institucionales son fijos.
+        </p>
+
+        <div className="mt-6 space-y-5">
           {schema.fields.map((f) => {
             if (f.type === "text") {
               return (
-                <Field key={f.key} label={f.label}>
-                  <input
+                <Field key={f.key} label={f.label} htmlFor={`f-${f.key}`}>
+                  <Input
+                    id={`f-${f.key}`}
                     value={(values[f.key] as string) ?? ""}
                     onChange={(e) => setField(f.key, e.target.value)}
-                    className="w-full rounded border px-3 py-2 text-sm"
-                    style={{ borderColor: "var(--color-ui-border)" }}
                   />
                 </Field>
               );
             }
+
             if (f.type === "textarea") {
               return (
-                <Field key={f.key} label={f.label}>
-                  <textarea
+                <Field key={f.key} label={f.label} htmlFor={`f-${f.key}`}>
+                  <Textarea
+                    id={`f-${f.key}`}
+                    rows={3}
                     value={(values[f.key] as string) ?? ""}
                     onChange={(e) => setField(f.key, e.target.value)}
-                    rows={2}
-                    className="w-full rounded border px-3 py-2 text-sm"
-                    style={{ borderColor: "var(--color-ui-border)" }}
                   />
                 </Field>
               );
             }
+
             if (f.type === "media") {
               const current = values[f.key] as { assetId?: string } | undefined;
               return (
-                <Field key={f.key} label={f.label}>
-                  <select
-                    value={current?.assetId ?? ""}
-                    onChange={(e) => {
-                      const opt = mediaOptions.find((m) => m.id === e.target.value);
-                      setField(
-                        f.key,
-                        opt
-                          ? {
-                              assetId: opt.id,
-                              path: opt.path,
-                              src: opt.url,
-                              subtitlePath: opt.subtitlePath ?? undefined,
-                              muted: true,
-                            }
-                          : undefined,
-                      );
-                    }}
-                    className="w-full rounded border px-3 py-2 text-sm"
-                    style={{ borderColor: "var(--color-ui-border)" }}
-                  >
-                    <option value="">— Sin medio —</option>
-                    {mediaOptions.map((m) => (
-                      <option key={m.id} value={m.id}>
-                        {m.type === "video" ? "🎬" : "🖼"} {m.title}
-                      </option>
-                    ))}
-                  </select>
-                  {mediaOptions.length === 0 && (
-                    <p className="mt-1 text-xs text-ui-muted">
-                      No hay archivos. Suba videos o imágenes en la biblioteca.
-                    </p>
-                  )}
+                <Field
+                  key={f.key}
+                  label={f.label}
+                  hint="Elija un archivo ya subido a la biblioteca. Pulse sobre la miniatura seleccionada para quitarla."
+                >
+                  <MediaPicker
+                    options={mediaOptions}
+                    value={current}
+                    onChange={(media: SelectedMedia | undefined) =>
+                      setField(f.key, media)
+                    }
+                  />
                 </Field>
               );
             }
+
             if (f.type !== "list") return null;
+
             const list = (values[f.key] as Record<string, string>[]) ?? [];
             return (
               <div key={f.key}>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-ui-ink">{f.label}</span>
-                  <button
-                    type="button"
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-sm font-semibold text-ui-ink">
+                    {f.label}
+                  </span>
+                  <Button
+                    variant="secondary"
+                    size="sm"
                     onClick={() => addListItem(f.key)}
                     disabled={list.length >= f.max}
-                    className="text-xs font-bold text-inst-blue-top disabled:opacity-40"
                   >
-                    + Añadir ({list.length}/{f.max})
-                  </button>
+                    <Plus size={14} aria-hidden />
+                    Añadir ({list.length}/{f.max})
+                  </Button>
                 </div>
-                <div className="mt-2 space-y-3">
-                  {list.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="rounded border p-3"
-                      style={{ borderColor: "var(--color-ui-border)" }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-ui-muted">
-                          #{idx + 1}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => removeListItem(f.key, idx)}
-                          className="text-xs font-bold text-inst-red"
-                        >
-                          Quitar
-                        </button>
+
+                {list.length === 0 ? (
+                  <p className="mt-2 rounded-[10px] border border-dashed border-ui-border-strong bg-ui-raised px-3 py-3 text-xs text-ui-muted">
+                    Sin elementos. Pulse «Añadir» para crear el primero.
+                  </p>
+                ) : (
+                  <div className="mt-3 space-y-3">
+                    {list.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="rounded-[12px] border border-ui-border bg-ui-raised p-3.5"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="grid h-6 w-6 place-items-center rounded-full bg-info-soft text-[11px] font-black text-inst-blue-top">
+                            {idx + 1}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeListItem(f.key, idx)}
+                            className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-inst-red transition hover:bg-danger-soft"
+                          >
+                            <Trash2 size={12} aria-hidden />
+                            Quitar
+                          </button>
+                        </div>
+                        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                          {f.itemFields.map((itf) => (
+                            <Field
+                              key={itf.key}
+                              label={itf.label}
+                              htmlFor={`f-${f.key}-${idx}-${itf.key}`}
+                            >
+                              <Input
+                                id={`f-${f.key}-${idx}-${itf.key}`}
+                                value={item[itf.key] ?? ""}
+                                onChange={(e) =>
+                                  setListItem(f.key, idx, itf.key, e.target.value)
+                                }
+                              />
+                            </Field>
+                          ))}
+                        </div>
                       </div>
-                      <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                        {f.itemFields.map((itf) => (
-                          <label key={itf.key} className="block">
-                            <span className="block text-xs text-ui-muted">
-                              {itf.label}
-                            </span>
-                            <input
-                              value={item[itf.key] ?? ""}
-                              onChange={(e) =>
-                                setListItem(f.key, idx, itf.key, e.target.value)
-                              }
-                              className="mt-0.5 w-full rounded border px-2 py-1 text-sm"
-                              style={{ borderColor: "var(--color-ui-border)" }}
-                            />
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
 
-        {error && <p className="mt-4 text-sm text-inst-red">{error}</p>}
-        {!preview.success && (
-          <p className="mt-4 text-xs text-ui-muted">
-            Complete los campos obligatorios para habilitar el guardado.
-          </p>
+        {error && (
+          <Alert tone="danger" className="mt-5" title="No se pudo guardar">
+            {error}
+          </Alert>
         )}
 
-        <div className="mt-6 flex gap-3">
-          <button
+        {!preview.success && (
+          <Alert tone="info" className="mt-5">
+            Complete los campos necesarios para habilitar el guardado. A la
+            derecha verá la pantalla armándose en tiempo real.
+          </Alert>
+        )}
+
+        <div className="mt-6 flex flex-wrap gap-2 border-t border-ui-border pt-5">
+          <Button
             onClick={submit}
             disabled={pending || !preview.success}
-            className="rounded px-5 py-2.5 text-sm font-bold text-inst-white disabled:opacity-50"
-            style={{ background: "var(--color-inst-blue-bottom)" }}
+            size="lg"
           >
-            {pending ? "Guardando…" : contentId ? "Guardar cambios" : "Crear contenido"}
-          </button>
-          <button
+            <Save size={17} aria-hidden />
+            {pending
+              ? "Guardando…"
+              : contentId
+                ? "Guardar cambios"
+                : "Crear contenido"}
+          </Button>
+          <Button
+            variant="ghost"
+            size="lg"
             onClick={() => router.push("/admin/plantillas")}
-            className="rounded px-5 py-2.5 text-sm font-bold text-ui-ink"
-            style={{ border: "1px solid var(--color-ui-border)" }}
+            disabled={pending}
           >
             Cancelar
-          </button>
+          </Button>
         </div>
-      </div>
+
+        <p className="mt-4 flex items-start gap-2 text-xs leading-relaxed text-ui-muted">
+          <Monitor size={13} className="mt-0.5 shrink-0" aria-hidden />
+          Al guardar, el contenido queda en <strong>borrador</strong>. Todavía no
+          se ve en los televisores: hay que aprobarlo y añadirlo a la playlist.
+        </p>
+      </Card>
 
       {/* Vista previa en vivo */}
-      <div>
-        <p className="mb-2 text-sm font-bold text-ui-ink">Vista previa</p>
-        <div
-          className="relative aspect-video w-full overflow-hidden rounded-md border shadow-sm"
-          style={{ borderColor: "var(--color-ui-border)" }}
-        >
-          {preview.success ? (
-            <ScreenFrame bare={isBareView(preview.data)}>
-              <ViewRenderer content={preview.data} />
-            </ScreenFrame>
-          ) : (
-            <div className="absolute inset-0 grid place-items-center bg-ui-canvas px-4 text-center text-sm text-ui-muted">
-              Vista previa disponible al completar los campos.
+      <div className="lg:sticky lg:top-24 lg:self-start">
+        <Card>
+          <div className="flex items-center gap-2.5">
+            <span className="grid h-9 w-9 place-items-center rounded-[10px] bg-info-soft text-inst-blue-top">
+              <Eye size={18} aria-hidden />
+            </span>
+            <div>
+              <h2 className="text-base font-extrabold text-inst-blue-top">
+                Vista previa en vivo
+              </h2>
+              <p className="text-xs text-ui-muted">
+                Así se verá en los televisores (1920×1080).
+              </p>
             </div>
-          )}
-        </div>
+          </div>
+
+          <div className="relative mt-4 aspect-video w-full overflow-hidden rounded-[12px] border border-ui-border bg-black shadow-[var(--shadow-ui)]">
+            {preview.success ? (
+              <ScreenFrame bare={isBareView(preview.data)}>
+                <ViewRenderer content={preview.data} />
+              </ScreenFrame>
+            ) : (
+              <div className="absolute inset-0 grid place-items-center bg-ui-canvas px-6 text-center">
+                <div>
+                  <Eye size={28} className="mx-auto text-ui-faint" aria-hidden />
+                  <p className="mt-2 text-sm font-semibold text-ui-ink">
+                    Falta información
+                  </p>
+                  <p className="mt-1 text-xs text-ui-muted">
+                    Complete los campos de la izquierda para ver la pantalla.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </Card>
       </div>
     </div>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <label className="block">
-      <span className="block text-sm font-semibold text-ui-ink">{label}</span>
-      <div className="mt-1">{children}</div>
-    </label>
   );
 }

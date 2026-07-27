@@ -5,15 +5,16 @@ import { useRouter } from "next/navigation";
 import { changeContentStatus } from "@/lib/actions/content";
 import { nextStatuses, statusLabel } from "@/lib/views/workflow";
 import type { ContentStatus } from "@/lib/supabase/database.types";
+import { Badge, type BadgeTone } from "@/components/ui/Badge";
 
-const STATUS_COLOR: Record<string, string> = {
-  borrador: "#5b6172",
-  en_revision: "#B06000",
-  aprobado: "#137333",
-  programado: "#0505FD",
-  publicado: "#137333",
-  finalizado: "#5b6172",
-  archivado: "#5b6172",
+const STATUS_TONE: Record<string, BadgeTone> = {
+  borrador: "neutral",
+  en_revision: "warn",
+  aprobado: "ok",
+  programado: "info",
+  publicado: "ok",
+  finalizado: "neutral",
+  archivado: "neutral",
 };
 
 export function ContentStatusControls({
@@ -38,24 +39,32 @@ export function ContentStatusControls({
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span
-        className="rounded-full px-2.5 py-0.5 text-xs font-bold text-white"
-        style={{ background: STATUS_COLOR[status] ?? "#5b6172" }}
-      >
+      <Badge tone={STATUS_TONE[status] ?? "neutral"} dot>
         {statusLabel(status)}
-      </span>
+      </Badge>
+
       {nextStatuses(status).map((t) => (
         <button
           key={t.to}
+          type="button"
           onClick={() => move(t.to)}
           disabled={pending}
-          className="text-xs font-bold disabled:opacity-50"
-          style={{ color: t.emphasis === "danger" ? "#C52322" : "#03037A" }}
+          className={[
+            "rounded-[8px] border px-2.5 py-1 text-xs font-bold transition disabled:opacity-50",
+            t.emphasis === "danger"
+              ? "border-danger/25 text-inst-red hover:bg-danger-soft"
+              : "border-ui-border-strong text-inst-blue-top hover:border-inst-blue/45 hover:bg-info-soft",
+          ].join(" ")}
         >
           {t.label}
         </button>
       ))}
-      {error && <span className="text-xs text-inst-red">{error}</span>}
+
+      {error && (
+        <span role="alert" className="text-xs font-semibold text-inst-red">
+          {error}
+        </span>
+      )}
     </div>
   );
 }

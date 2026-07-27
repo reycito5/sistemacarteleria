@@ -1,4 +1,8 @@
+import { Siren } from "lucide-react";
 import { getActiveEmergency } from "@/lib/data/admin";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Alert } from "@/components/ui/Alert";
+import { Badge } from "@/components/ui/Badge";
 import { EmergencyForm } from "./EmergencyForm";
 
 export const dynamic = "force-dynamic";
@@ -14,34 +18,43 @@ export default async function ComunicadosPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-black text-inst-blue-top">Comunicados urgentes</h1>
-        <span
-          className="rounded-full px-3 py-1 text-xs font-bold text-inst-white"
-          style={{ background: "var(--color-inst-red)" }}
-        >
-          Prioridad absoluta
-        </span>
-      </div>
-      <p className="mt-1 max-w-2xl text-sm text-ui-muted">
-        Una emergencia interrumpe la playlist y aparece simultáneamente en las cuatro
-        pantallas (sección 16). Requiere confirmación especial.
-      </p>
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="2 · Emisión"
+        title="Comunicados urgentes"
+        description="La única excepción al flujo normal: no pasa por la playlist. Al activar un comunicado, tapa de inmediato la programación de las cuatro pantallas y se mantiene hasta que se desactiva a mano."
+        actions={<Badge tone="danger" dot>Prioridad absoluta</Badge>}
+      />
 
-      <div className="mt-6">
-        {configured ? (
-          <EmergencyForm active={active} />
-        ) : (
-          <div
-            className="rounded-md border-l-4 bg-white px-4 py-3 text-sm"
-            style={{ borderColor: "var(--color-inst-gold)" }}
-          >
-            <strong>Supabase no configurado.</strong> Configure el entorno e inicie
-            sesión para activar comunicados de emergencia.
-          </div>
-        )}
-      </div>
+      {active ? (
+        <Alert
+          tone="danger"
+          title={`Hay un comunicado activo: ${active.title}`}
+        >
+          Mientras siga activo, ningún otro contenido se ve en los televisores.
+          Desactívelo en cuanto la situación se normalice.
+        </Alert>
+      ) : (
+        <Alert tone="info" title="Sin comunicados activos">
+          Las pantallas están emitiendo la programación normal. Use esta pantalla
+          sólo ante una emergencia real o un aviso institucional inaplazable.
+        </Alert>
+      )}
+
+      {configured ? (
+        <EmergencyForm active={active} />
+      ) : (
+        <Alert tone="warn" title="Supabase no está configurado">
+          Configure el entorno e inicie sesión para activar comunicados de
+          emergencia.
+        </Alert>
+      )}
+
+      <p className="flex items-center gap-2 text-xs text-ui-muted">
+        <Siren size={14} aria-hidden />
+        La activación queda registrada en la auditoría con la cuenta que la
+        realizó.
+      </p>
     </div>
   );
 }

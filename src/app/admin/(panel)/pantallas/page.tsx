@@ -1,6 +1,12 @@
+import { MonitorPlay, Radio, TriangleAlert } from "lucide-react";
 import { listScreensStatus, type ScreenStatusView } from "@/lib/data/admin";
 import { AutoRefresh } from "@/components/admin/AutoRefresh";
 import { RealtimeScreens } from "@/components/admin/RealtimeScreens";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Alert } from "@/components/ui/Alert";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { ActivateScreenForm } from "./ActivateScreenForm";
 
 export const dynamic = "force-dynamic";
@@ -8,7 +14,7 @@ export const dynamic = "force-dynamic";
 function relativeTime(iso: string | null): string {
   if (!iso) return "nunca";
   const diff = Math.round((Date.now() - Date.parse(iso)) / 1000);
-  if (diff < 60) return `hace ${diff}s`;
+  if (diff < 60) return `hace ${Math.max(diff, 0)} s`;
   if (diff < 3600) return `hace ${Math.round(diff / 60)} min`;
   return `hace ${Math.round(diff / 3600)} h`;
 }
@@ -29,79 +35,116 @@ async function loadScreens(): Promise<ScreenStatusView[] | null> {
 
 export default async function PantallasPage() {
   const screens = await loadScreens();
+  const online = screens?.filter((s) => s.online).length ?? 0;
 
   return (
-    <div>
+    <div className="space-y-6">
       <AutoRefresh seconds={30} />
       <RealtimeScreens />
-      <div className="flex items-center gap-3">
-        <h1 className="text-2xl font-black text-inst-blue-top">Centro de pantallas</h1>
-        <span className="flex items-center gap-1.5 text-xs font-semibold text-ui-muted">
-          <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-          en vivo · Realtime
-        </span>
-      </div>
-      <p className="mt-1 text-sm text-ui-muted">
-        Estado, contenido actual y última conexión de las cuatro pantallas del grupo
-        general.
-      </p>
+
+      <PageHeader
+        eyebrow="Paso 4 · Operación"
+        title="Centro de pantallas"
+        description="Estado en vivo de los televisores del grupo general. Cada equipo informa de su situación cada 20 segundos; si deja de hacerlo durante un minuto, se marca como desconectado."
+        actions={
+          <Badge tone="ok" dot className="ui-pulse">
+            En vivo
+          </Badge>
+        }
+      />
 
       {screens === null ? (
-        <div
-          className="mt-6 rounded-md border-l-4 bg-white px-4 py-3 text-sm"
-          style={{ borderColor: "var(--color-inst-gold)" }}
-        >
-          <strong>Supabase no configurado.</strong> Configure el entorno e inicie
-          sesión para ver el estado de las pantallas.
-        </div>
+        <Alert tone="warn" title="Supabase no está configurado">
+          Configure el entorno e inicie sesión para ver el estado de las
+          pantallas.
+        </Alert>
       ) : screens.length === 0 ? (
-        <p className="mt-6 text-sm text-ui-muted">
-          No hay pantallas registradas. Aplique el seed (migración 0003).
-        </p>
+        <EmptyState
+          icon={<MonitorPlay size={26} />}
+          title="No hay pantallas registradas"
+          description="Aplique la migración de datos iniciales (0003_seed.sql) o registre un televisor con el código de activación de abajo."
+        />
       ) : (
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {screens.map((s) => (
-            <div
-              key={s.id}
-              className="rounded-md border bg-white p-4"
-              style={{ borderColor: "var(--color-ui-border)" }}
+        <>
+          {online < screens.length && (
+            <Alert
+              tone="warn"
+              title={`${screens.length - online} pantalla(s) sin conexión`}
             >
-              <div className="flex items-center justify-between">
-                <p className="font-extrabold uppercase text-inst-blue-top">
-                  {s.location || s.name}
+              Verifique que el equipo esté encendido, con el reproductor abierto
+              y con acceso a la red. Mientras tanto sigue emitiendo el contenido
+              que tenía guardado.
+            </Alert>
+          )}
+
+          <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {screens.map((s) => (
+              <li key={s.id} className="ui-card p-5">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-sm font-extrabold uppercase leading-tight text-inst-blue-top">
+                    {s.location || s.name}
+                  </p>
+                  <Badge tone={s.online ? "ok" : "danger"} dot>
+                    {s.online ? "En línea" : "Caída"}
+                  </Badge>
+                </div>
+                <p className="ui-tnum mt-1 text-[11px] tracking-widest text-ui-faint">
+                  {s.code}
                 </p>
-                <span
-                  className="flex items-center gap-1.5 text-xs font-bold"
-                  style={{ color: s.online ? "#137333" : "#C52322" }}
-                >
-                  <span
-                    className="h-2.5 w-2.5 rounded-full"
-                    style={{ background: s.online ? "#34a853" : "#C52322" }}
-                  />
-                  {s.online ? "En línea" : "Desconectada"}
-                </span>
-              </div>
-              <p className="mt-3 text-xs text-ui-muted">Reproduciendo</p>
-              <p className="text-sm font-semibold">
-                {s.currentContentTitle ?? "—"}
-              </p>
-              <div className="mt-2 space-y-0.5 text-xs text-ui-muted">
-                <p>
-                  Posición: <span className="font-mono">{fmtPos(s.currentPositionSeconds)}</span>
-                </p>
-                <p>Versión playlist: {s.playlistVersion ?? "—"}</p>
-                <p>Última conexión: {relativeTime(s.lastSeenAt)}</p>
-                <p>Código: {s.code}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+
+                <div className="mt-4 border-t border-ui-border pt-3">
+                  <p className="text-[11px] font-bold uppercase tracking-wide text-ui-muted">
+                    Reproduciendo
+                  </p>
+                  <p className="mt-0.5 line-clamp-2 text-[13px] font-semibold text-ui-ink">
+                    {s.currentContentTitle ?? "—"}
+                  </p>
+                </div>
+
+                <dl className="mt-3 space-y-1 text-[11px] text-ui-muted">
+                  <div className="flex justify-between gap-2">
+                    <dt>Posición</dt>
+                    <dd className="ui-tnum font-semibold text-ui-ink">
+                      {fmtPos(s.currentPositionSeconds)}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt>Versión de playlist</dt>
+                    <dd className="ui-tnum font-semibold text-ui-ink">
+                      {s.playlistVersion ?? "—"}
+                    </dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt>Último latido</dt>
+                    <dd className="flex items-center gap-1 font-semibold text-ui-ink">
+                      {!s.online && (
+                        <TriangleAlert
+                          size={11}
+                          className="text-inst-red"
+                          aria-hidden
+                        />
+                      )}
+                      {relativeTime(s.lastSeenAt)}
+                    </dd>
+                  </div>
+                </dl>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
 
       {screens !== null && (
-        <div className="mt-8 max-w-2xl">
-          <ActivateScreenForm />
-        </div>
+        <Card>
+          <CardHeader
+            icon={<Radio size={18} />}
+            title="Activar un televisor nuevo"
+            description="Abra /player/activar en el equipo, anote el código de 6 dígitos que muestra y confírmelo aquí. Hasta que se confirme, el televisor no recibe programación."
+          />
+          <div className="mt-5 max-w-xl">
+            <ActivateScreenForm />
+          </div>
+        </Card>
       )}
     </div>
   );

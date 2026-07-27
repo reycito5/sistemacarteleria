@@ -1,11 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import {
   getContentItem,
   listMediaOptions,
   type MediaOption,
 } from "@/lib/data/admin";
 import { FORM_SCHEMAS, type EditableKind } from "@/lib/views/formSchema";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Alert } from "@/components/ui/Alert";
 import { ContentForm } from "../ContentForm";
 
 export const dynamic = "force-dynamic";
@@ -44,36 +47,38 @@ export default async function EditarContenidoPage({
 
   if (loaded === "unconfigured") {
     return (
-      <div>
-        <h1 className="text-2xl font-black text-inst-blue-top">Editar contenido</h1>
-        <div
-          className="mt-4 rounded-md border-l-4 bg-white px-4 py-3 text-sm"
-          style={{ borderColor: "var(--color-inst-gold)" }}
-        >
-          <strong>Supabase no configurado.</strong> Configure el entorno e inicie
-          sesión.
-        </div>
+      <div className="space-y-6">
+        <PageHeader eyebrow="Paso 2 · Contenido" title="Editar contenido" />
+        <Alert tone="warn" title="Supabase no está configurado">
+          Configure el entorno e inicie sesión para editar contenidos.
+        </Alert>
       </div>
     );
   }
   if (!loaded) notFound();
 
   return (
-    <div>
-      <Link href="/admin/plantillas" className="text-sm font-bold text-inst-red">
-        ← Plantillas
+    <div className="space-y-6">
+      <Link
+        href="/admin/plantillas"
+        className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ui-muted transition hover:text-inst-blue-top"
+      >
+        <ArrowLeft size={15} aria-hidden />
+        Volver a plantillas
       </Link>
-      <h1 className="mt-2 text-2xl font-black text-inst-blue-top">
-        Editar: {FORM_SCHEMAS[loaded.kind].label}
-      </h1>
-      <div className="mt-6">
-        <ContentForm
-          kind={loaded.kind}
-          mediaOptions={loaded.media}
-          initial={loaded.data}
-          contentId={loaded.id}
-        />
-      </div>
+
+      <PageHeader
+        eyebrow="Paso 2 · Contenido"
+        title={`Editar: ${FORM_SCHEMAS[loaded.kind].label}`}
+        description="Los cambios se aplican en cuanto guarde. Si el contenido ya está en la playlist publicada, los televisores lo recogen en menos de un minuto."
+      />
+
+      <ContentForm
+        kind={loaded.kind}
+        mediaOptions={loaded.media}
+        initial={loaded.data}
+        contentId={loaded.id}
+      />
     </div>
   );
 }

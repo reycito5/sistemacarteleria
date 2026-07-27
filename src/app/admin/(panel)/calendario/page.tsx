@@ -1,8 +1,11 @@
+import { CalendarClock } from "lucide-react";
 import {
   listSchedules,
   listSchedulablePlaylists,
   type ScheduleView,
 } from "@/lib/data/admin";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Alert } from "@/components/ui/Alert";
 import { ScheduleManager } from "./ScheduleManager";
 
 export const dynamic = "force-dynamic";
@@ -28,26 +31,32 @@ export default async function CalendarioPage() {
   const data = await loadData();
 
   return (
-    <div>
-      <h1 className="text-2xl font-black text-inst-blue-top">Calendario</h1>
-      <p className="mt-1 max-w-2xl text-sm text-ui-muted">
-        Programe cuándo se reproduce cada playlist en el grupo general: días, franja
-        horaria, vigencia y prioridad (0 emergencia … 90 respaldo).
-      </p>
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="2 · Emisión"
+        title="Calendario de programación"
+        description="Opcional. Permite que una playlist se emita sólo ciertos días u horas. Sin ninguna programación activa, los televisores emiten la playlist publicada durante todo el día."
+      />
 
-      <div className="mt-6">
-        {data === null ? (
-          <div
-            className="rounded-md border-l-4 bg-white px-4 py-3 text-sm"
-            style={{ borderColor: "var(--color-inst-gold)" }}
-          >
-            <strong>Supabase no configurado.</strong> Configure el entorno e inicie
-            sesión para gestionar el calendario.
-          </div>
-        ) : (
-          <ScheduleManager playlists={data.playlists} schedules={data.schedules} />
-        )}
-      </div>
+      <Alert tone="info" title="Cómo se resuelven las coincidencias">
+        Si dos programaciones se solapan en el mismo momento, gana la de{" "}
+        <strong>menor número de prioridad</strong> (0 es lo más urgente, 90 es el
+        respaldo). Un comunicado de emergencia está por encima de todas ellas.
+      </Alert>
+
+      {data === null ? (
+        <Alert tone="warn" title="Supabase no está configurado">
+          Configure el entorno e inicie sesión para gestionar el calendario.
+        </Alert>
+      ) : (
+        <ScheduleManager playlists={data.playlists} schedules={data.schedules} />
+      )}
+
+      <p className="flex items-center gap-2 text-xs text-ui-muted">
+        <CalendarClock size={14} aria-hidden />
+        Las programaciones se aplican al grupo general: afectan a las cuatro
+        pantallas por igual.
+      </p>
     </div>
   );
 }

@@ -2,7 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { MonitorCheck } from "lucide-react";
 import { activateScreen } from "@/lib/actions/screen";
+import { Button } from "@/components/ui/Button";
+import { Field, Input } from "@/components/ui/Field";
+import { Alert } from "@/components/ui/Alert";
 
 /** Formulario de confirmación de activación de una pantalla (sección 22). */
 export function ActivateScreenForm() {
@@ -31,50 +35,60 @@ export function ActivateScreenForm() {
   };
 
   return (
-    <div
-      className="rounded-md border bg-white p-5"
-      style={{ borderColor: "var(--color-ui-border)" }}
-    >
-      <h2 className="text-sm font-bold text-ui-ink">Activar una pantalla</h2>
-      <p className="mt-1 text-xs text-ui-muted">
-        Introduzca el código de 6 dígitos que muestra el reproductor y asígnele nombre
-        y ubicación.
-      </p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <input
-          value={activationCode}
-          onChange={(e) => setActivationCode(e.target.value)}
-          inputMode="numeric"
-          maxLength={6}
-          placeholder="Código (000000)"
-          className="rounded border px-3 py-2 text-sm tabular-nums"
-          style={{ borderColor: "var(--color-ui-border)" }}
-        />
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Nombre (p. ej. Pantalla 1 — Recepción)"
-          className="rounded border px-3 py-2 text-sm"
-          style={{ borderColor: "var(--color-ui-border)" }}
-        />
-        <input
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="Ubicación"
-          className="rounded border px-3 py-2 text-sm"
-          style={{ borderColor: "var(--color-ui-border)" }}
-        />
+    <div>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <Field label="Código" htmlFor="act-code" required>
+          <Input
+            id="act-code"
+            value={activationCode}
+            onChange={(e) => setActivationCode(e.target.value.replace(/\D/g, ""))}
+            inputMode="numeric"
+            maxLength={6}
+            placeholder="000000"
+            className="ui-tnum text-center text-lg font-bold tracking-[0.3em]"
+          />
+        </Field>
+
+        <Field label="Nombre" htmlFor="act-name">
+          <Input
+            id="act-name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Pantalla 1"
+          />
+        </Field>
+
+        <Field label="Ubicación" htmlFor="act-location">
+          <Input
+            id="act-location"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Recepción"
+          />
+        </Field>
       </div>
-      {error && <p className="mt-3 text-sm text-inst-red">{error}</p>}
-      {ok && <p className="mt-3 text-sm text-green-700">Pantalla activada y añadida al grupo general.</p>}
-      <button
+
+      {error && (
+        <Alert tone="danger" className="mt-4" title="No se pudo activar">
+          {error}
+        </Alert>
+      )}
+      {ok && (
+        <Alert tone="ok" className="mt-4" title="Pantalla activada">
+          Ya forma parte del grupo general y empezará a recibir la programación
+          publicada.
+        </Alert>
+      )}
+
+      <Button
+        className="mt-5"
         onClick={submit}
-        disabled={pending}
-        className="mt-4 rounded px-5 py-2.5 text-sm font-bold text-inst-white disabled:opacity-60"
-        style={{ background: "var(--color-inst-blue-bottom)" }}
+        disabled={pending || activationCode.length < 6}
+        size="lg"
       >
+        <MonitorCheck size={17} aria-hidden />
         {pending ? "Activando…" : "Activar y asignar"}
-      </button>
+      </Button>
     </div>
   );
 }

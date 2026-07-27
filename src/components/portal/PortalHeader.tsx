@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogIn, Menu, X } from "lucide-react";
@@ -11,10 +11,7 @@ import { PORTAL_LINKS } from "@/lib/portal/navigation";
 export function PortalHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  const close = () => setOpen(false);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
@@ -52,6 +49,7 @@ export function PortalHeader() {
                 <Link
                   key={l.href}
                   href={l.href}
+                  onClick={close}
                   aria-current={active ? "page" : undefined}
                   className={[
                     "relative rounded-[8px] px-3 py-2 text-[13px] font-semibold transition",
@@ -99,6 +97,7 @@ export function PortalHeader() {
                 <li key={l.href}>
                   <Link
                     href={l.href}
+                    onClick={close}
                     className={[
                       "block rounded-[8px] px-3 py-2.5 text-sm font-semibold transition",
                       isActive(l.href)
@@ -113,6 +112,7 @@ export function PortalHeader() {
             </ul>
             <Link
               href="/admin/login"
+              onClick={close}
               className="mt-3 flex h-11 items-center justify-center gap-2 rounded-[10px] bg-inst-blue-bottom text-sm font-bold text-inst-white"
             >
               <LogIn size={16} aria-hidden />

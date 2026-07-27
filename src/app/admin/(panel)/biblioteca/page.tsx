@@ -1,4 +1,9 @@
+import { LibraryBig } from "lucide-react";
 import { listMediaAssets, type MediaAssetSummary } from "@/lib/data/admin";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Alert } from "@/components/ui/Alert";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
 import { MediaUploader } from "./MediaUploader";
 import { MediaList } from "./MediaList";
 
@@ -16,31 +21,37 @@ export default async function BibliotecaPage() {
   const assets = await loadAssets();
 
   return (
-    <div>
-      <h1 className="text-2xl font-black text-inst-blue-top">Biblioteca multimedia</h1>
-      <p className="mt-1 max-w-2xl text-sm text-ui-muted">
-        Videos MP4 (H.264) e imágenes 16:9. Los archivos se validan y quedan
-        disponibles para las plantillas y la playlist.
-      </p>
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Paso 1 · Contenido"
+        title="Biblioteca multimedia"
+        description="El almacén de videos e imágenes del sistema. Subir un archivo aquí NO lo pone en pantalla: para eso hay que usarlo después dentro de una plantilla."
+        actions={<Badge tone="info">Paso 1 de 4</Badge>}
+      />
 
       {assets === null ? (
-        <div
-          className="mt-6 rounded-md border-l-4 bg-white px-4 py-3 text-sm"
-          style={{ borderColor: "var(--color-inst-gold)" }}
-        >
-          <strong>Supabase no configurado.</strong> Configure el entorno, aplique la
-          migración de almacenamiento (0004) e inicie sesión para subir archivos.
-        </div>
+        <Alert tone="warn" title="Supabase no está configurado">
+          Configure las variables de entorno, aplique la migración de
+          almacenamiento (<code>0004_storage.sql</code>) e inicie sesión para
+          poder subir archivos.
+        </Alert>
       ) : (
-        <div className="mt-6 space-y-8">
+        <>
           <MediaUploader />
-          <section>
-            <h2 className="mb-3 text-lg font-extrabold text-inst-blue-top">
-              Archivos ({assets.length})
-            </h2>
-            <MediaList assets={assets} />
-          </section>
-        </div>
+
+          <Card flush>
+            <div className="border-b border-ui-border p-5 sm:p-6">
+              <CardHeader
+                icon={<LibraryBig size={18} />}
+                title={`Archivos guardados (${assets.length})`}
+                description="Pulse sobre cualquier miniatura para verla a tamaño grande. Los videos se abren con un reproductor de controles reales."
+              />
+            </div>
+            <div className="p-5 sm:p-6">
+              <MediaList assets={assets} />
+            </div>
+          </Card>
+        </>
       )}
     </div>
   );

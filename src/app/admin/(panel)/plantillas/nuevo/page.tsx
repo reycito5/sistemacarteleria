@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { listMediaOptions, type MediaOption } from "@/lib/data/admin";
 import { FORM_SCHEMAS, type EditableKind } from "@/lib/views/formSchema";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Alert } from "@/components/ui/Alert";
 import { ContentForm } from "../ContentForm";
 
 export const dynamic = "force-dynamic";
@@ -30,16 +33,30 @@ export default async function NuevoContenidoPage({
   const schema = FORM_SCHEMAS[kind];
 
   return (
-    <div>
-      <Link href="/admin/plantillas" className="text-sm font-bold text-inst-red">
-        ← Plantillas
+    <div className="space-y-6">
+      <Link
+        href="/admin/plantillas"
+        className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ui-muted transition hover:text-inst-blue-top"
+      >
+        <ArrowLeft size={15} aria-hidden />
+        Volver a plantillas
       </Link>
-      <h1 className="mt-2 text-2xl font-black text-inst-blue-top">
-        Nuevo: {schema.label}
-      </h1>
-      <div className="mt-6">
-        <ContentForm kind={kind} mediaOptions={mediaOptions} />
-      </div>
+
+      <PageHeader
+        eyebrow="Paso 2 · Contenido"
+        title={`Nueva pantalla: ${schema.label}`}
+        description="Complete los campos editables. Los colores, la cabecera y el pie institucionales no se tocan: se aplican solos."
+      />
+
+      {mediaOptions.length === 0 && (
+        <Alert tone="warn" title="La biblioteca está vacía">
+          Todavía no hay videos ni imágenes que asignar a esta pantalla. Puede
+          guardar el contenido igualmente y añadir el medio más tarde desde{" "}
+          <strong>Biblioteca multimedia</strong>.
+        </Alert>
+      )}
+
+      <ContentForm kind={kind} mediaOptions={mediaOptions} />
     </div>
   );
 }

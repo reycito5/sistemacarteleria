@@ -3,6 +3,16 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
+  ArrowDown,
+  ArrowUp,
+  ListPlus,
+  ListVideo,
+  Radio,
+  Sparkles,
+  Trash2,
+  X,
+} from "lucide-react";
+import {
   addPlaylistItem,
   createWorkingPlaylist,
   movePlaylistItem,
@@ -12,6 +22,12 @@ import {
   updatePlaylistItemDuration,
 } from "@/lib/actions/playlist";
 import type { ActionResult } from "@/lib/actions/helpers";
+import { Button } from "@/components/ui/Button";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
+import { Alert } from "@/components/ui/Alert";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Input } from "@/components/ui/Field";
 
 export interface EditorItem {
   id: string;
@@ -36,7 +52,19 @@ interface PlaylistEditorProps {
   available: EditorContent[];
 }
 
-export function PlaylistEditor({ playlist, items, available }: PlaylistEditorProps) {
+/** «3 min 20 s» a partir de un total de segundos. */
+function humanCycle(seconds: number): string {
+  if (seconds < 60) return `${seconds} s`;
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return s === 0 ? `${m} min` : `${m} min ${s} s`;
+}
+
+export function PlaylistEditor({
+  playlist,
+  items,
+  available,
+}: PlaylistEditorProps) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -51,174 +79,207 @@ export function PlaylistEditor({ playlist, items, available }: PlaylistEditorPro
   };
 
   const total = items.reduce((a, i) => a + i.durationSeconds, 0);
+  const published = playlist?.status === "publicada";
+
+  if (!playlist) {
+    return (
+      <Card>
+        <EmptyState
+          icon={<ListVideo size={26} />}
+          title="Todavía no existe la playlist institucional"
+          description="Créela una sola vez: a partir de entonces se edita y se vuelve a publicar cuantas veces haga falta."
+          action={
+            <Button onClick={() => run(createWorkingPlaylist)} disabled={pending} size="lg">
+              <ListPlus size={17} aria-hidden />
+              Crear playlist institucional
+            </Button>
+          }
+        />
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
       {error && (
-        <div
-          className="rounded-md border-l-4 bg-white px-4 py-3 text-sm text-inst-red"
-          style={{ borderColor: "var(--color-inst-red)" }}
-        >
+        <Alert tone="danger" title="No se pudo completar la operación">
           {error}
-        </div>
+        </Alert>
       )}
 
-      {!playlist ? (
-        <div
-          className="rounded-md border bg-white p-6"
-          style={{ borderColor: "var(--color-ui-border)" }}
-        >
-          <p className="text-sm text-ui-muted">
-            Aún no existe una playlist institucional. Cree una para empezar.
-          </p>
-          <button
-            onClick={() => run(createWorkingPlaylist)}
-            disabled={pending}
-            className="mt-4 rounded px-4 py-2 text-sm font-bold text-inst-white disabled:opacity-60"
-            style={{ background: "var(--color-inst-blue-bottom)" }}
-          >
-            Crear playlist institucional
-          </button>
-        </div>
-      ) : (
-        <>
-          <div
-            className="flex flex-wrap items-center justify-between gap-4 rounded-md border bg-white p-5"
-            style={{ borderColor: "var(--color-ui-border)" }}
-          >
-            <div>
-              <p className="font-extrabold text-inst-blue-top">{playlist.name}</p>
-              <p className="text-xs text-ui-muted">
-                Estado: <strong>{playlist.status}</strong> · versión {playlist.version} ·{" "}
-                {items.length} contenidos · {total}s por ciclo
-              </p>
+      {/* Cabecera de la playlist */}
+      <Card>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-lg font-black text-inst-blue-top">
+                {playlist.name}
+              </h2>
+              <Badge tone={published ? "ok" : "warn"} dot>
+                {published ? "Publicada" : playlist.status}
+              </Badge>
+              <Badge tone="neutral">v{playlist.version}</Badge>
             </div>
-            <button
-              onClick={() => run(() => publishPlaylist(playlist.id))}
-              disabled={pending || items.length === 0}
-              className="rounded px-5 py-2.5 text-sm font-bold text-inst-white disabled:opacity-50"
-              style={{ background: "var(--color-inst-red)" }}
-            >
-              Publicar en las 4 pantallas
-            </button>
+            <p className="mt-1.5 text-sm text-ui-muted">
+              {items.length} contenido{items.length === 1 ? "" : "s"} ·{" "}
+              {humanCycle(total)} por ciclo completo
+            </p>
           </div>
 
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* Contenidos en la playlist */}
-            <section
-              className="rounded-md border bg-white p-5"
-              style={{ borderColor: "var(--color-ui-border)" }}
-            >
-              <h2 className="text-sm font-bold text-ui-ink">Orden de reproducción</h2>
-              {items.length === 0 ? (
-                <p className="mt-3 text-sm text-ui-muted">
-                  Vacía. Añada contenidos desde la derecha.
-                </p>
-              ) : (
-                <ol className="mt-3 space-y-2">
-                  {items.map((it, i) => (
-                    <li
-                      key={it.id}
-                      className="flex items-center gap-2 rounded border px-3 py-2"
-                      style={{ borderColor: "var(--color-ui-border)" }}
-                    >
-                      <span className="w-6 text-sm font-bold text-ui-muted">
-                        {i + 1}
-                      </span>
-                      <span className="flex-1 text-sm font-semibold">{it.contentTitle}</span>
-                      <input
-                        type="number"
-                        min={1}
-                        defaultValue={it.durationSeconds}
-                        onBlur={(e) =>
-                          run(() =>
-                            updatePlaylistItemDuration(it.id, Number(e.target.value)),
-                          )
-                        }
-                        className="w-16 rounded border px-2 py-1 text-sm"
-                        style={{ borderColor: "var(--color-ui-border)" }}
-                        aria-label="Duración en segundos"
-                      />
-                      <span className="text-xs text-ui-muted">s</span>
-                      <button
-                        onClick={() => run(() => movePlaylistItem(playlist.id, it.id, "up"))}
-                        disabled={pending || i === 0}
-                        className="px-1.5 text-ui-muted disabled:opacity-30"
-                        aria-label="Subir"
-                      >
-                        ▲
-                      </button>
-                      <button
-                        onClick={() => run(() => movePlaylistItem(playlist.id, it.id, "down"))}
-                        disabled={pending || i === items.length - 1}
-                        className="px-1.5 text-ui-muted disabled:opacity-30"
-                        aria-label="Bajar"
-                      >
-                        ▼
-                      </button>
-                      <button
-                        onClick={() => run(() => removePlaylistItem(it.id))}
-                        disabled={pending}
-                        className="px-1.5 font-bold text-inst-red"
-                        aria-label="Quitar"
-                      >
-                        ✕
-                      </button>
-                    </li>
-                  ))}
-                </ol>
-              )}
-            </section>
+          <Button
+            variant="danger"
+            size="lg"
+            onClick={() => run(() => publishPlaylist(playlist.id))}
+            disabled={pending || items.length === 0}
+          >
+            <Radio size={17} aria-hidden />
+            Publicar en las 4 pantallas
+          </Button>
+        </div>
 
-            {/* Biblioteca de contenidos disponibles */}
-            <section
-              className="rounded-md border bg-white p-5"
-              style={{ borderColor: "var(--color-ui-border)" }}
-            >
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm font-bold text-ui-ink">Contenidos disponibles</h2>
-                <button
-                  onClick={() => run(seedSampleContent)}
-                  disabled={pending}
-                  className="rounded px-3 py-1.5 text-xs font-bold text-inst-blue-top"
-                  style={{ border: "1px solid var(--color-ui-border)" }}
+        {items.length === 0 && (
+          <Alert tone="warn" className="mt-4">
+            Una playlist vacía no puede publicarse. Añada al menos un contenido
+            desde la columna de la derecha.
+          </Alert>
+        )}
+      </Card>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Orden de reproducción */}
+        <Card>
+          <CardHeader
+            icon={<ListVideo size={18} />}
+            title="Orden de reproducción"
+            description="El ciclo se repite indefinidamente. La duración se mide en segundos."
+          />
+
+          {items.length === 0 ? (
+            <p className="mt-5 rounded-[12px] border border-dashed border-ui-border-strong bg-ui-raised px-4 py-6 text-center text-sm text-ui-muted">
+              La playlist está vacía.
+            </p>
+          ) : (
+            <ol className="mt-5 space-y-2">
+              {items.map((it, i) => (
+                <li
+                  key={it.id}
+                  className="flex items-center gap-2 rounded-[10px] border border-ui-border bg-ui-raised px-3 py-2.5"
                 >
-                  Cargar ejemplos
-                </button>
-              </div>
-              {available.length === 0 ? (
-                <p className="mt-3 text-sm text-ui-muted">
-                  No hay contenidos. Use «Cargar ejemplos» para generarlos desde las
-                  plantillas.
-                </p>
-              ) : (
-                <ul className="mt-3 space-y-2">
-                  {available.map((c) => (
-                    <li
-                      key={c.id}
-                      className="flex items-center gap-2 rounded border px-3 py-2"
-                      style={{ borderColor: "var(--color-ui-border)" }}
+                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-inst-blue-bottom text-[11px] font-black text-inst-white">
+                    {i + 1}
+                  </span>
+                  <span className="min-w-0 flex-1 truncate text-sm font-semibold text-ui-ink">
+                    {it.contentTitle}
+                  </span>
+
+                  <span className="flex shrink-0 items-center gap-1">
+                    <Input
+                      type="number"
+                      min={1}
+                      defaultValue={it.durationSeconds}
+                      onBlur={(e) =>
+                        run(() =>
+                          updatePlaylistItemDuration(it.id, Number(e.target.value)),
+                        )
+                      }
+                      className="h-8 w-16 px-2 text-center text-xs"
+                      aria-label={`Duración de ${it.contentTitle} en segundos`}
+                    />
+                    <span className="text-xs text-ui-muted">s</span>
+                  </span>
+
+                  <span className="flex shrink-0 items-center">
+                    <button
+                      type="button"
+                      onClick={() => run(() => movePlaylistItem(playlist.id, it.id, "up"))}
+                      disabled={pending || i === 0}
+                      aria-label={`Subir ${it.contentTitle}`}
+                      className="grid h-7 w-7 place-items-center rounded-[7px] text-ui-muted transition hover:bg-ui-canvas hover:text-ui-ink disabled:opacity-25"
                     >
-                      <div className="flex-1">
-                        <p className="text-sm font-semibold">{c.title}</p>
-                        <p className="text-xs text-ui-muted">{c.label}</p>
-                      </div>
-                      <button
-                        onClick={() => run(() => addPlaylistItem(playlist.id, c.id))}
-                        disabled={pending}
-                        className="rounded px-3 py-1.5 text-xs font-bold text-inst-white disabled:opacity-60"
-                        style={{ background: "var(--color-inst-blue-bottom)" }}
-                      >
-                        Añadir
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-          </div>
-        </>
-      )}
+                      <ArrowUp size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => run(() => movePlaylistItem(playlist.id, it.id, "down"))}
+                      disabled={pending || i === items.length - 1}
+                      aria-label={`Bajar ${it.contentTitle}`}
+                      className="grid h-7 w-7 place-items-center rounded-[7px] text-ui-muted transition hover:bg-ui-canvas hover:text-ui-ink disabled:opacity-25"
+                    >
+                      <ArrowDown size={14} />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => run(() => removePlaylistItem(it.id))}
+                      disabled={pending}
+                      aria-label={`Quitar ${it.contentTitle}`}
+                      className="grid h-7 w-7 place-items-center rounded-[7px] text-ui-muted transition hover:bg-danger-soft hover:text-inst-red disabled:opacity-40"
+                    >
+                      <X size={14} />
+                    </button>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          )}
+        </Card>
+
+        {/* Contenidos disponibles */}
+        <Card>
+          <CardHeader
+            icon={<ListPlus size={18} />}
+            title="Contenidos aprobados"
+            description="Sólo aparecen aquí los contenidos aprobados en «Plantillas»."
+            actions={
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => run(seedSampleContent)}
+                disabled={pending}
+              >
+                <Sparkles size={14} aria-hidden />
+                Cargar ejemplos
+              </Button>
+            }
+          />
+
+          {available.length === 0 ? (
+            <p className="mt-5 rounded-[12px] border border-dashed border-ui-border-strong bg-ui-raised px-4 py-6 text-center text-sm leading-relaxed text-ui-muted">
+              No hay contenidos aprobados. Créelos en «Plantillas y contenidos» y
+              apruébelos, o pulse «Cargar ejemplos» para generar un conjunto de
+              prueba.
+            </p>
+          ) : (
+            <ul className="mt-5 space-y-2">
+              {available.map((c) => (
+                <li
+                  key={c.id}
+                  className="flex items-center gap-3 rounded-[10px] border border-ui-border bg-ui-raised px-3 py-2.5"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-ui-ink">
+                      {c.title}
+                    </p>
+                    <p className="text-xs text-ui-muted">{c.label}</p>
+                  </div>
+                  <Button
+                    size="sm"
+                    onClick={() => run(() => addPlaylistItem(playlist.id, c.id))}
+                    disabled={pending}
+                  >
+                    Añadir
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Card>
+      </div>
+
+      <p className="flex items-center gap-2 text-xs text-ui-muted">
+        <Trash2 size={13} aria-hidden />
+        Quitar un contenido de la playlist no lo elimina: sigue disponible en
+        «Plantillas y contenidos».
+      </p>
     </div>
   );
 }

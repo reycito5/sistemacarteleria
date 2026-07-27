@@ -1,7 +1,11 @@
+import { ListVideo } from "lucide-react";
 import { getWorkingPlaylist, listContentItems } from "@/lib/data/admin";
 import { labelForKind } from "@/lib/views/registry";
 import { PLAYABLE_STATUSES } from "@/lib/views/workflow";
 import type { ViewContent } from "@/lib/views/schemas";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { Alert } from "@/components/ui/Alert";
+import { Badge } from "@/components/ui/Badge";
 import {
   PlaylistEditor,
   type EditorContent,
@@ -63,30 +67,38 @@ export default async function PlaylistPage() {
   const data = await loadData();
 
   return (
-    <div>
-      <h1 className="text-2xl font-black text-inst-blue-top">Playlist general</h1>
-      <p className="mt-1 text-sm text-ui-muted">
-        Una sola playlist institucional activa. Al publicar, las cuatro pantallas
-        reciben la misma programación sincronizada por hora oficial.
-      </p>
+    <div className="space-y-6">
+      <PageHeader
+        eyebrow="Paso 3 · Emisión"
+        title="Playlist general"
+        description="Esto es exactamente lo que se ve en los televisores. Se ordenan las pantallas aprobadas, se fija cuánto dura cada una y se publica: los equipos recogen la nueva versión en menos de un minuto."
+        actions={<Badge tone="info">Paso 3 de 4</Badge>}
+      />
 
-      <div className="mt-6">
-        {data ? (
-          <PlaylistEditor
-            playlist={data.playlist}
-            items={data.items}
-            available={data.available}
-          />
-        ) : (
-          <div
-            className="rounded-md border-l-4 bg-white px-4 py-3 text-sm"
-            style={{ borderColor: "var(--color-inst-gold)" }}
-          >
-            <strong>Supabase no configurado.</strong> Configure las variables de
-            entorno e inicie sesión para gestionar la playlist.
-          </div>
-        )}
-      </div>
+      <Alert tone="info">
+        Sólo aparecen aquí los contenidos <strong>aprobados</strong>. Si no
+        encuentra el que busca, revise su estado en{" "}
+        <strong>Plantillas y contenidos</strong>.
+      </Alert>
+
+      {data ? (
+        <PlaylistEditor
+          playlist={data.playlist}
+          items={data.items}
+          available={data.available}
+        />
+      ) : (
+        <Alert tone="warn" title="Supabase no está configurado">
+          Configure las variables de entorno e inicie sesión para gestionar la
+          playlist.
+        </Alert>
+      )}
+
+      <p className="flex items-center gap-2 text-xs text-ui-muted">
+        <ListVideo size={14} aria-hidden />
+        La programación se sincroniza por hora oficial: las cuatro pantallas
+        muestran el mismo elemento al mismo tiempo.
+      </p>
     </div>
   );
 }

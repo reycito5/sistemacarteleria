@@ -1,9 +1,11 @@
 import type { ViewContent } from "@/lib/views/schemas";
 
 /**
- * Contenido de ejemplo basado en las referencias visuales (imágenes 1–5).
- * Sirve para vista previa y para el reproductor de demostración mientras no
- * exista una playlist real publicada desde el panel.
+ * Contenido de ejemplo del catálogo completo de vistas institucionales.
+ *
+ * Sirve para la galería de plantillas y para el reproductor de demostración
+ * mientras no exista una playlist real publicada desde el panel. Las cinco
+ * primeras reproducen las referencias visuales originales.
  */
 export const SAMPLE_VIEWS: ViewContent[] = [
   {
@@ -67,5 +69,86 @@ export const SAMPLE_VIEWS: ViewContent[] = [
       { label: "Modalidad", value: "Presencial y virtual" },
     ],
     qrCaption: "INSCRÍBETE AQUÍ",
+  },
+  {
+    kind: "bienvenida",
+    title: "BIENVENIDOS AL POSGRADO",
+    subtitle: "Le orientamos para que encuentre lo que necesita.",
+    locations: [
+      { label: "Informaciones e inscripciones", place: "Recepción · Planta baja" },
+      { label: "Coordinación académica", place: "Segundo piso · Oficina 204" },
+      { label: "Defensas y conferencias", place: "Auditorio de Posgrado" },
+    ],
+    strapline: "Formación avanzada al servicio del desarrollo del Beni",
+  },
+  {
+    kind: "reconocimientos",
+    title: "RECONOCIMIENTOS",
+    badge: "ORGULLO INSTITUCIONAL",
+    items: [
+      {
+        name: "Lic. María Fernanda Suárez",
+        role: "Maestría en Educación Superior",
+        detail: "Defensa de tesis aprobada con mención de honor.",
+      },
+      {
+        name: "Ing. Carlos Andrés Rojas",
+        role: "Diplomado en Inteligencia Artificial",
+        detail: "Mejor proyecto final de la promoción 2026.",
+      },
+      {
+        name: "Dra. Lucía Camacho",
+        role: "Docente investigadora",
+        detail: "Publicación destacada en innovación educativa.",
+      },
+    ],
+    strapline: "Reconocemos el esfuerzo de quienes elevan el nivel académico",
+  },
+  {
+    kind: "evento_vivo",
+    badge: "EN VIVO",
+    title: "DEFENSA DE TESIS",
+    speaker: "Lic. María Fernanda Suárez",
+    schedule: [
+      { time: "09:00", label: "Presentación del tribunal" },
+      { time: "09:15", label: "Exposición de la tesis" },
+      { time: "10:00", label: "Preguntas del tribunal" },
+      { time: "10:30", label: "Deliberación y resultado" },
+    ],
+    qrCaption: "SÍGUELO EN LÍNEA",
+  },
+  {
+    kind: "testimonio",
+    name: "Lic. Andrea Suárez",
+    program: "Maestría en Educación Superior · Gestión 2026",
+    quote: "El Posgrado me dio herramientas para liderar mejor",
+    result:
+      "Hoy lidero proyectos con más visión, seguridad y compromiso con mi comunidad.",
+    strapline: "Profesionales que convierten el conocimiento en transformación",
+  },
+  {
+    kind: "mensaje",
+    authority: "Vicerrector de Posgrado — UABJB",
+    name: "Camilo Antonio Rosas Ardaya Ph.D.",
+    message:
+      "Desde el Posgrado impulsamos la formación, la investigación y el liderazgo al servicio del desarrollo del Beni.",
+    quote: "El conocimiento transforma nuestro futuro",
+  },
+  {
+    kind: "sincronizacion",
+    steps: [
+      "Descargando contenidos",
+      "Verificando videos",
+      "Actualizando agenda",
+      "Sincronizando programación",
+    ],
+  },
+  {
+    kind: "emergencia",
+    title: "SUSPENSIÓN DE ACTIVIDADES",
+    message:
+      "Las actividades académicas de hoy quedan suspendidas por disposición del Vicerrectorado.",
+    instructions:
+      "Diríjase a la salida más cercana con calma y siga las indicaciones del personal.",
   },
 ];

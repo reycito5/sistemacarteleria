@@ -2,12 +2,19 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { CalendarPlus, ListChecks, Power, Trash2 } from "lucide-react";
 import {
   createSchedule,
   deleteSchedule,
   toggleSchedule,
 } from "@/lib/actions/schedule";
 import type { ScheduleView } from "@/lib/data/admin";
+import { Button } from "@/components/ui/Button";
+import { Card, CardHeader } from "@/components/ui/Card";
+import { Field, Input, Select } from "@/components/ui/Field";
+import { Alert } from "@/components/ui/Alert";
+import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
 
 const DAYS = [
   { n: 1, label: "Lun" },
@@ -29,6 +36,19 @@ const PRIORITIES = [
 interface Props {
   playlists: { id: string; name: string; status: string }[];
   schedules: ScheduleView[];
+}
+
+function dayLabels(days: number[]): string {
+  const map: Record<number, string> = {
+    0: "Dom",
+    1: "Lun",
+    2: "Mar",
+    3: "Mié",
+    4: "Jue",
+    5: "Vie",
+    6: "Sáb",
+  };
+  return days.map((d) => map[d]).join(" · ");
 }
 
 export function ScheduleManager({ playlists, schedules }: Props) {
@@ -75,180 +95,200 @@ export function ScheduleManager({ playlists, schedules }: Props) {
   };
 
   return (
-    <div className="space-y-8">
-      {error && <p className="text-sm text-inst-red">{error}</p>}
+    <div className="space-y-6">
+      {error && (
+        <Alert tone="danger" title="No se pudo completar la operación">
+          {error}
+        </Alert>
+      )}
 
-      {/* Formulario */}
-      <section
-        className="max-w-2xl rounded-md border bg-white p-5"
-        style={{ borderColor: "var(--color-ui-border)" }}
-      >
-        <h2 className="text-sm font-bold text-ui-ink">Nueva programación</h2>
+      {/* Nueva programación */}
+      <Card>
+        <CardHeader
+          icon={<CalendarPlus size={18} />}
+          title="Nueva programación"
+          description="Deje las fechas y horas en blanco para que se emita siempre en los días marcados."
+        />
 
         {playlists.length === 0 ? (
-          <p className="mt-3 text-sm text-ui-muted">
-            No hay playlists. Cree una en «Playlist general» primero.
-          </p>
+          <Alert tone="warn" className="mt-5">
+            No hay ninguna playlist todavía. Créela primero en{" "}
+            <strong>Playlist general</strong>.
+          </Alert>
         ) : (
-          <div className="mt-4 space-y-4">
-            <label className="block">
-              <span className="block text-sm font-semibold text-ui-ink">Playlist</span>
-              <select
-                value={playlistId}
-                onChange={(e) => setPlaylistId(e.target.value)}
-                className="mt-1 w-full rounded border px-3 py-2 text-sm"
-                style={{ borderColor: "var(--color-ui-border)" }}
+          <div className="mt-6 space-y-5">
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Field label="Playlist" htmlFor="sch-playlist" required>
+                <Select
+                  id="sch-playlist"
+                  value={playlistId}
+                  onChange={(e) => setPlaylistId(e.target.value)}
+                >
+                  {playlists.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name} ({p.status})
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+
+              <Field
+                label="Prioridad"
+                htmlFor="sch-priority"
+                hint="Número más bajo, mayor prioridad ante coincidencias."
               >
-                {playlists.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name} ({p.status})
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <label className="block">
-              <span className="block text-sm font-semibold text-ui-ink">Prioridad</span>
-              <select
-                value={priority}
-                onChange={(e) => setPriority(Number(e.target.value))}
-                className="mt-1 w-full rounded border px-3 py-2 text-sm"
-                style={{ borderColor: "var(--color-ui-border)" }}
-              >
-                {PRIORITIES.map((p) => (
-                  <option key={p.v} value={p.v}>
-                    {p.label}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <div>
-              <span className="block text-sm font-semibold text-ui-ink">Días</span>
-              <div className="mt-2 flex flex-wrap gap-2">
-                {DAYS.map((d) => (
-                  <button
-                    key={d.n}
-                    type="button"
-                    onClick={() => toggleDay(d.n)}
-                    className="rounded px-3 py-1.5 text-sm font-semibold"
-                    style={
-                      days.includes(d.n)
-                        ? { background: "var(--color-inst-blue-bottom)", color: "#fff" }
-                        : { border: "1px solid var(--color-ui-border)", color: "#1b1f2a" }
-                    }
-                  >
-                    {d.label}
-                  </button>
-                ))}
-              </div>
+                <Select
+                  id="sch-priority"
+                  value={priority}
+                  onChange={(e) => setPriority(Number(e.target.value))}
+                >
+                  {PRIORITIES.map((p) => (
+                    <option key={p.v} value={p.v}>
+                      {p.label}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2">
-              <TimeField label="Hora diaria inicio" value={dailyStart} onChange={setDailyStart} />
-              <TimeField label="Hora diaria fin" value={dailyEnd} onChange={setDailyEnd} />
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <DateField label="Vigente desde" value={startAt} onChange={setStartAt} />
-              <DateField label="Vigente hasta" value={endAt} onChange={setEndAt} />
-            </div>
-
-            <button
-              onClick={submit}
-              disabled={pending}
-              className="rounded px-5 py-2.5 text-sm font-bold text-inst-white disabled:opacity-60"
-              style={{ background: "var(--color-inst-blue-bottom)" }}
+            <Field
+              label="Días de la semana"
+              hint="Pulse para activar o desactivar cada día."
             >
-              Programar
-            </button>
+              <div className="flex flex-wrap gap-2">
+                {DAYS.map((d) => {
+                  const on = days.includes(d.n);
+                  return (
+                    <button
+                      key={d.n}
+                      type="button"
+                      onClick={() => toggleDay(d.n)}
+                      aria-pressed={on}
+                      className={[
+                        "h-9 w-14 rounded-[10px] text-sm font-bold transition",
+                        on
+                          ? "bg-inst-blue-bottom text-inst-white shadow-[var(--shadow-ui-sm)]"
+                          : "border border-ui-border-strong text-ui-muted hover:border-inst-blue/40 hover:text-ui-ink",
+                      ].join(" ")}
+                    >
+                      {d.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </Field>
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Field label="Hora de inicio (diaria)" htmlFor="sch-dstart">
+                <Input
+                  id="sch-dstart"
+                  type="time"
+                  value={dailyStart}
+                  onChange={(e) => setDailyStart(e.target.value)}
+                />
+              </Field>
+              <Field label="Hora de fin (diaria)" htmlFor="sch-dend">
+                <Input
+                  id="sch-dend"
+                  type="time"
+                  value={dailyEnd}
+                  onChange={(e) => setDailyEnd(e.target.value)}
+                />
+              </Field>
+              <Field label="Vigente desde" htmlFor="sch-start">
+                <Input
+                  id="sch-start"
+                  type="date"
+                  value={startAt}
+                  onChange={(e) => setStartAt(e.target.value)}
+                />
+              </Field>
+              <Field label="Vigente hasta" htmlFor="sch-end">
+                <Input
+                  id="sch-end"
+                  type="date"
+                  value={endAt}
+                  onChange={(e) => setEndAt(e.target.value)}
+                />
+              </Field>
+            </div>
+
+            <Button onClick={submit} disabled={pending} size="lg">
+              <CalendarPlus size={17} aria-hidden />
+              {pending ? "Programando…" : "Programar"}
+            </Button>
           </div>
         )}
-      </section>
+      </Card>
 
-      {/* Listado */}
-      <section>
-        <h2 className="text-sm font-bold text-ui-ink">Programaciones</h2>
-        {schedules.length === 0 ? (
-          <p className="mt-3 text-sm text-ui-muted">Aún no hay programaciones.</p>
-        ) : (
-          <ul
-            className="mt-3 divide-y rounded-md border bg-white"
-            style={{ borderColor: "var(--color-ui-border)" }}
-          >
-            {schedules.map((s) => (
-              <li key={s.id} className="flex flex-wrap items-center gap-4 px-4 py-3">
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-inst-blue-top">
-                    {s.playlistName}{" "}
-                    <span className="text-xs font-normal text-ui-muted">
-                      · prioridad {s.priority}
-                    </span>
-                  </p>
-                  <p className="text-xs text-ui-muted">
-                    {s.daysOfWeek.length ? dayLabels(s.daysOfWeek) : "Todos los días"}
-                    {s.dailyStart && ` · ${s.dailyStart}–${s.dailyEnd ?? ""}`}
-                  </p>
-                </div>
-                <span
-                  className="text-xs font-bold"
-                  style={{ color: s.active ? "#137333" : "#5b6172" }}
+      {/* Programaciones existentes */}
+      <Card flush>
+        <div className="border-b border-ui-border p-5 sm:p-6">
+          <CardHeader
+            icon={<ListChecks size={18} />}
+            title={`Programaciones (${schedules.length})`}
+            description="Sólo las activas se tienen en cuenta al decidir qué se emite."
+          />
+        </div>
+
+        <div className="p-5 sm:p-6">
+          {schedules.length === 0 ? (
+            <EmptyState
+              icon={<ListChecks size={26} />}
+              title="Sin programaciones"
+              description="Mientras no exista ninguna, los televisores emiten la playlist publicada durante todo el día."
+            />
+          ) : (
+            <ul className="divide-y divide-ui-border rounded-[12px] border border-ui-border">
+              {schedules.map((s) => (
+                <li
+                  key={s.id}
+                  className="flex flex-wrap items-center gap-4 p-4 transition hover:bg-ui-raised"
                 >
-                  {s.active ? "Activa" : "Inactiva"}
-                </span>
-                <button
-                  onClick={() => run(() => toggleSchedule(s.id, !s.active))}
-                  disabled={pending}
-                  className="text-xs font-bold text-inst-blue-top"
-                >
-                  {s.active ? "Desactivar" : "Activar"}
-                </button>
-                <button
-                  onClick={() => run(() => deleteSchedule(s.id))}
-                  disabled={pending}
-                  className="text-xs font-bold text-inst-red"
-                >
-                  Eliminar
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+                  <div className="min-w-[200px] flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="text-sm font-extrabold text-inst-blue-top">
+                        {s.playlistName}
+                      </p>
+                      <Badge tone="neutral">Prioridad {s.priority}</Badge>
+                      <Badge tone={s.active ? "ok" : "neutral"} dot>
+                        {s.active ? "Activa" : "Inactiva"}
+                      </Badge>
+                    </div>
+                    <p className="mt-1 text-xs text-ui-muted">
+                      {s.daysOfWeek.length
+                        ? dayLabels(s.daysOfWeek)
+                        : "Todos los días"}
+                      {s.dailyStart && ` · ${s.dailyStart}–${s.dailyEnd ?? ""}`}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => run(() => toggleSchedule(s.id, !s.active))}
+                      disabled={pending}
+                      className="inline-flex items-center gap-1.5 rounded-[8px] border border-ui-border-strong px-2.5 py-1 text-xs font-bold text-inst-blue-top transition hover:border-inst-blue/45 hover:bg-info-soft disabled:opacity-50"
+                    >
+                      <Power size={13} aria-hidden />
+                      {s.active ? "Desactivar" : "Activar"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => run(() => deleteSchedule(s.id))}
+                      disabled={pending}
+                      className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-inst-red transition hover:bg-danger-soft disabled:opacity-50"
+                    >
+                      <Trash2 size={13} aria-hidden />
+                      Eliminar
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </Card>
     </div>
-  );
-}
-
-function dayLabels(days: number[]): string {
-  const map: Record<number, string> = { 0: "Dom", 1: "Lun", 2: "Mar", 3: "Mié", 4: "Jue", 5: "Vie", 6: "Sáb" };
-  return days.map((d) => map[d]).join(" ");
-}
-
-function TimeField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
-  return (
-    <label className="block">
-      <span className="block text-sm font-semibold text-ui-ink">{label}</span>
-      <input
-        type="time"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full rounded border px-3 py-2 text-sm"
-        style={{ borderColor: "var(--color-ui-border)" }}
-      />
-    </label>
-  );
-}
-
-function DateField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
-  return (
-    <label className="block">
-      <span className="block text-sm font-semibold text-ui-ink">{label}</span>
-      <input
-        type="date"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="mt-1 w-full rounded border px-3 py-2 text-sm"
-        style={{ borderColor: "var(--color-ui-border)" }}
-      />
-    </label>
   );
 }

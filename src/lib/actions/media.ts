@@ -15,6 +15,7 @@ const registerSchema = z.object({
   height: z.number().int().positive().nullish(),
   durationSeconds: z.number().positive().nullish(),
   thumbnailPath: z.string().nullish(),
+  subtitlePath: z.string().nullish(),
 });
 
 export type RegisterMediaInput = z.infer<typeof registerSchema>;
@@ -52,6 +53,7 @@ export async function registerMediaAsset(
       type: d.mediaType,
       storage_path: d.storagePath,
       thumbnail_path: d.thumbnailPath ?? null,
+      subtitle_path: d.subtitlePath ?? null,
       mime_type: d.mimeType,
       file_size: d.fileSize,
       width: d.width ?? null,

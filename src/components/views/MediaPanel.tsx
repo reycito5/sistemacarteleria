@@ -32,7 +32,18 @@ export function MediaPanel({
           muted
           loop
           playsInline
-        />
+          crossOrigin="anonymous"
+        >
+          {media?.subtitleSrc && (
+            <track
+              default
+              kind="subtitles"
+              srcLang="es"
+              label="Español"
+              src={media.subtitleSrc}
+            />
+          )}
+        </video>
       ) : media?.src ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img

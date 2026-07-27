@@ -7,6 +7,13 @@ import { ComunicadoView } from "./ComunicadoView";
 import { SincronizacionView } from "./SincronizacionView";
 import { EmergenciaView } from "./EmergenciaView";
 import { BackupView } from "./BackupView";
+import {
+  BienvenidaView,
+  ReconocimientosView,
+  EventoVivoView,
+  TestimonioView,
+  MensajeView,
+} from "./ExtraViews";
 
 /**
  * Selecciona la plantilla institucional según el tipo de contenido. Ante un
@@ -24,6 +31,16 @@ export function ViewRenderer({ content }: { content: ViewContent }) {
       return <NoticiasView content={content} />;
     case "comunicado":
       return <ComunicadoView content={content} />;
+    case "bienvenida":
+      return <BienvenidaView content={content} />;
+    case "reconocimientos":
+      return <ReconocimientosView content={content} />;
+    case "evento_vivo":
+      return <EventoVivoView content={content} />;
+    case "testimonio":
+      return <TestimonioView content={content} />;
+    case "mensaje":
+      return <MensajeView content={content} />;
     case "sincronizacion":
       return <SincronizacionView content={content} />;
     case "emergencia":

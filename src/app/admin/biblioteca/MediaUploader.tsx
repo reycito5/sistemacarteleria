@@ -54,6 +54,7 @@ function readDimensions(file: File, kind: "video" | "image"): Promise<Dimensions
 export function MediaUploader() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const subInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -110,6 +111,27 @@ export function MediaUploader() {
       return;
     }
 
+    // Subtítulos opcionales (.vtt) para videos.
+    let subtitlePath: string | null = null;
+    const subFile = subInputRef.current?.files?.[0];
+    if (mediaType === "video" && subFile) {
+      if (!/\.vtt$/i.test(subFile.name)) {
+        setError("Los subtítulos deben ser un archivo .vtt");
+        setStatus(null);
+        return;
+      }
+      const sp = `subtitle/${path.replace(/^video\//, "").replace(/\.\w+$/, "")}.vtt`;
+      const { error: subErr } = await supabase.storage
+        .from("media")
+        .upload(sp, subFile, { contentType: "text/vtt", upsert: false });
+      if (subErr) {
+        setError(`Error al subir subtítulos: ${subErr.message}`);
+        setStatus(null);
+        return;
+      }
+      subtitlePath = sp;
+    }
+
     setStatus("Registrando en la biblioteca…");
     startTransition(async () => {
       const res = await registerMediaAsset({
@@ -121,6 +143,7 @@ export function MediaUploader() {
         width: dims?.width ?? null,
         height: dims?.height ?? null,
         durationSeconds: dims?.durationSeconds ?? null,
+        subtitlePath,
       });
       if (!res.ok) {
         setError(res.error);
@@ -130,6 +153,7 @@ export function MediaUploader() {
       setStatus("Archivo añadido a la biblioteca.");
       setTitle("");
       if (inputRef.current) inputRef.current.value = "";
+      if (subInputRef.current) subInputRef.current.value = "";
       router.refresh();
     });
   };
@@ -161,6 +185,18 @@ export function MediaUploader() {
         accept="video/mp4,image/jpeg,image/png,image/webp"
         className="mt-3 block w-full text-sm"
       />
+
+      <label className="mt-3 block">
+        <span className="block text-xs font-semibold text-panel-ink">
+          Subtítulos (.vtt) — opcional, para videos
+        </span>
+        <input
+          ref={subInputRef}
+          type="file"
+          accept=".vtt,text/vtt"
+          className="mt-1 block w-full text-sm"
+        />
+      </label>
 
       {error && <p className="mt-3 text-sm text-inst-red">{error}</p>}
       {status && <p className="mt-3 text-sm text-inst-blue-top">{status}</p>}

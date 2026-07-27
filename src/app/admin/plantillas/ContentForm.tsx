@@ -125,7 +125,13 @@ export function ContentForm({
                       setField(
                         f.key,
                         opt
-                          ? { assetId: opt.id, path: opt.path, src: opt.url, muted: true }
+                          ? {
+                              assetId: opt.id,
+                              path: opt.path,
+                              src: opt.url,
+                              subtitlePath: opt.subtitlePath ?? undefined,
+                              muted: true,
+                            }
                           : undefined,
                       );
                     }}

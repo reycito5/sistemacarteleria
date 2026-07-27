@@ -132,6 +132,8 @@ export interface MediaOption {
   title: string;
   /** Ruta en Storage que se guarda en el contenido (se firma al reproducir). */
   path: string;
+  /** Ruta de subtítulos (.vtt) si existe. */
+  subtitlePath: string | null;
   /** URL firmada para la vista previa del panel. */
   url: string;
   type: MediaAssetRow["type"];
@@ -141,7 +143,7 @@ export async function listMediaOptions(): Promise<MediaOption[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("media_assets")
-    .select("id, title, type, storage_path")
+    .select("id, title, type, storage_path, subtitle_path")
     .order("created_at", { ascending: false });
   const rows = data ?? [];
   const signed = await signMediaPaths(
@@ -153,6 +155,7 @@ export async function listMediaOptions(): Promise<MediaOption[]> {
     title: a.title,
     type: a.type,
     path: a.storage_path,
+    subtitlePath: a.subtitle_path,
     url: signed.get(a.storage_path) ?? "",
   }));
 }

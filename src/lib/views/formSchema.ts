@@ -156,6 +156,96 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
       { type: "text", key: "qrCaption", label: "Texto del QR" },
     ],
   },
+  bienvenida: {
+    kind: "bienvenida",
+    label: "Bienvenida y orientación",
+    titleKey: "title",
+    fields: [
+      { type: "text", key: "title", label: "Título" },
+      { type: "textarea", key: "subtitle", label: "Subtítulo" },
+      { type: "media", key: "media", label: "Video / imagen" },
+      {
+        type: "list",
+        key: "locations",
+        label: "Ubicaciones / oficinas",
+        max: 6,
+        itemFields: [
+          { key: "label", label: "Área" },
+          { key: "place", label: "Ubicación" },
+        ],
+      },
+      { type: "text", key: "strapline", label: "Frase inferior" },
+    ],
+  },
+  reconocimientos: {
+    kind: "reconocimientos",
+    label: "Reconocimientos",
+    titleKey: "title",
+    fields: [
+      { type: "text", key: "title", label: "Título" },
+      { type: "text", key: "badge", label: "Etiqueta (badge)" },
+      { type: "media", key: "media", label: "Video / imagen" },
+      {
+        type: "list",
+        key: "items",
+        label: "Reconocidos",
+        max: 4,
+        itemFields: [
+          { key: "name", label: "Nombre" },
+          { key: "role", label: "Rol / categoría" },
+          { key: "detail", label: "Detalle" },
+        ],
+      },
+      { type: "text", key: "strapline", label: "Frase inferior" },
+    ],
+  },
+  evento_vivo: {
+    kind: "evento_vivo",
+    label: "Transmisión o evento en vivo",
+    titleKey: "title",
+    fields: [
+      { type: "text", key: "badge", label: "Etiqueta (badge)" },
+      { type: "text", key: "title", label: "Título del evento" },
+      { type: "text", key: "speaker", label: "Expositor" },
+      { type: "media", key: "media", label: "Video en vivo" },
+      {
+        type: "list",
+        key: "schedule",
+        label: "Programación",
+        max: 4,
+        itemFields: [
+          { key: "time", label: "Hora" },
+          { key: "label", label: "Actividad" },
+        ],
+      },
+      { type: "text", key: "qrCaption", label: "Texto del QR" },
+    ],
+  },
+  testimonio: {
+    kind: "testimonio",
+    label: "Testimonios",
+    titleKey: "name",
+    fields: [
+      { type: "media", key: "media", label: "Video testimonial" },
+      { type: "text", key: "name", label: "Nombre del participante" },
+      { type: "text", key: "program", label: "Programa cursado" },
+      { type: "textarea", key: "quote", label: "Frase destacada" },
+      { type: "textarea", key: "result", label: "Resultado profesional" },
+      { type: "text", key: "strapline", label: "Frase inferior" },
+    ],
+  },
+  mensaje: {
+    kind: "mensaje",
+    label: "Mensaje institucional",
+    titleKey: "name",
+    fields: [
+      { type: "text", key: "authority", label: "Cargo / autoridad" },
+      { type: "text", key: "name", label: "Nombre" },
+      { type: "media", key: "media", label: "Fotografía oficial" },
+      { type: "textarea", key: "message", label: "Mensaje" },
+      { type: "textarea", key: "quote", label: "Frase institucional" },
+    ],
+  },
 };
 
 export const EDITABLE_KINDS = Object.values(FORM_SCHEMAS);

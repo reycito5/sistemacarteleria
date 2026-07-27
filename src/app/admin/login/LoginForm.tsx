@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,7 +14,6 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export function LoginForm() {
-  const router = useRouter();
   const [serverError, setServerError] = useState<string | null>(null);
   const [phase, setPhase] = useState<"password" | "mfa">("password");
   const [mfaCode, setMfaCode] = useState("");
@@ -28,8 +26,10 @@ export function LoginForm() {
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const finish = () => {
-    router.push("/admin");
-    router.refresh();
+    // Navegación completa (no router.push) tras iniciar sesión: garantiza que
+    // el navegador envíe al servidor las cookies de sesión recién creadas, para
+    // que el middleware reconozca la sesión y no rebote de vuelta al login.
+    window.location.assign("/admin");
   };
 
   const onSubmit = async (values: FormValues) => {

@@ -48,6 +48,16 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
     }
   });
 
+  // Credencial individual del dispositivo (se envía en cada latido).
+  const [deviceToken] = useState<string | undefined>(() => {
+    if (typeof window === "undefined") return undefined;
+    try {
+      return window.localStorage.getItem("sicd.screen.token") ?? undefined;
+    } catch {
+      return undefined;
+    }
+  });
+
   // Offline-first: parte de la caché local y refresca el manifiesto de red.
   useEffect(() => {
     let cancelled = false;
@@ -117,6 +127,7 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           screenCode: resolvedCode,
+          deviceToken: deviceToken ?? null,
           currentContentId: current?.contentItemId ?? null,
           currentPositionSeconds: 0,
           playlistVersion: m?.version ?? null,
@@ -126,7 +137,7 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
     } catch {
       // La pérdida de red no debe afectar la reproducción.
     }
-  }, [resolvedCode, online]);
+  }, [resolvedCode, deviceToken, online]);
 
   useEffect(() => {
     if (!resolvedCode) return;

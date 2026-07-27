@@ -6,6 +6,7 @@ import { ScreenFrame } from "@/components/institutional/ScreenFrame";
 import { INSTITUTION } from "@/lib/design/tokens";
 
 const STORAGE_KEY = "sicd.screen.code";
+const TOKEN_KEY = "sicd.screen.token";
 type Phase = "solicitando" | "esperando" | "no_configurado" | "error";
 
 /**
@@ -60,11 +61,15 @@ export function ActivationClient() {
         const data = (await res.json()) as {
           status?: string;
           screen?: { code: string };
+          deviceToken?: string;
         };
         if (cancelled) return;
         if (data.status === "activated" && data.screen) {
           try {
             window.localStorage.setItem(STORAGE_KEY, data.screen.code);
+            if (data.deviceToken) {
+              window.localStorage.setItem(TOKEN_KEY, data.deviceToken);
+            }
           } catch {
             /* almacenamiento no disponible */
           }

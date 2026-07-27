@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { verifyToken } from "@/lib/player/deviceToken";
 
 /**
  * Route Handler de latidos (Fase 8). Cada reproductor reporta periódicamente su
@@ -13,6 +14,7 @@ export const runtime = "nodejs";
 
 const heartbeatSchema = z.object({
   screenCode: z.string().min(1),
+  deviceToken: z.string().nullish(),
   currentContentId: z.string().uuid().nullish(),
   currentPositionSeconds: z.number().min(0).default(0),
   playlistVersion: z.number().int().nullish(),
@@ -49,7 +51,7 @@ export async function POST(request: Request) {
 
   const { data: screen, error: screenError } = await supabase
     .from("screens")
-    .select("id")
+    .select("id, device_token_hash")
     .eq("code", data.screenCode)
     .maybeSingle();
 
@@ -58,6 +60,17 @@ export async function POST(request: Request) {
   }
   if (!screen) {
     return NextResponse.json({ error: "Pantalla no encontrada" }, { status: 404 });
+  }
+
+  // Verificación de credencial: si la pantalla tiene token (fue activada),
+  // exige uno válido. Las pantallas sembradas sin token se aceptan (compat).
+  if (screen.device_token_hash) {
+    if (!data.deviceToken || !verifyToken(data.deviceToken, screen.device_token_hash)) {
+      return NextResponse.json(
+        { error: "Credencial de pantalla inválida" },
+        { status: 401 },
+      );
+    }
   }
 
   const now = new Date().toISOString();

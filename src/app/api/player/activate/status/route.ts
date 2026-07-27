@@ -4,6 +4,7 @@ import {
   isActivationExpired,
   isValidActivationCode,
 } from "@/lib/player/activation";
+import { generateDeviceToken, hashToken } from "@/lib/player/deviceToken";
 
 /**
  * Consulta el estado de una activación (sección 22, paso 8). El reproductor
@@ -33,12 +34,25 @@ export async function GET(request: Request) {
   // Pantalla ya activada con ese código de activación.
   const { data: activated } = await supabase
     .from("screens")
-    .select("code, name, location, activated_at")
+    .select("id, code, name, location, activated_at, device_token_hash")
     .eq("activation_code", code)
     .not("activated_at", "is", null)
     .maybeSingle();
 
   if (activated) {
+    // Primera consulta tras la activación: emite el token de dispositivo una
+    // sola vez (se guarda solo el hash). Consultas posteriores no lo devuelven.
+    let deviceToken: string | undefined;
+    if (!activated.device_token_hash) {
+      const token = generateDeviceToken();
+      const { error } = await supabase
+        .from("screens")
+        .update({ device_token_hash: hashToken(token) })
+        .eq("id", activated.id)
+        .is("device_token_hash", null);
+      if (!error) deviceToken = token;
+    }
+
     return NextResponse.json(
       {
         status: "activated",
@@ -47,6 +61,7 @@ export async function GET(request: Request) {
           name: activated.name,
           location: activated.location,
         },
+        ...(deviceToken ? { deviceToken } : {}),
       },
       { headers: { "cache-control": "no-store" } },
     );

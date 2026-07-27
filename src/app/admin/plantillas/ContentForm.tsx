@@ -242,7 +242,7 @@ export function ContentForm({
       <div>
         <p className="mb-2 text-sm font-bold text-panel-ink">Vista previa</p>
         <div
-          className="aspect-video w-full overflow-hidden rounded-md border shadow-sm"
+          className="relative aspect-video w-full overflow-hidden rounded-md border shadow-sm"
           style={{ borderColor: "var(--color-panel-border)" }}
         >
           {preview.success ? (
@@ -250,7 +250,7 @@ export function ContentForm({
               <ViewRenderer content={preview.data} />
             </ScreenFrame>
           ) : (
-            <div className="grid h-full place-items-center bg-panel-bg text-sm text-panel-muted">
+            <div className="absolute inset-0 grid place-items-center bg-panel-bg px-4 text-center text-sm text-panel-muted">
               Vista previa disponible al completar los campos.
             </div>
           )}

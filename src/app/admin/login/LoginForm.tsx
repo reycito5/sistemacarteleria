@@ -96,14 +96,13 @@ export function LoginForm() {
           inputMode="numeric"
           maxLength={6}
           autoFocus
-          className="w-full rounded border px-3 py-2 text-sm tabular-nums outline-none focus:border-inst-blue"
-          style={{ borderColor: "var(--color-panel-border)" }}
+          className="w-full rounded-lg border border-panel-border bg-white px-3 py-2.5 text-center text-lg tracking-[0.4em] tabular-nums outline-none transition focus:border-inst-blue focus:ring-2 focus:ring-inst-blue/20"
         />
         {serverError && <p className="text-sm text-inst-red">{serverError}</p>}
         <button
           onClick={submitMfa}
           disabled={mfaBusy || mfaCode.length < 6}
-          className="w-full rounded py-2.5 text-sm font-bold text-inst-white disabled:opacity-60"
+          className="w-full rounded-lg py-2.5 text-sm font-bold text-inst-white shadow-sm transition hover:brightness-110 disabled:opacity-60"
           style={{ background: "var(--color-inst-blue-bottom)" }}
         >
           {mfaBusy ? "Verificando…" : "Verificar"}
@@ -122,8 +121,7 @@ export function LoginForm() {
           type="email"
           autoComplete="email"
           {...register("email")}
-          className="mt-1 w-full rounded border px-3 py-2 text-sm outline-none focus:border-inst-blue"
-          style={{ borderColor: "var(--color-panel-border)" }}
+          className="mt-1 w-full rounded-lg border border-panel-border bg-white px-3 py-2.5 text-sm outline-none transition focus:border-inst-blue focus:ring-2 focus:ring-inst-blue/20"
         />
         {errors.email && (
           <p className="mt-1 text-xs text-inst-red">{errors.email.message}</p>
@@ -138,8 +136,7 @@ export function LoginForm() {
           type="password"
           autoComplete="current-password"
           {...register("password")}
-          className="mt-1 w-full rounded border px-3 py-2 text-sm outline-none focus:border-inst-blue"
-          style={{ borderColor: "var(--color-panel-border)" }}
+          className="mt-1 w-full rounded-lg border border-panel-border bg-white px-3 py-2.5 text-sm outline-none transition focus:border-inst-blue focus:ring-2 focus:ring-inst-blue/20"
         />
         {errors.password && (
           <p className="mt-1 text-xs text-inst-red">{errors.password.message}</p>
@@ -151,7 +148,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="w-full rounded py-2.5 text-sm font-bold text-inst-white disabled:opacity-60"
+        className="w-full rounded-lg py-2.5 text-sm font-bold text-inst-white shadow-sm transition hover:brightness-110 disabled:opacity-60"
         style={{ background: "var(--color-inst-blue-bottom)" }}
       >
         {isSubmitting ? "Ingresando…" : "Ingresar"}

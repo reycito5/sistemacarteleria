@@ -21,47 +21,50 @@ const LINKS = [
 
 export default function Home() {
   return (
-    <div className="min-h-full bg-panel-bg text-panel-ink">
+    <div className="min-h-dvh bg-panel-bg text-panel-ink">
       <header
-        className="px-10 py-8 text-inst-white"
-        style={{ background: "var(--color-inst-blue-bottom)" }}
+        className="px-6 py-10 text-inst-white sm:px-10 sm:py-14"
+        style={{
+          background:
+            "linear-gradient(135deg, var(--color-inst-blue-bottom), var(--color-inst-blue-top))",
+        }}
       >
-        <p className="text-[13px] font-semibold tracking-[0.3em] text-inst-gold">
-          {INSTITUTION.systemName}
-        </p>
-        <h1 className="mt-1 text-4xl font-black">{INSTITUTION.commercialName}</h1>
-        <p className="mt-2 max-w-3xl text-white/80">
-          {INSTITUTION.university} · {INSTITUTION.vicerrectorate}. Sistema de
-          cartelería digital para cuatro pantallas con una única programación
-          institucional sincronizada.
-        </p>
+        <div className="mx-auto max-w-5xl">
+          <p className="text-[12px] font-semibold tracking-[0.3em] text-inst-gold sm:text-[13px]">
+            {INSTITUTION.systemName}
+          </p>
+          <h1 className="mt-2 text-3xl font-black leading-tight sm:text-5xl">
+            {INSTITUTION.commercialName}
+          </h1>
+          <p className="mt-3 max-w-3xl text-sm text-white/80 sm:text-base">
+            {INSTITUTION.university} · {INSTITUTION.vicerrectorate}. Sistema de
+            cartelería digital para cuatro pantallas con una única programación
+            institucional sincronizada.
+          </p>
+        </div>
       </header>
       <div className="inst-rule-gold" />
 
-      <main className="mx-auto max-w-5xl px-6 py-10">
-        <div className="grid gap-5 sm:grid-cols-3">
+      <main className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
+        <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">
           {LINKS.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="group rounded-md border bg-white p-6 transition hover:shadow-md"
-              style={{ borderColor: "var(--color-panel-border)" }}
+              className="group flex flex-col rounded-2xl border border-panel-border bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-inst-blue/30 hover:shadow-lg hover:shadow-black/5"
             >
-              <h2 className="text-xl font-extrabold text-inst-blue-top">
+              <h2 className="text-lg font-extrabold text-inst-blue-top sm:text-xl">
                 {link.title}
               </h2>
-              <p className="mt-2 text-sm text-panel-muted">{link.desc}</p>
-              <span className="mt-4 inline-block text-sm font-bold text-inst-red">
-                Abrir →
+              <p className="mt-2 flex-1 text-sm text-panel-muted">{link.desc}</p>
+              <span className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-inst-red transition group-hover:gap-2">
+                Abrir <span aria-hidden>→</span>
               </span>
             </Link>
           ))}
         </div>
 
-        <section
-          className="mt-10 rounded-md border bg-white p-6"
-          style={{ borderColor: "var(--color-panel-border)" }}
-        >
+        <section className="mt-8 rounded-2xl border border-panel-border bg-white p-6 shadow-sm sm:mt-10">
           <h3 className="text-lg font-extrabold text-inst-blue-top">
             Grupo institucional
           </h3>

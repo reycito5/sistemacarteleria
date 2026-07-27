@@ -21,12 +21,15 @@ const TITLES: Record<string, string> = {
  */
 export default function PreviewPage() {
   return (
-    <div className="min-h-full bg-panel-bg px-6 py-8 text-panel-ink">
+    <div className="min-h-dvh bg-panel-bg px-4 py-8 text-panel-ink sm:px-6">
       <div className="mx-auto max-w-6xl">
-        <Link href="/" className="text-sm font-bold text-inst-red">
-          ← Inicio
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1 text-sm font-bold text-inst-red transition hover:gap-2"
+        >
+          <span aria-hidden>←</span> Inicio
         </Link>
-        <h1 className="mt-2 text-3xl font-black text-inst-blue-top">
+        <h1 className="mt-2 text-2xl font-black text-inst-blue-top sm:text-3xl">
           Plantillas institucionales
         </h1>
         <p className="mt-1 text-sm text-panel-muted">
@@ -34,11 +37,11 @@ export default function PreviewPage() {
           inmutables.
         </p>
 
-        <div className="mt-8 grid gap-8 lg:grid-cols-2">
+        <div className="mt-8 grid gap-6 sm:gap-8 lg:grid-cols-2">
           {SAMPLE_VIEWS.map((content, i) => (
             <figure key={i} className="space-y-2">
               <div
-                className="aspect-video w-full overflow-hidden rounded-md border shadow-sm"
+                className="relative aspect-video w-full overflow-hidden rounded-xl border shadow-sm"
                 style={{ borderColor: "var(--color-panel-border)" }}
               >
                 <ScreenFrame bare={isBareView(content)}>

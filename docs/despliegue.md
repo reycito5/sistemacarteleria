@@ -17,13 +17,19 @@ mini PC físicos) y no forman parte del código del repositorio.
    - `0004_storage.sql` — bucket de medios
    - `0005_realtime.sql` — Realtime del monitoreo
    - `0006_private_media.sql` — bucket privado + URLs firmadas
+   - `0007_bootstrap_admin.sql` — primer usuario = superadmin + ayudante
    Con la CLI: `supabase db push` (o `supabase migration up`).
 3. **Autenticación**: habilite el proveedor de correo/contraseña. La verificación
    en dos pasos (TOTP) ya está soportada por la app en `/admin/seguridad`.
 4. **Realtime**: la migración `0005` publica `screens` y `screen_heartbeats`;
    confirme que Realtime está habilitado en el proyecto.
-5. **Primer usuario**: cree un usuario en Auth y, en la tabla `profiles`, asigne
-   `role = 'superadmin'` para tener control total.
+5. **Primer administrador**: con la migración `0007`, el **primer usuario que se
+   registre** se convierte automáticamente en `superadmin`. Cree ese usuario en
+   Auth (o desde `/admin/login`), inicie sesión y ya tendrá control total.
+   - Para promover a otros usuarios más adelante, ejecute en el editor SQL:
+     `select promote_to_superadmin('correo@dominio');`
+   - Si su base ya tenía usuarios antes de aplicar `0007`, use ese mismo
+     ayudante para designar al administrador.
 
 ## 2. Variables de entorno
 

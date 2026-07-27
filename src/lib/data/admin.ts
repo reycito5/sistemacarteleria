@@ -1,18 +1,12 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
-import { publicEnv } from "@/lib/env";
+import { signMediaPaths } from "@/lib/media/storage";
 import type {
   ContentItemRow,
   MediaAssetRow,
   PlaylistRow,
   PlaylistItemRow,
 } from "@/lib/supabase/database.types";
-
-/** URL pública de un archivo del bucket 'media'. */
-export function publicMediaUrl(storagePath: string): string {
-  const base = publicEnv.NEXT_PUBLIC_SUPABASE_URL;
-  return `${base}/storage/v1/object/public/media/${storagePath}`;
-}
 
 export interface MediaAssetSummary {
   id: string;
@@ -37,13 +31,19 @@ export async function listMediaAssets(): Promise<MediaAssetSummary[]> {
     )
     .order("created_at", { ascending: false });
 
-  return (data ?? []).map((a) => ({
+  const rows = data ?? [];
+  const paths = rows.flatMap((a) =>
+    [a.storage_path, a.thumbnail_path].filter((p): p is string => Boolean(p)),
+  );
+  const signed = await signMediaPaths(supabase, paths);
+
+  return rows.map((a) => ({
     id: a.id,
     title: a.title,
     type: a.type,
     status: a.status,
-    url: publicMediaUrl(a.storage_path),
-    thumbnailUrl: a.thumbnail_path ? publicMediaUrl(a.thumbnail_path) : null,
+    url: signed.get(a.storage_path) ?? "",
+    thumbnailUrl: a.thumbnail_path ? signed.get(a.thumbnail_path) ?? null : null,
     width: a.width,
     height: a.height,
     durationSeconds: a.duration_seconds,
@@ -126,10 +126,13 @@ export async function getContentItem(id: string): Promise<ContentItemFull | null
   };
 }
 
-/** Opciones de la biblioteca para el selector de medios (id, título, url, tipo). */
+/** Opciones de la biblioteca para el selector de medios. */
 export interface MediaOption {
   id: string;
   title: string;
+  /** Ruta en Storage que se guarda en el contenido (se firma al reproducir). */
+  path: string;
+  /** URL firmada para la vista previa del panel. */
   url: string;
   type: MediaAssetRow["type"];
 }
@@ -140,11 +143,17 @@ export async function listMediaOptions(): Promise<MediaOption[]> {
     .from("media_assets")
     .select("id, title, type, storage_path")
     .order("created_at", { ascending: false });
-  return (data ?? []).map((a) => ({
+  const rows = data ?? [];
+  const signed = await signMediaPaths(
+    supabase,
+    rows.map((a) => a.storage_path),
+  );
+  return rows.map((a) => ({
     id: a.id,
     title: a.title,
     type: a.type,
-    url: publicMediaUrl(a.storage_path),
+    path: a.storage_path,
+    url: signed.get(a.storage_path) ?? "",
   }));
 }
 

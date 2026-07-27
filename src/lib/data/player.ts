@@ -6,6 +6,7 @@ import {
   type PlayerManifest,
   type PlaylistItemLike,
 } from "@/lib/player/manifest";
+import { signMediaPaths } from "@/lib/media/storage";
 import { emergenciaSchema, type EmergenciaContent } from "@/lib/views/schemas";
 
 type Client = SupabaseClient<Database>;
@@ -89,5 +90,33 @@ export async function getActiveManifest(
   }));
 
   const emergency = await fetchActiveEmergency(supabase, nowIso);
-  return buildManifest(playlist, rawItems, emergency);
+  const manifest = buildManifest(playlist, rawItems, emergency);
+
+  // Firma las rutas de medios (bucket privado) para que las pantallas puedan
+  // descargarlos sin exponer el bucket. Las URLs firmadas se re-generan en cada
+  // construcción; el Service Worker cachea por ruta, ignorando el token.
+  await signManifestMedia(supabase, manifest);
+  return manifest;
+}
+
+/** Sustituye media.path por una URL firmada en cada elemento del manifiesto. */
+async function signManifestMedia(
+  supabase: Client,
+  manifest: PlayerManifest,
+): Promise<void> {
+  const paths = new Set<string>();
+  for (const item of manifest.items) {
+    const media = (item.content as { media?: { path?: string } }).media;
+    if (media?.path) paths.add(media.path);
+  }
+  if (paths.size === 0) return;
+
+  const signed = await signMediaPaths(supabase, [...paths]);
+  for (const item of manifest.items) {
+    const media = (item.content as { media?: { path?: string; src?: string } }).media;
+    if (media?.path) {
+      const url = signed.get(media.path);
+      if (url) media.src = url;
+    }
+  }
 }

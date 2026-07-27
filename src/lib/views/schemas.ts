@@ -10,6 +10,8 @@ import { z } from "zod";
 
 export const mediaRefSchema = z.object({
   assetId: z.string().uuid().optional(),
+  /** Ruta en Storage; se firma en el servidor al construir el manifiesto */
+  path: z.string().optional(),
   /** URL directa o firmada, resuelta en tiempo de render */
   src: z.string().optional(),
   poster: z.string().optional(),

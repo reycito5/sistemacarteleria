@@ -124,7 +124,9 @@ export function ContentForm({
                       const opt = mediaOptions.find((m) => m.id === e.target.value);
                       setField(
                         f.key,
-                        opt ? { assetId: opt.id, src: opt.url, muted: true } : undefined,
+                        opt
+                          ? { assetId: opt.id, path: opt.path, src: opt.url, muted: true }
+                          : undefined,
                       );
                     }}
                     className="w-full rounded border px-3 py-2 text-sm"

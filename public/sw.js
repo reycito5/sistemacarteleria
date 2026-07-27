@@ -44,10 +44,13 @@ async function precacheMedia(urls) {
   await Promise.all(
     urls.map(async (url) => {
       try {
-        const match = await cache.match(url);
+        // Clave normalizada por ruta (coincide con el manejador de fetch).
+        const u = new URL(url);
+        const key = new Request(u.origin + u.pathname, { method: "GET" });
+        const match = await cache.match(key);
         if (match) return; // ya está en caché
         const res = await fetch(url, { mode: "cors" });
-        if (res.ok) await cache.put(url, res.clone());
+        if (res.ok) await cache.put(key, res.clone());
       } catch {
         // Un archivo que no se pudo precargar no debe romper el resto.
       }
@@ -68,9 +71,12 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(req.url);
 
-  // 1) Medios: cache-first (se sirven aunque no haya red).
+  // 1) Medios: cache-first (se sirven aunque no haya red). Se cachean por ruta
+  //    (sin el token de la URL firmada) para que la rotación del token no
+  //    invalide la caché offline.
   if (isMedia(url)) {
-    event.respondWith(cacheFirst(req, MEDIA_CACHE));
+    const key = new Request(url.origin + url.pathname, { method: "GET" });
+    event.respondWith(cacheFirstKeyed(req, key, MEDIA_CACHE));
     return;
   }
 
@@ -94,12 +100,17 @@ self.addEventListener("fetch", (event) => {
 });
 
 async function cacheFirst(req, cacheName) {
+  return cacheFirstKeyed(req, req, cacheName);
+}
+
+/** Cache-first usando `key` como clave de caché y `req` para la descarga. */
+async function cacheFirstKeyed(req, key, cacheName) {
   const cache = await caches.open(cacheName);
-  const cached = await cache.match(req);
+  const cached = await cache.match(key);
   if (cached) return cached;
   try {
     const res = await fetch(req);
-    if (res.ok) cache.put(req, res.clone());
+    if (res.ok) cache.put(key, res.clone());
     return res;
   } catch (err) {
     if (cached) return cached;

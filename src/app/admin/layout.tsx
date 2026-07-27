@@ -10,6 +10,7 @@ const MODULES = [
   { href: "/admin/comunicados", label: "Comunicados urgentes" },
   { href: "/admin/oferta", label: "Portal de oferta" },
   { href: "/admin/pantallas", label: "Centro de pantallas" },
+  { href: "/admin/seguridad", label: "Seguridad (2FA)" },
 ];
 
 export default function AdminLayout({

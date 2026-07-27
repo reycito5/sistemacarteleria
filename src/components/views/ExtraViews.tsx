@@ -21,19 +21,19 @@ export function BienvenidaView({ content }: { content: BienvenidaContent }) {
             {content.title}
           </h2>
           {content.subtitle && (
-            <p className="mt-2 text-[24px] font-medium text-panel-ink">
+            <p className="mt-2 text-[24px] font-medium text-ui-ink">
               {content.subtitle}
             </p>
           )}
           <ul className="mt-5 flex flex-1 flex-col justify-center gap-3">
             {content.locations.map((l, i) => (
-              <li key={i} className="flex items-center gap-3 border-b pb-3" style={{ borderColor: "var(--color-panel-border)" }}>
+              <li key={i} className="flex items-center gap-3 border-b pb-3" style={{ borderColor: "var(--color-ui-border)" }}>
                 <span className="grid h-11 w-11 shrink-0 place-items-center rounded-md text-[20px]" style={{ color: "var(--color-inst-red)", border: "2px solid var(--color-inst-red)" }} aria-hidden>
                   ▸
                 </span>
                 <div>
                   <p className="text-[24px] font-extrabold text-inst-blue-top">{l.label}</p>
-                  {l.place && <p className="text-[18px] text-panel-muted">{l.place}</p>}
+                  {l.place && <p className="text-[18px] text-ui-muted">{l.place}</p>}
                 </div>
               </li>
             ))}
@@ -65,10 +65,10 @@ export function ReconocimientosView({ content }: { content: ReconocimientosConte
           </div>
           <ul className="mt-4 flex flex-col gap-4">
             {content.items.map((it, i) => (
-              <li key={i} className="border-b pb-3" style={{ borderColor: "var(--color-panel-border)" }}>
+              <li key={i} className="border-b pb-3" style={{ borderColor: "var(--color-ui-border)" }}>
                 <p className="text-[28px] font-extrabold leading-tight text-inst-blue-top">{it.name}</p>
                 {it.role && <p className="text-[20px] font-semibold text-inst-red">{it.role}</p>}
-                {it.detail && <p className="text-[18px] text-panel-ink">{it.detail}</p>}
+                {it.detail && <p className="text-[18px] text-ui-ink">{it.detail}</p>}
               </li>
             ))}
           </ul>
@@ -123,7 +123,8 @@ export function TestimonioView({ content }: { content: TestimonioContent }) {
     <div className="flex h-full flex-col">
       <div className="flex min-h-0 flex-1">
         <div className="w-[58%] p-3">
-          <MediaPanel media={content.media} />
+          {/* Único lugar donde la barra forma parte del diseño de la vista. */}
+          <MediaPanel media={content.media} decorativeControls />
         </div>
         <div className="flex w-[42%] flex-col justify-center px-8 py-6">
           {content.quote && (
@@ -136,7 +137,7 @@ export function TestimonioView({ content }: { content: TestimonioContent }) {
             <p className="text-[22px] font-semibold text-inst-red">{content.program}</p>
           )}
           {content.result && (
-            <p className="mt-3 text-[20px] text-panel-ink">{content.result}</p>
+            <p className="mt-3 text-[20px] text-ui-ink">{content.result}</p>
           )}
         </div>
       </div>
@@ -150,7 +151,7 @@ export function MensajeView({ content }: { content: MensajeContent }) {
   return (
     <div className="flex h-full">
       <div className="w-[42%] p-3">
-        <MediaPanel media={content.media} showControls={false} />
+        <MediaPanel media={content.media} />
       </div>
       <div className="flex w-[58%] flex-col justify-center px-10 py-8">
         <p className="text-[22px] font-semibold uppercase tracking-wide text-inst-red">
@@ -159,7 +160,7 @@ export function MensajeView({ content }: { content: MensajeContent }) {
         <p className="text-[34px] font-black text-inst-blue-top">{content.name}</p>
         <div className="mt-3 h-[3px] w-28" style={{ background: "var(--color-inst-gold)" }} />
         {content.message && (
-          <p className="mt-5 text-[24px] leading-relaxed text-panel-ink">{content.message}</p>
+          <p className="mt-5 text-[24px] leading-relaxed text-ui-ink">{content.message}</p>
         )}
         {content.quote && (
           <p className="mt-6 text-[28px] font-black italic leading-tight text-inst-blue-top">

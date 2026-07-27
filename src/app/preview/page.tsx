@@ -21,7 +21,7 @@ const TITLES: Record<string, string> = {
  */
 export default function PreviewPage() {
   return (
-    <div className="min-h-dvh bg-panel-bg px-4 py-8 text-panel-ink sm:px-6">
+    <div className="min-h-dvh bg-ui-canvas px-4 py-8 text-ui-ink sm:px-6">
       <div className="mx-auto max-w-6xl">
         <Link
           href="/"
@@ -32,7 +32,7 @@ export default function PreviewPage() {
         <h1 className="mt-2 text-2xl font-black text-inst-blue-top sm:text-3xl">
           Plantillas institucionales
         </h1>
-        <p className="mt-1 text-sm text-panel-muted">
+        <p className="mt-1 text-sm text-ui-muted">
           Línea gráfica V11.6 bloqueada: cabecera, pie, colores y tipografía son
           inmutables.
         </p>
@@ -42,7 +42,7 @@ export default function PreviewPage() {
             <figure key={i} className="space-y-2">
               <div
                 className="relative aspect-video w-full overflow-hidden rounded-xl border shadow-sm"
-                style={{ borderColor: "var(--color-panel-border)" }}
+                style={{ borderColor: "var(--color-ui-border)" }}
               >
                 <ScreenFrame bare={isBareView(content)}>
                   <ViewRenderer content={content} />

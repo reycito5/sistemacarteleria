@@ -30,9 +30,9 @@ export function NoticiasView({ content }: { content: NoticiasContent }) {
 
           <ul className="mt-3 flex flex-col gap-3">
             {content.items.map((item, i) => (
-              <li key={i} className="border-b pb-3" style={{ borderColor: "var(--color-panel-border)" }}>
+              <li key={i} className="border-b pb-3" style={{ borderColor: "var(--color-ui-border)" }}>
                 <p className="text-[17px] font-semibold">
-                  <span className="text-panel-muted">{item.date}</span>
+                  <span className="text-ui-muted">{item.date}</span>
                   <span className="mx-2 text-inst-gold">|</span>
                   <span className="text-inst-red">{item.tag}</span>
                 </p>

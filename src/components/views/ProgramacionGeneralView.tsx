@@ -27,7 +27,7 @@ export function ProgramacionGeneralView({
               <li
                 key={i}
                 className="flex items-center gap-4 border-b pb-4"
-                style={{ borderColor: "var(--color-panel-border)" }}
+                style={{ borderColor: "var(--color-ui-border)" }}
               >
                 <span
                   className="grid h-14 w-14 shrink-0 place-items-center rounded-md text-[26px]"

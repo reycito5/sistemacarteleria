@@ -22,7 +22,7 @@ function format(now: Date) {
  * la hora local del reproductor; evita desajustes de hidratación mostrando un
  * marcador estable hasta el primer tick.
  */
-export function LiveClock() {
+export function LiveClock({ className = "tabular-nums" }: { className?: string }) {
   const [value, setValue] = useState<{ time: string; date: string } | null>(
     null,
   );
@@ -35,7 +35,7 @@ export function LiveClock() {
   }, []);
 
   return (
-    <span className="tabular-nums">
+    <span className={className}>
       {value ? `${value.time}  ·  ${value.date}` : "—:—  ·  —"}
     </span>
   );

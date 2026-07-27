@@ -15,7 +15,7 @@ export function ComunicadoView({ content }: { content: ComunicadoContent }) {
         {content.title}
       </h1>
       {content.subtitle && (
-        <p className="mt-2 max-w-[75%] text-[30px] font-medium text-panel-ink">
+        <p className="mt-2 max-w-[75%] text-[30px] font-medium text-ui-ink">
           {content.subtitle}
         </p>
       )}
@@ -42,7 +42,7 @@ export function ComunicadoView({ content }: { content: ComunicadoContent }) {
                 ◷
               </span>
               <span className="text-[24px]">
-                <span className="text-panel-muted">{spec.label}</span>
+                <span className="text-ui-muted">{spec.label}</span>
                 <br />
                 <span className="text-[28px] font-extrabold text-inst-blue-top">{spec.value}</span>
               </span>

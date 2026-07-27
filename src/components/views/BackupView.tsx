@@ -19,7 +19,7 @@ export function BackupView() {
         <p className="mt-6 text-[28px] font-semibold italic text-inst-blue-top">
           Excelencia académica, investigación y compromiso con el desarrollo del Beni
         </p>
-        <p className="mt-8 text-[26px] font-bold text-panel-ink">
+        <p className="mt-8 text-[26px] font-bold text-ui-ink">
           {INSTITUTIONAL_CONTACTS.enrollmentLabel} ·{" "}
           {INSTITUTIONAL_CONTACTS.phones.join(" · ")}
         </p>

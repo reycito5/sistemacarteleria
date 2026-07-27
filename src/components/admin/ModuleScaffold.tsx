@@ -26,16 +26,16 @@ export function ModuleScaffold({
           {phase}
         </span>
       </div>
-      <p className="mt-1 max-w-2xl text-sm text-panel-muted">{description}</p>
+      <p className="mt-1 max-w-2xl text-sm text-ui-muted">{description}</p>
 
       <div
         className="mt-6 rounded-md border bg-white p-6"
-        style={{ borderColor: "var(--color-panel-border)" }}
+        style={{ borderColor: "var(--color-ui-border)" }}
       >
-        <p className="text-sm font-bold text-panel-ink">Alcance del módulo</p>
+        <p className="text-sm font-bold text-ui-ink">Alcance del módulo</p>
         <ul className="mt-3 grid gap-2 sm:grid-cols-2">
           {features.map((f) => (
-            <li key={f} className="flex items-start gap-2 text-sm text-panel-ink">
+            <li key={f} className="flex items-start gap-2 text-sm text-ui-ink">
               <span className="mt-0.5 text-inst-red">›</span>
               {f}
             </li>

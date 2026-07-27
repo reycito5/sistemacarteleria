@@ -30,7 +30,7 @@ export function AgendaView({ content }: { content: AgendaContent }) {
               <li
                 key={i}
                 className="flex items-center gap-4 border-b pb-3"
-                style={{ borderColor: "var(--color-panel-border)" }}
+                style={{ borderColor: "var(--color-ui-border)" }}
               >
                 {item.imageSrc ? (
                   // eslint-disable-next-line @next/next/no-img-element

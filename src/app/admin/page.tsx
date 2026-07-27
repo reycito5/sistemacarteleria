@@ -2,6 +2,7 @@ import Link from "next/link";
 import { INSTITUTION } from "@/lib/design/tokens";
 import { listScreensStatus, getActiveEmergency, type ScreenStatusView } from "@/lib/data/admin";
 import { AutoRefresh } from "@/components/admin/AutoRefresh";
+import { RealtimeScreens } from "@/components/admin/RealtimeScreens";
 
 export const dynamic = "force-dynamic";
 
@@ -39,7 +40,8 @@ export default async function AdminDashboard() {
 
   return (
     <div>
-      <AutoRefresh seconds={15} />
+      <AutoRefresh seconds={30} />
+      <RealtimeScreens />
       <h1 className="text-2xl font-black text-inst-blue-top">Dashboard</h1>
       <p className="mt-1 text-sm text-panel-muted">
         Grupo {INSTITUTION.generalGroup} · programación institucional única.

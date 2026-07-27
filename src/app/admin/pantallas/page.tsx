@@ -1,5 +1,6 @@
 import { listScreensStatus, type ScreenStatusView } from "@/lib/data/admin";
 import { AutoRefresh } from "@/components/admin/AutoRefresh";
+import { RealtimeScreens } from "@/components/admin/RealtimeScreens";
 import { ActivateScreenForm } from "./ActivateScreenForm";
 
 export const dynamic = "force-dynamic";
@@ -31,12 +32,13 @@ export default async function PantallasPage() {
 
   return (
     <div>
-      <AutoRefresh seconds={10} />
+      <AutoRefresh seconds={30} />
+      <RealtimeScreens />
       <div className="flex items-center gap-3">
         <h1 className="text-2xl font-black text-inst-blue-top">Centro de pantallas</h1>
         <span className="flex items-center gap-1.5 text-xs font-semibold text-panel-muted">
           <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-          en vivo · cada 10s
+          en vivo · Realtime
         </span>
       </div>
       <p className="mt-1 text-sm text-panel-muted">

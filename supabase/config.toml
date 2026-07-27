@@ -1,0 +1,10 @@
+# Configuración mínima del CLI de Supabase para vincular y aplicar migraciones.
+# El project_id es el nombre local del proyecto; la vinculación real con el
+# proyecto remoto se hace con `supabase link --project-ref <ref>`.
+# Si su versión del CLI requiere más campos, ejecute `supabase init` para
+# regenerar este archivo manteniendo la carpeta supabase/migrations.
+
+project_id = "sistemacarteleria"
+
+[db]
+major_version = 15

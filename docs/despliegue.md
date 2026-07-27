@@ -83,7 +83,47 @@ Marque cada prueba en la puesta en marcha:
 - [ ] Reproducción continua durante toda la jornada.
 - [ ] Legibilidad a distancia y lectura del código QR.
 
-## 7. Verificación del código (CI)
+## 7. CI/CD automático (GitHub Actions)
+
+El repositorio incluye tres flujos en `.github/workflows/`:
+
+| Flujo | Disparo | Qué hace |
+| ----- | ------- | -------- |
+| `ci.yml` | push / PR | Lint, typecheck, pruebas y build |
+| `deploy.yml` | push a `main` (o manual) | Despliega a Vercel (producción) |
+| `migrate.yml` | manual | Aplica las migraciones a Supabase |
+
+### Secretos a configurar (Settings → Secrets and variables → Actions)
+
+Añádalos en GitHub; **nunca** se muestran en logs ni en el código:
+
+Para el despliegue en Vercel:
+- `VERCEL_TOKEN`
+- `VERCEL_ORG_ID`
+- `VERCEL_PROJECT_ID`
+
+Para las migraciones de Supabase:
+- `SUPABASE_ACCESS_TOKEN`
+- `SUPABASE_PROJECT_REF`
+- `SUPABASE_DB_PASSWORD`
+
+> `VERCEL_ORG_ID` y `VERCEL_PROJECT_ID` se obtienen ejecutando `vercel link`
+> una vez en local (quedan en `.vercel/project.json`). El `SUPABASE_PROJECT_REF`
+> es el identificador del proyecto en su URL de Supabase.
+
+Además, configure en **Vercel** las variables de entorno de la sección 2
+(`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
+`SUPABASE_SERVICE_ROLE_KEY`, opcional `OFERTA_PORTAL_URL`).
+
+### Secuencia de primer despliegue
+
+1. Añada los secretos de Supabase → ejecute `migrate.yml` (pestaña Actions →
+   Run workflow) para crear el esquema.
+2. Configure las variables de entorno en Vercel.
+3. Añada los secretos de Vercel → al hacer merge a `main` (o Run workflow),
+   `deploy.yml` publica el sitio.
+
+## 8. Verificación local del código
 
 ```bash
 npm run lint

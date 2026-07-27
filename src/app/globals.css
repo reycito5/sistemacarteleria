@@ -50,6 +50,8 @@
   /* --- Tipografía --------------------------------------------------------- */
   --font-sans: var(--font-inst-sans), "Inter", "Helvetica Neue", Arial,
     sans-serif;
+  /* Serif académica: nombres de programa del portal público. */
+  --font-serif: var(--font-inst-serif), "Source Serif 4", Georgia, serif;
 
   /* --- Radios ------------------------------------------------------------- */
   --radius-inst: 4px;

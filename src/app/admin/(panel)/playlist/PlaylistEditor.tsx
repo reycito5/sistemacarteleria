@@ -2,22 +2,13 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ArrowDown,
-  ArrowUp,
-  ListPlus,
-  ListVideo,
-  Radio,
-  Sparkles,
-  Trash2,
-  X,
-} from "lucide-react";
+import { ListPlus, ListVideo, Radio, Sparkles, Trash2 } from "lucide-react";
 import {
   addPlaylistItem,
   createWorkingPlaylist,
-  movePlaylistItem,
   publishPlaylist,
   removePlaylistItem,
+  reorderPlaylist,
   seedSampleContent,
   updatePlaylistItemDuration,
 } from "@/lib/actions/playlist";
@@ -27,7 +18,7 @@ import { Card, CardHeader } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Alert } from "@/components/ui/Alert";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Input } from "@/components/ui/Field";
+import { SortablePlaylist } from "./SortablePlaylist";
 
 export interface EditorItem {
   id: string;
@@ -151,7 +142,7 @@ export function PlaylistEditor({
           <CardHeader
             icon={<ListVideo size={18} />}
             title="Orden de reproducción"
-            description="El ciclo se repite indefinidamente. La duración se mide en segundos."
+            description="El ciclo se repite indefinidamente. Arrastre para reordenar; la duración se mide en segundos."
           />
 
           {items.length === 0 ? (
@@ -159,67 +150,21 @@ export function PlaylistEditor({
               La playlist está vacía.
             </p>
           ) : (
-            <ol className="mt-5 space-y-2">
-              {items.map((it, i) => (
-                <li
-                  key={it.id}
-                  className="flex items-center gap-2 rounded-[10px] border border-ui-border bg-ui-raised px-3 py-2.5"
-                >
-                  <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-inst-blue-bottom text-[11px] font-black text-inst-white">
-                    {i + 1}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-sm font-semibold text-ui-ink">
-                    {it.contentTitle}
-                  </span>
-
-                  <span className="flex shrink-0 items-center gap-1">
-                    <Input
-                      type="number"
-                      min={1}
-                      defaultValue={it.durationSeconds}
-                      onBlur={(e) =>
-                        run(() =>
-                          updatePlaylistItemDuration(it.id, Number(e.target.value)),
-                        )
-                      }
-                      className="h-8 w-16 px-2 text-center text-xs"
-                      aria-label={`Duración de ${it.contentTitle} en segundos`}
-                    />
-                    <span className="text-xs text-ui-muted">s</span>
-                  </span>
-
-                  <span className="flex shrink-0 items-center">
-                    <button
-                      type="button"
-                      onClick={() => run(() => movePlaylistItem(playlist.id, it.id, "up"))}
-                      disabled={pending || i === 0}
-                      aria-label={`Subir ${it.contentTitle}`}
-                      className="grid h-7 w-7 place-items-center rounded-[7px] text-ui-muted transition hover:bg-ui-canvas hover:text-ui-ink disabled:opacity-25"
-                    >
-                      <ArrowUp size={14} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => run(() => movePlaylistItem(playlist.id, it.id, "down"))}
-                      disabled={pending || i === items.length - 1}
-                      aria-label={`Bajar ${it.contentTitle}`}
-                      className="grid h-7 w-7 place-items-center rounded-[7px] text-ui-muted transition hover:bg-ui-canvas hover:text-ui-ink disabled:opacity-25"
-                    >
-                      <ArrowDown size={14} />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => run(() => removePlaylistItem(it.id))}
-                      disabled={pending}
-                      aria-label={`Quitar ${it.contentTitle}`}
-                      className="grid h-7 w-7 place-items-center rounded-[7px] text-ui-muted transition hover:bg-danger-soft hover:text-inst-red disabled:opacity-40"
-                    >
-                      <X size={14} />
-                    </button>
-                  </span>
-                </li>
-              ))}
-            </ol>
+            <div className="mt-5">
+              <SortablePlaylist
+                items={items}
+                disabled={pending}
+                onReorder={(ids) => run(() => reorderPlaylist(playlist.id, ids))}
+                onDurationChange={(id, seconds) =>
+                  run(() => updatePlaylistItemDuration(id, seconds))
+                }
+                onRemove={(id) => run(() => removePlaylistItem(id))}
+              />
+              <p className="mt-3 text-xs text-ui-muted">
+                Arrastre por el asa de la izquierda para cambiar el orden, o use
+                las flechas.
+              </p>
+            </div>
           )}
         </Card>
 

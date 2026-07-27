@@ -13,16 +13,39 @@ import type {
  * de modo que no haya que reescribir la información en la cartelería.
  */
 
+/**
+ * Estado de un programa tal como lo publica el portal.
+ *
+ *  - `abierta`   — inscripción abierta
+ *  - `cerrada`   — inscripción cerrada
+ *  - `ejecucion` — ya está en marcha
+ *  - `proximo`   — anunciado, sin fecha de inscripción todavía
+ */
+export const PROGRAM_STATUSES = [
+  "abierta",
+  "cerrada",
+  "ejecucion",
+  "proximo",
+] as const;
+export type ProgramStatus = (typeof PROGRAM_STATUSES)[number];
+
 export const portalProgramSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
+  /** Diplomado, Maestría, Especialidad, Doctorado… */
+  level: z.string().default(""),
+  /** Área de conocimiento: Educación, Ciencias Económicas… */
+  area: z.string().default(""),
   modality: z.string().default(""),
   startDate: z.string().default(""),
   durationMonths: z.number().int().positive().nullish(),
   credits: z.number().int().positive().nullish(),
   hours: z.number().int().positive().nullish(),
   slogan: z.string().default(""),
+  /** Imagen de portada del programa en el portal. */
+  imageUrl: z.string().url().nullish(),
   enrollmentUrl: z.string().url().nullish(),
+  status: z.enum(PROGRAM_STATUSES).default("abierta"),
   enrollmentOpen: z.boolean().default(true),
 });
 
@@ -82,6 +105,10 @@ const FIELD_ALIASES = {
     "activo",
     "active",
   ],
+  level: ["level", "nivel", "tipo", "type", "grado", "categoria"],
+  area: ["area", "área", "areaConocimiento", "facultad", "unidad", "category"],
+  status: ["status", "estado", "situacion", "situación", "state"],
+  imageUrl: ["imageUrl", "image", "imagen", "portada", "cover", "foto", "thumbnail"],
 } as const;
 
 type RawRecord = Record<string, unknown>;
@@ -126,6 +153,26 @@ function asBoolean(value: unknown, fallback: boolean): boolean {
   return fallback;
 }
 
+/**
+ * Interpreta el estado del programa a partir del texto del portal
+ * («Inscripción abierta», «En ejecución», «Inscripción cerrada»…).
+ */
+function asStatus(value: unknown, enrollmentOpen: boolean): ProgramStatus {
+  const text = asText(value)
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
+
+  if (text) {
+    if (text.includes("ejecucion") || text.includes("curso")) return "ejecucion";
+    if (text.includes("proxim")) return "proximo";
+    if (text.includes("cerrad")) return "cerrada";
+    if (text.includes("abiert")) return "abierta";
+  }
+  // Sin estado explícito, se deduce del indicador de inscripciones.
+  return enrollmentOpen ? "abierta" : "cerrada";
+}
+
 function asAbsoluteUrl(value: unknown, base?: string): string | null {
   const text = asText(value);
   if (!text) return null;
@@ -155,17 +202,28 @@ export function normalizeProgram(
     asText(pick(record, FIELD_ALIASES.id)) ||
     `${name.toLowerCase().replace(/[^a-z0-9]+/g, "-").slice(0, 40)}-${index}`;
 
+  const enrollmentOpen = asBoolean(
+    pick(record, FIELD_ALIASES.enrollmentOpen),
+    true,
+  );
+  const status = asStatus(pick(record, FIELD_ALIASES.status), enrollmentOpen);
+
   return {
     id,
     name,
+    level: asText(pick(record, FIELD_ALIASES.level)),
+    area: asText(pick(record, FIELD_ALIASES.area)),
     modality: asText(pick(record, FIELD_ALIASES.modality)),
     startDate: asText(pick(record, FIELD_ALIASES.startDate)),
     durationMonths: asPositiveInt(pick(record, FIELD_ALIASES.durationMonths)),
     credits: asPositiveInt(pick(record, FIELD_ALIASES.credits)),
     hours: asPositiveInt(pick(record, FIELD_ALIASES.hours)),
     slogan: asText(pick(record, FIELD_ALIASES.slogan)).slice(0, 160),
+    imageUrl: asAbsoluteUrl(pick(record, FIELD_ALIASES.imageUrl), baseUrl),
     enrollmentUrl: asAbsoluteUrl(pick(record, FIELD_ALIASES.enrollmentUrl), baseUrl),
-    enrollmentOpen: asBoolean(pick(record, FIELD_ALIASES.enrollmentOpen), true),
+    status,
+    // El estado explícito manda sobre el indicador suelto de inscripciones.
+    enrollmentOpen: status === "abierta",
   };
 }
 
@@ -212,45 +270,84 @@ export function normalizePortalPayload(
     .filter((p): p is PortalProgram => p !== null);
 }
 
-/** Oferta de ejemplo (respaldo cuando no hay portal configurado). */
+/**
+ * Oferta de ejemplo (respaldo cuando no hay portal configurado).
+ * Refleja la estructura real del portal de oferta académica.
+ */
 export const SAMPLE_PORTAL_PROGRAMS: PortalProgram[] = [
+  {
+    id: "dip-auditoria",
+    name: "Diplomado en Auditoría y Control Gubernamental",
+    level: "Diplomado",
+    area: "Ciencias Económicas",
+    modality: "Virtual",
+    startDate: "1 de septiembre de 2025",
+    durationMonths: 4,
+    credits: null,
+    hours: null,
+    slogan: "",
+    imageUrl: null,
+    enrollmentUrl: null,
+    status: "ejecucion",
+    enrollmentOpen: false,
+  },
+  {
+    id: "dip-tic-educacion",
+    name: "Diplomado en TIC en la Educación Superior",
+    level: "Diplomado",
+    area: "Tecnología Educativa",
+    modality: "Virtual",
+    startDate: "10 de agosto de 2026",
+    durationMonths: 4,
+    credits: null,
+    hours: null,
+    slogan: "",
+    imageUrl: null,
+    enrollmentUrl: null,
+    status: "cerrada",
+    enrollmentOpen: false,
+  },
   {
     id: "mae-edu-sup",
     name: "Maestría en Educación Superior",
+    level: "Maestría",
+    area: "Educación",
     modality: "Virtual",
-    startDate: "31/07/2026",
+    startDate: "17 de agosto de 2026",
     durationMonths: 18,
     credits: 80,
     hours: 3200,
     slogan: "Forma a los formadores del Beni",
-    enrollmentUrl: "https://posgrado.uabjb.edu.bo/inscripcion",
+    imageUrl: null,
+    enrollmentUrl: null,
+    status: "abierta",
     enrollmentOpen: true,
   },
   {
-    id: "dip-ia",
-    name: "Diplomado en Inteligencia Artificial",
-    modality: "Virtual",
-    startDate: "10/08/2026",
-    durationMonths: 5,
-    credits: 20,
-    hours: 800,
-    slogan: "Transforma datos en decisiones inteligentes",
-    enrollmentUrl: "https://posgrado.uabjb.edu.bo/inscripcion",
-    enrollmentOpen: true,
-  },
-  {
-    id: "dip-plataformas",
-    name: "Diplomado en Manejo y Administración de Plataformas Virtuales",
-    modality: "Virtual",
-    startDate: "28/08/2026",
-    durationMonths: 5,
-    credits: 20,
-    hours: 800,
-    slogan: "Lidera la educación digital",
-    enrollmentUrl: "https://posgrado.uabjb.edu.bo/inscripcion",
+    id: "esp-gestion-universitaria",
+    name: "Especialidad en Gestión Universitaria",
+    level: "Especialidad",
+    area: "Educación",
+    modality: "Semipresencial",
+    startDate: "24 de agosto de 2026",
+    durationMonths: 10,
+    credits: null,
+    hours: null,
+    slogan: "",
+    imageUrl: null,
+    enrollmentUrl: null,
+    status: "abierta",
     enrollmentOpen: true,
   },
 ];
+
+/** Etiqueta legible de cada estado, tal como se muestra en el portal. */
+export const STATUS_LABEL: Record<ProgramStatus, string> = {
+  abierta: "Inscripción abierta",
+  cerrada: "Inscripción cerrada",
+  ejecucion: "En ejecución",
+  proximo: "Próximamente",
+};
 
 /** Convierte un programa del portal en la vista «Programa destacado». */
 export function programToDestacado(
@@ -264,10 +361,12 @@ export function programToDestacado(
     specs.push({ label: "Créditos", value: `${program.credits} créditos` });
   if (program.hours) specs.push({ label: "Horas", value: `${program.hours} horas` });
   if (program.startDate) specs.push({ label: "Inicio", value: program.startDate });
+  if (program.area) specs.push({ label: "Área", value: program.area });
 
   return {
     kind: "programa_destacado",
-    badge: "PROGRAMA DESTACADO",
+    // El nivel del programa encabeza la vista cuando el portal lo publica.
+    badge: (program.level || "Programa destacado").toUpperCase(),
     programName: program.name,
     specs: specs.slice(0, 6),
     quote: program.slogan,

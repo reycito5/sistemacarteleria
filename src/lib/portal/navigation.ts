@@ -11,6 +11,8 @@ export interface PortalLink {
 export const PORTAL_LINKS: readonly PortalLink[] = [
   { href: "/", label: "Inicio" },
   { href: "/oferta", label: "Oferta académica" },
+  { href: "/agenda", label: "Agenda" },
   { href: "/pantallas", label: "Las pantallas" },
   { href: "/preview", label: "Plantillas" },
+  { href: "/contacto", label: "Contacto" },
 ];

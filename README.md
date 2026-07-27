@@ -81,9 +81,11 @@ Rutas principales:
 | Ruta | Descripción |
 | ---- | ----------- |
 | `/` | Portada institucional: qué es el sistema y cómo funciona |
-| `/oferta` | Oferta académica leída del portal de oferta |
+| `/oferta` | Oferta académica del portal, con filtros por nivel y área |
+| `/agenda` | Actividades publicadas desde el panel, agrupadas por fecha |
 | `/pantallas` | Las cuatro pantallas y cómo se sincronizan |
 | `/preview` | Catálogo de las plantillas institucionales |
+| `/contacto` | Canales de atención y soporte del sistema |
 
 Todas comparten cabecera con menú y pie institucional.
 
@@ -141,8 +143,13 @@ El sistema prueba solo las rutas JSON habituales, acepta campos en español o
 en inglés y, si nada responde, lee los datos incrustados en el HTML. El panel
 muestra el diagnóstico de cada intento.
 
-Guía completa, con el código de la ruta JSON recomendada:
-[`docs/portal-oferta.md`](docs/portal-oferta.md).
+De cada programa se aprovechan nombre, **nivel** (Diplomado, Maestría…),
+**área**, modalidad, **estado** («Inscripción abierta», «En ejecución»…),
+inicio, duración, créditos, horas, lema, imagen y enlace.
+
+- Guía completa: [`docs/portal-oferta.md`](docs/portal-oferta.md)
+- Ruta JSON lista para copiar al portal:
+  [`docs/ejemplos/api-programas.route.ts`](docs/ejemplos/api-programas.route.ts)
 
 ---
 
@@ -168,7 +175,9 @@ Dos capas bien separadas, ambas en `src/app/globals.css`:
 2. **Interfaz de gestión** (`--color-ui-*`): el panel y el portal web. Usa los
    mismos colores institucionales sobre superficies, sombras y estados propios
    de una aplicación web. Las primitivas compartidas están en
-   `src/components/ui/`.
+   `src/components/ui/`. El portal público añade una serif académica
+   (`--font-serif`) para los nombres de programa, en línea con el portal de
+   oferta; el televisor no la usa.
 
 ## Reproducción de video
 

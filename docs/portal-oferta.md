@@ -78,14 +78,29 @@ el resto es opcional y se omite si falta.
 | ------------- | -------------------------------------------------------------------- |
 | Nombre        | `name`, `nombre`, `titulo`, `title`, `programa`, `program`            |
 | Identificador | `id`, `slug`, `codigo`, `code`                                       |
+| Nivel         | `level`, `nivel`, `tipo`, `type`, `grado`, `categoria`               |
+| Área          | `area`, `areaConocimiento`, `facultad`, `unidad`, `category`         |
 | Modalidad     | `modality`, `modalidad`, `mode`                                      |
+| Estado        | `status`, `estado`, `situacion`, `state`                             |
 | Inicio        | `startDate`, `inicio`, `fechaInicio`, `fecha_inicio`, `start`        |
 | Duración      | `durationMonths`, `duracion`, `duracionMeses`, `meses`, `duration`   |
 | Créditos      | `credits`, `creditos`                                                |
 | Horas         | `hours`, `horas`, `cargaHoraria`, `carga_horaria`                    |
 | Lema o resumen| `slogan`, `lema`, `descripcion`, `description`, `resumen`            |
+| Imagen        | `imageUrl`, `imagen`, `image`, `portada`, `cover`, `foto`            |
 | Enlace        | `enrollmentUrl`, `inscripcionUrl`, `url`, `link`, `href`             |
 | Inscripciones | `enrollmentOpen`, `inscripcionesAbiertas`, `abierto`, `activo`       |
+
+**Estado del programa.** Se interpreta el texto tal como lo escribe el portal:
+
+| Texto del portal        | Estado reconocido | Cómo se ve en la tarjeta      |
+| ----------------------- | ----------------- | ----------------------------- |
+| «Inscripción abierta»   | `abierta`         | Etiqueta roja                 |
+| «Inscripción cerrada»   | `cerrada`         | Etiqueta azul                 |
+| «En ejecución», «En curso» | `ejecucion`    | Etiqueta azul                 |
+| «Próximamente»          | `proximo`         | Etiqueta dorada               |
+
+Si no se publica ningún estado, se deduce del indicador de inscripciones.
 
 Detalles útiles:
 
@@ -111,14 +126,29 @@ const PROGRAMAS = [
   {
     id: "mae-edu-sup",
     nombre: "Maestría en Educación Superior",
+    nivel: "Maestría",
+    area: "Educación",
     modalidad: "Virtual",
-    inicio: "31/07/2026",
+    estado: "Inscripción abierta",
+    inicio: "17 de agosto de 2026",
     duracion: 18,
     creditos: 80,
     horas: 3200,
     descripcion: "Forma a los formadores del Beni",
-    url: "/inscripcion",
-    abierto: true,
+    imagen: "/img/programas/maestria-educacion.jpg",
+    url: "/oferta/maestria-en-educacion-superior",
+  },
+  {
+    id: "dip-auditoria",
+    nombre: "Diplomado en Auditoría y Control Gubernamental",
+    nivel: "Diplomado",
+    area: "Ciencias Económicas",
+    modalidad: "Virtual",
+    estado: "En ejecución",
+    inicio: "1 de septiembre de 2025",
+    duracion: 4,
+    imagen: "/img/programas/auditoria.jpg",
+    url: "/oferta/diplomado-en-auditoria",
   },
 ];
 
@@ -166,7 +196,21 @@ Los fallos más habituales:
 
 ---
 
-## 6. Del portal a la pantalla
+## 6. Qué se ve con estos datos
+
+Con nivel, área, estado e imagen, la cartelería aprovecha todo:
+
+- La página pública `/oferta` reproduce las tarjetas del portal (portada,
+  nivel, estado, modalidad, área y ficha breve) y añade filtros por nivel y
+  por área.
+- Al importar un programa, la pantalla «Programa destacado» usa el **nivel**
+  como distintivo (MAESTRÍA, DIPLOMADO…) y añade el **área** a la ficha.
+
+Sin esos campos todo sigue funcionando: simplemente se omiten.
+
+---
+
+## 7. Del portal a la pantalla
 
 Importar un programa **no lo pone en el televisor**. El recorrido completo es:
 

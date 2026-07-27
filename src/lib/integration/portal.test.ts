@@ -19,18 +19,27 @@ describe("portalProgramSchema", () => {
 });
 
 describe("programToDestacado", () => {
+  const maestria = SAMPLE_PORTAL_PROGRAMS.find((p) => p.level === "Maestría")!;
+
   it("produce una vista válida con especificaciones ordenadas", () => {
-    const content = programToDestacado(SAMPLE_PORTAL_PROGRAMS[1]);
-    const parsed = viewContentSchema.safeParse(content);
-    expect(parsed.success).toBe(true);
-    expect(content.programName).toMatch(/Inteligencia Artificial/);
+    const content = programToDestacado(maestria);
+    expect(viewContentSchema.safeParse(content).success).toBe(true);
+    expect(content.programName).toBe(maestria.name);
     expect(content.specs.length).toBeLessThanOrEqual(6);
     expect(content.specs[0]).toEqual({ label: "Modalidad", value: "Virtual" });
   });
 
+  it("usa el nivel del programa como distintivo de la vista", () => {
+    expect(programToDestacado(maestria).badge).toBe("MAESTRÍA");
+    // Sin nivel publicado se conserva el distintivo genérico.
+    expect(programToDestacado({ ...maestria, level: "" }).badge).toBe(
+      "PROGRAMA DESTACADO",
+    );
+  });
+
   it("cambia el texto del QR según inscripción abierta", () => {
-    const abierto = programToDestacado({ ...SAMPLE_PORTAL_PROGRAMS[0], enrollmentOpen: true });
-    const cerrado = programToDestacado({ ...SAMPLE_PORTAL_PROGRAMS[0], enrollmentOpen: false });
+    const abierto = programToDestacado({ ...maestria, enrollmentOpen: true });
+    const cerrado = programToDestacado({ ...maestria, enrollmentOpen: false });
     expect(abierto.qrCaption).toBe("INSCRÍBETE AQUÍ");
     expect(cerrado.qrCaption).toBe("CONOCE EL PROGRAMA");
   });
@@ -122,5 +131,40 @@ describe("normalizePortalPayload", () => {
 
   it("devuelve lista vacía si la respuesta no tiene programas", () => {
     expect(normalizePortalPayload({ error: "not found" })).toEqual([]);
+  });
+});
+
+describe("normalizeProgram · nivel, área y estado", () => {
+  it("lee nivel, área e imagen del portal", () => {
+    const p = normalizeProgram({
+      nombre: "Diplomado en Auditoría y Control Gubernamental",
+      nivel: "Diplomado",
+      area: "Ciencias Económicas",
+      imagen: "/img/auditoria.jpg",
+    }, 0, "https://ofertaposgrado.vercel.app/oferta");
+    expect(p?.level).toBe("Diplomado");
+    expect(p?.area).toBe("Ciencias Económicas");
+    expect(p?.imageUrl).toBe("https://ofertaposgrado.vercel.app/img/auditoria.jpg");
+  });
+
+  it("interpreta el estado tal como lo escribe el portal", () => {
+    const estado = (texto: string) =>
+      normalizeProgram({ nombre: "X", estado: texto })?.status;
+    expect(estado("Inscripción abierta")).toBe("abierta");
+    expect(estado("Inscripción cerrada")).toBe("cerrada");
+    expect(estado("En ejecución")).toBe("ejecucion");
+    expect(estado("Próximamente")).toBe("proximo");
+  });
+
+  it("deduce el estado del indicador de inscripciones cuando no viene escrito", () => {
+    expect(normalizeProgram({ nombre: "X" })?.status).toBe("abierta");
+    expect(normalizeProgram({ nombre: "X", abierto: "no" })?.status).toBe("cerrada");
+  });
+
+  it("mantiene enrollmentOpen coherente con el estado", () => {
+    // «En ejecución» no admite inscripciones aunque el portal marque abierto.
+    const p = normalizeProgram({ nombre: "X", estado: "En ejecución", abierto: true });
+    expect(p?.status).toBe("ejecucion");
+    expect(p?.enrollmentOpen).toBe(false);
   });
 });

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { listContentItems, type ContentItemSummary } from "@/lib/data/admin";
 import { EDITABLE_KINDS } from "@/lib/views/formSchema";
 import { DeleteContentButton } from "./DeleteContentButton";
+import { ContentStatusControls } from "./ContentStatusControls";
 
 export const dynamic = "force-dynamic";
 
@@ -60,9 +61,10 @@ export default async function PlantillasPage() {
               <li key={c.id} className="flex items-center gap-4 px-4 py-3">
                 <div className="flex-1">
                   <p className="text-sm font-bold text-inst-blue-top">{c.title}</p>
-                  <p className="text-xs text-panel-muted">
-                    {c.templateName} · {c.status}
-                  </p>
+                  <p className="text-xs text-panel-muted">{c.templateName}</p>
+                  <div className="mt-2">
+                    <ContentStatusControls id={c.id} status={c.status} />
+                  </div>
                 </div>
                 <Link
                   href={`/admin/plantillas/${c.id}`}

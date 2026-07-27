@@ -1,5 +1,6 @@
 import { getWorkingPlaylist, listContentItems } from "@/lib/data/admin";
 import { labelForKind } from "@/lib/views/registry";
+import { PLAYABLE_STATUSES } from "@/lib/views/workflow";
 import type { ViewContent } from "@/lib/views/schemas";
 import {
   PlaylistEditor,
@@ -24,7 +25,12 @@ async function loadData(): Promise<LoadedData | null> {
     ]);
 
     const available = contents
-      .filter((c) => c.kind !== "sincronizacion" && c.kind !== "emergencia")
+      .filter(
+        (c) =>
+          c.kind !== "sincronizacion" &&
+          c.kind !== "emergencia" &&
+          PLAYABLE_STATUSES.includes(c.status),
+      )
       .map((c) => ({
         id: c.id,
         title: c.title,

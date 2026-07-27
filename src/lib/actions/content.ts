@@ -5,6 +5,8 @@ import { getContext, writeAudit, type ActionResult } from "./helpers";
 import { viewContentSchema } from "@/lib/views/schemas";
 import { FORM_SCHEMAS, type EditableKind } from "@/lib/views/formSchema";
 import { viewNumberForKind } from "@/lib/views/registry";
+import { canTransition } from "@/lib/views/workflow";
+import type { ContentStatus } from "@/lib/supabase/database.types";
 
 function revalidate(id?: string) {
   revalidatePath("/admin/plantillas");
@@ -84,6 +86,42 @@ export async function updateContentItem(
 
   if (error) return { ok: false, error: error.message };
   await writeAudit(ctx.data, "editar", "content_item", id, { kind });
+  revalidate(id);
+  return { ok: true, data: undefined };
+}
+
+/**
+ * Cambia el estado de un contenido en el flujo de aprobación (sección 20).
+ * Valida la transición; RLS aplica el permiso por rol (aprobar/archivar exige
+ * rol de publicación).
+ */
+export async function changeContentStatus(
+  id: string,
+  target: ContentStatus,
+): Promise<ActionResult> {
+  const ctx = await getContext();
+  if (!ctx.ok) return ctx;
+  const { supabase } = ctx.data;
+
+  const { data: current } = await supabase
+    .from("content_items")
+    .select("status")
+    .eq("id", id)
+    .maybeSingle();
+  if (!current) return { ok: false, error: "Contenido no encontrado." };
+
+  if (!canTransition(current.status, target)) {
+    return { ok: false, error: "Transición de estado no permitida." };
+  }
+
+  const patch: { status: ContentStatus; approved_at?: string | null } = {
+    status: target,
+  };
+  if (target === "aprobado") patch.approved_at = new Date().toISOString();
+
+  const { error } = await supabase.from("content_items").update(patch).eq("id", id);
+  if (error) return { ok: false, error: error.message };
+  await writeAudit(ctx.data, "cambiar_estado", "content_item", id, { target });
   revalidate(id);
   return { ok: true, data: undefined };
 }

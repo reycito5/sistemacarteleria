@@ -7,6 +7,11 @@ import { EmergenciaView } from "@/components/views/EmergenciaView";
 import { SincronizacionView } from "@/components/views/SincronizacionView";
 import { computePosition, type SyncItem } from "@/lib/player/sync";
 import { loadCachedManifest, saveManifest } from "@/lib/player/cache";
+import {
+  collectMediaUrls,
+  precacheMedia,
+  registerPlayerServiceWorker,
+} from "@/lib/player/serviceWorker";
 import type { PlayerManifest } from "@/lib/player/manifest";
 
 const MANIFEST_REFRESH_MS = 60_000;
@@ -61,12 +66,14 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
         applyManifest(next);
         setOnline(true);
         saveManifest(next);
+        precacheMedia(collectMediaUrls(next)); // descarga anticipada (offline)
       } catch {
         if (!cancelled) setOnline(false); // sigue reproduciendo desde caché
       }
     };
 
     const start = async () => {
+      registerPlayerServiceWorker();
       const cached = loadCachedManifest();
       if (cached) applyManifest(cached); // evita pantalla negra al arrancar
       await fetchManifest();

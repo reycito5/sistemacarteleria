@@ -20,7 +20,7 @@ Construcción por fases (sección 31 del prompt maestro).
 | 4 | Playlist general | ✅ editor + orden + duraciones + publicación real |
 | 5 | Reproductor (kiosco, autoplay, repetición) | ✅ consume manifiesto real |
 | 6 | Sincronización por hora oficial | ✅ motor + pruebas |
-| 7 | Offline (caché local del manifiesto) | ✅ caché local + respaldo anterior |
+| 7 | Offline (Service Worker + caché) | ✅ SW, precarga de medios y caché de manifiesto |
 | 8 | Monitoreo (heartbeats) | ✅ centro de pantallas en vivo + dashboard real |
 | — | Calendario de programación | ✅ programaciones por días/franja/prioridad |
 | 11 | Activación de pantallas por código | ✅ código temporal + confirmación en panel |

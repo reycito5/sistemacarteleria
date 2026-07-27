@@ -72,6 +72,18 @@ Exec=chromium --kiosk --autoplay-policy=no-user-gesture-required https://cartele
 X-GNOME-Autostart-enabled=true
 ```
 
+## 5b. Funcionamiento sin Internet (Service Worker)
+
+El reproductor registra un Service Worker (`/sw.js`) que:
+
+- Cachea el app shell y los recursos estáticos.
+- Precarga los videos e imágenes de la programación (descarga anticipada).
+- Guarda la última copia del manifiesto (además de la caché en `localStorage`).
+
+Así, si se pierde la conexión, cada pantalla sigue reproduciendo el contenido
+ya descargado. Al volver Internet, se revalida y se vuelve a sincronizar. La
+primera carga con red es necesaria para poblar la caché.
+
 ## 6. Prevención de pantalla en negro
 
 - Desactive el ahorro de energía y el apagado de pantalla del SO.

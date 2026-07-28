@@ -46,33 +46,13 @@ export function ProgramaDestacadoView({
 
   return (
     <>
-      <PhotoPanel
-        span={4}
-        media={content.media}
-        eyebrow={content.level || content.badge}
-        title={content.programName}
-        flag={false}
-      >
-        {(content.version || content.parallel) && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {content.version && (
-              <span className="inline-flex items-center rounded-full bg-white px-6 py-2.5 text-[22px] font-bold uppercase tracking-[.08em] text-sig-ink">
-                {content.version}
-              </span>
-            )}
-            {content.parallel && (
-              <span className="inline-flex items-center rounded-full border-2 border-white/60 px-6 py-2.5 text-[22px] font-bold uppercase tracking-[.08em] text-white">
-                {content.parallel}
-              </span>
-            )}
-          </div>
-        )}
-      </PhotoPanel>
+      {/* Medio limpio: se ve el afiche o el video sin texto encima. */}
+      <PhotoPanel span={4} media={content.media} flag={false} />
 
       <SigCard span={8}>
         <CardHead
-          eyebrow={content.badge}
-          title="Datos del programa"
+          eyebrow={content.level || content.badge}
+          title={content.programName}
           right={
             <SigBadge
               kind={content.enrollmentOpen ? "onlight-open" : "onlight-soon"}
@@ -82,6 +62,21 @@ export function ProgramaDestacadoView({
           }
         />
         <CardBody className="pt-3.5">
+          {(content.version || content.parallel) && (
+            <div className="mb-4 flex flex-wrap gap-2.5">
+              {content.version && (
+                <span className="inline-flex items-center rounded-full bg-sig-ink px-5 py-2 text-[20px] font-bold uppercase tracking-[.08em] text-white">
+                  {content.version}
+                </span>
+              )}
+              {content.parallel && (
+                <span className="inline-flex items-center rounded-full border-2 border-sig-rule px-5 py-2 text-[20px] font-bold uppercase tracking-[.08em] text-sig-ink">
+                  {content.parallel}
+                </span>
+              )}
+            </div>
+          )}
+
           {content.description && (
             <p
               className="max-w-[96%] leading-[1.45] text-sig-text-soft"

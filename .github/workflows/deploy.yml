@@ -1,12 +1,19 @@
 name: Deploy (Vercel producción)
 
-# Despliega a Vercel en cada push a main. Requiere los secretos del repositorio:
+# Despliega a Vercel en cada push a la rama por defecto del repositorio.
+#
+# Antes apuntaba a `main`, rama que no existe aquí: el flujo nunca se
+# disparaba solo y la producción había que promoverla a mano desde el panel de
+# Vercel. Ahora sigue a la rama real.
+#
+# Requiere los secretos del repositorio:
 #   VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID
 # Añádalos en: Settings → Secrets and variables → Actions. Nunca se exponen.
+# Sin ellos el flujo se detiene en la primera comprobación, sin desplegar nada.
 
 on:
   push:
-    branches: [main]
+    branches: [claude/sicd-uabjb-carteleria-digital-1yp9o8]
   workflow_dispatch:
 
 concurrency:

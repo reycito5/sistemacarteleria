@@ -96,7 +96,7 @@ El repositorio incluye tres flujos en `.github/workflows/`:
 | Flujo | Disparo | Qué hace |
 | ----- | ------- | -------- |
 | `ci.yml` | push / PR | Lint, typecheck, pruebas y build |
-| `deploy.yml` | push a `main` (o manual) | Despliega a Vercel (producción) |
+| `deploy.yml` | push a la rama por defecto (o manual) | Despliega a Vercel (producción) |
 | `migrate.yml` | manual | Aplica las migraciones a Supabase |
 
 ### Secretos a configurar (Settings → Secrets and variables → Actions)
@@ -126,7 +126,7 @@ Además, configure en **Vercel** las variables de entorno de la sección 2
 1. Añada los secretos de Supabase → ejecute `migrate.yml` (pestaña Actions →
    Run workflow) para crear el esquema.
 2. Configure las variables de entorno en Vercel.
-3. Añada los secretos de Vercel → al hacer merge a `main` (o Run workflow),
+3. Añada los secretos de Vercel → al hacer merge a la rama por defecto (o Run workflow),
    `deploy.yml` publica el sitio.
 
 ## 8. Verificación local del código

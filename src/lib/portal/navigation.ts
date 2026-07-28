@@ -6,13 +6,21 @@
 export interface PortalLink {
   href: string;
   label: string;
+  /** Abre en pestaña nueva hacia un sitio externo (p. ej. el portal de oferta). */
+  external?: boolean;
 }
 
+/** Portal externo de oferta académica del Posgrado (fuente canónica). */
+export const OFERTA_PORTAL_URL = "https://ofertaposgrado.vercel.app";
+
+/**
+ * El sitio de la cartelería no duplica el catálogo de oferta: «Oferta
+ * académica» y «Agenda» enlazan al portal de Posgrado. El menú queda enfocado
+ * en lo que es propio del sistema de señalización.
+ */
 export const PORTAL_LINKS: readonly PortalLink[] = [
   { href: "/", label: "Inicio" },
-  { href: "/oferta", label: "Oferta académica" },
-  { href: "/agenda", label: "Agenda" },
+  { href: OFERTA_PORTAL_URL, label: "Oferta académica", external: true },
   { href: "/pantallas", label: "Las pantallas" },
   { href: "/preview", label: "Plantillas" },
-  { href: "/contacto", label: "Contacto" },
 ];

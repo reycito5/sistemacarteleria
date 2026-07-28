@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogIn, Menu, X } from "lucide-react";
+import { ArrowUpRight, LogIn, Menu, X } from "lucide-react";
 import { INSTITUTION } from "@/lib/design/tokens";
 import { PORTAL_LINKS } from "@/lib/portal/navigation";
 
@@ -52,31 +52,41 @@ export function PortalHeader({ logoUrl = null }: { logoUrl?: string | null }) {
           </Link>
 
           <nav className="ml-auto hidden items-center gap-1 md:flex">
-            {PORTAL_LINKS.map((l) => {
-              const active = isActive(l.href);
-              return (
+            {PORTAL_LINKS.map((l) =>
+              l.external ? (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 rounded-[8px] px-3 py-2 text-[13px] font-semibold text-ui-muted transition hover:bg-ui-canvas hover:text-brand-ink"
+                >
+                  {l.label}
+                  <ArrowUpRight size={13} aria-hidden className="opacity-70" />
+                </a>
+              ) : (
                 <Link
                   key={l.href}
                   href={l.href}
                   onClick={close}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={isActive(l.href) ? "page" : undefined}
                   className={[
                     "relative rounded-[8px] px-3 py-2 text-[13px] font-semibold transition",
-                    active
+                    isActive(l.href)
                       ? "text-brand-ink"
                       : "text-ui-muted hover:bg-ui-canvas hover:text-brand-ink",
                   ].join(" ")}
                 >
                   {l.label}
-                  {active && (
+                  {isActive(l.href) && (
                     <span
                       aria-hidden
                       className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-brand-red"
                     />
                   )}
                 </Link>
-              );
-            })}
+              ),
+            )}
           </nav>
 
           <Link
@@ -104,18 +114,31 @@ export function PortalHeader({ logoUrl = null }: { logoUrl?: string | null }) {
             <ul className="space-y-0.5">
               {PORTAL_LINKS.map((l) => (
                 <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    onClick={close}
-                    className={[
-                      "block rounded-[8px] px-3 py-2.5 text-sm font-semibold transition",
-                      isActive(l.href)
-                        ? "bg-info-soft text-brand-ink"
-                        : "text-ui-muted hover:bg-ui-canvas",
-                    ].join(" ")}
-                  >
-                    {l.label}
-                  </Link>
+                  {l.external ? (
+                    <a
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={close}
+                      className="flex items-center gap-1.5 rounded-[8px] px-3 py-2.5 text-sm font-semibold text-ui-muted transition hover:bg-ui-canvas"
+                    >
+                      {l.label}
+                      <ArrowUpRight size={15} aria-hidden className="opacity-70" />
+                    </a>
+                  ) : (
+                    <Link
+                      href={l.href}
+                      onClick={close}
+                      className={[
+                        "block rounded-[8px] px-3 py-2.5 text-sm font-semibold transition",
+                        isActive(l.href)
+                          ? "bg-info-soft text-brand-ink"
+                          : "text-ui-muted hover:bg-ui-canvas",
+                      ].join(" ")}
+                    >
+                      {l.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

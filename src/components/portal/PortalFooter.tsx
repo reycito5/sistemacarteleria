@@ -43,12 +43,23 @@ export function PortalFooter() {
             <ul className="mt-3 space-y-2">
               {PORTAL_LINKS.map((l) => (
                 <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="text-[13px] text-white/70 transition hover:text-brand-white"
-                  >
-                    {l.label}
-                  </Link>
+                  {l.external ? (
+                    <a
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[13px] text-white/70 transition hover:text-brand-white"
+                    >
+                      {l.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={l.href}
+                      className="text-[13px] text-white/70 transition hover:text-brand-white"
+                    >
+                      {l.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

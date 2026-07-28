@@ -13,9 +13,7 @@ import {
   Timer,
 } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
-
-/** Portal externo de oferta académica del Posgrado (fuente canónica). */
-const OFERTA_PORTAL_URL = "https://ofertaposgrado.vercel.app";
+import { OFERTA_PORTAL_URL } from "@/lib/portal/navigation";
 
 export const metadata = {
   title: "UABJB Posgrado Digital — Cartelería institucional",

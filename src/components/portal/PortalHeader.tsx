@@ -8,7 +8,7 @@ import { INSTITUTION } from "@/lib/design/tokens";
 import { PORTAL_LINKS } from "@/lib/portal/navigation";
 
 /** Cabecera del portal público: marca institucional, menú y acceso al panel. */
-export function PortalHeader() {
+export function PortalHeader({ logoUrl = null }: { logoUrl?: string | null }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
@@ -29,12 +29,21 @@ export function PortalHeader() {
       <div className="border-b border-ui-border bg-ui-surface/92 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1180px] items-center gap-4 px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3 transition hover:opacity-85">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-brand-ink-deep text-sm font-black text-brand-red">
-              UB
-            </span>
+            {logoUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={logoUrl}
+                alt="Vicerrectorado de Posgrado — UABJB"
+                className="h-11 w-auto max-w-[150px] shrink-0 object-contain"
+              />
+            ) : (
+              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-brand-ink-deep text-sm font-black text-brand-red">
+                UB
+              </span>
+            )}
             <span className="min-w-0">
               <span className="block text-[9px] font-bold tracking-[0.2em] text-brand-red">
-                {INSTITUTION.systemName}
+                {INSTITUTION.vicerrectorate}
               </span>
               <span className="block truncate text-[15px] font-black leading-tight text-brand-ink">
                 {INSTITUTION.commercialName}

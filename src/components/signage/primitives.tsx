@@ -261,7 +261,7 @@ export function CardBody({
 }) {
   return (
     <div
-      className={`flex min-h-0 flex-1 flex-col px-[38px] pb-[34px] pt-[22px] ${className}`}
+      className={`flex min-h-0 flex-1 flex-col overflow-hidden px-[38px] pb-[34px] pt-[22px] ${className}`}
     >
       {children}
     </div>

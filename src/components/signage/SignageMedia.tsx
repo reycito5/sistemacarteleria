@@ -39,21 +39,43 @@ export function SignageMedia({
 
   const src = media?.src;
   const video = isVideoRef(media);
+  // El contenido puede pedir sonido (muted === false). Por defecto la cartelería
+  // va silenciada: son cuatro televisores en zonas de paso.
+  const wantsSound = media?.muted === false;
 
   useEffect(() => {
     if (!video) return;
     const el = videoRef.current;
     if (!el) return;
-    const attempt = () => el.play().catch(() => undefined);
+
+    // Arranca SIEMPRE en silencio: así el autoplay nunca lo bloquea el
+    // navegador (el video jamás se queda congelado). Si el contenido pide
+    // sonido, se intenta activar tras arrancar; si el navegador lo rechaza
+    // —autoplay con audio sin gesto del usuario— se vuelve a silenciar, de
+    // modo que el video sigue reproduciéndose igualmente.
+    const attempt = async () => {
+      el.muted = true;
+      try {
+        await el.play();
+      } catch {
+        return;
+      }
+      if (wantsSound) {
+        el.muted = false;
+        try {
+          await el.play();
+        } catch {
+          el.muted = true;
+        }
+      }
+    };
+
     attempt();
     const id = setTimeout(attempt, 400);
     return () => clearTimeout(id);
-  }, [video, src]);
+  }, [video, src, wantsSound]);
 
   const showFallback = !src || broken;
-  // El audio sólo suena si el contenido lo pide expresamente. Por defecto la
-  // cartelería va silenciada: son cuatro televisores en zonas de paso.
-  const muted = media?.muted !== false;
 
   return (
     <div className={`absolute inset-0 ${className}`}>
@@ -71,7 +93,7 @@ export function SignageMedia({
           poster={media?.poster}
           onError={() => setBroken(true)}
           autoPlay
-          muted={muted}
+          muted
           loop
           playsInline
           preload="auto"

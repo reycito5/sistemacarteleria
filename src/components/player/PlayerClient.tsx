@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ScreenFrame } from "@/components/institutional/ScreenFrame";
-import { ViewRenderer, isBareView } from "@/components/views/ViewRenderer";
+import { ViewRenderer, screenModeFor } from "@/components/views/ViewRenderer";
 import { EmergenciaView } from "@/components/views/EmergenciaView";
 import { SincronizacionView } from "@/components/views/SincronizacionView";
 import { computePosition, type SyncItem } from "@/lib/player/sync";
@@ -13,6 +13,7 @@ import {
   registerPlayerServiceWorker,
 } from "@/lib/player/serviceWorker";
 import type { PlayerManifest } from "@/lib/player/manifest";
+import { DEFAULT_IDENTITY } from "@/lib/institution/identity";
 
 const MANIFEST_REFRESH_MS = 60_000;
 const HEARTBEAT_MS = 20_000;
@@ -146,12 +147,15 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
     return () => clearInterval(id);
   }, [resolvedCode, sendHeartbeat]);
 
+  // Identidad institucional: llega en el manifiesto (también desde la caché).
+  const identity = manifest?.identity ?? DEFAULT_IDENTITY;
+
   // --- Render -------------------------------------------------------------
   // 1) Emergencia: prioridad absoluta.
   if (manifest?.emergency) {
     return (
       <div className="kiosk-root">
-        <ScreenFrame bare>
+        <ScreenFrame identity={identity} bare emergency>
           <EmergenciaView content={manifest.emergency} />
         </ScreenFrame>
       </div>
@@ -162,7 +166,7 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
   if (!manifest || manifest.items.length === 0) {
     return (
       <div className="kiosk-root">
-        <ScreenFrame bare>
+        <ScreenFrame identity={identity}>
           <SincronizacionView
             content={{
               kind: "sincronizacion",
@@ -181,11 +185,11 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
 
   // 3) Programación normal.
   const item = manifest.items[Math.min(index, manifest.items.length - 1)];
-  const bare = isBareView(item.content);
+  const mode = screenModeFor(item.content);
 
   return (
     <div className="kiosk-root">
-      <ScreenFrame bare={bare}>
+      <ScreenFrame identity={identity} {...mode}>
         <ViewRenderer content={item.content} />
       </ScreenFrame>
       {!online && (

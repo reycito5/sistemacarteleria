@@ -180,6 +180,64 @@ export async function movePlaylistItem(
 }
 
 /**
+ * Reordena la playlist completa a partir del nuevo orden de identificadores
+ * (arrastrar y soltar).
+ *
+ * La columna `position` tiene restricción unique por playlist, así que primero
+ * se aparcan todos los elementos en posiciones negativas —imposibles de
+ * colisionar— y después se asignan las definitivas.
+ */
+export async function reorderPlaylist(
+  playlistId: string,
+  orderedItemIds: string[],
+): Promise<ActionResult> {
+  const ctx = await getContext();
+  if (!ctx.ok) return ctx;
+  const { supabase } = ctx.data;
+
+  const { data: items } = await supabase
+    .from("playlist_items")
+    .select("id")
+    .eq("playlist_id", playlistId);
+
+  if (!items) return { ok: false, error: "No se pudo leer la playlist." };
+
+  // El nuevo orden debe contener exactamente los mismos elementos: si el panel
+  // trabajaba sobre una versión desfasada, se rechaza en vez de corromper.
+  const current = new Set(items.map((i) => i.id));
+  const proposed = new Set(orderedItemIds);
+  if (
+    current.size !== proposed.size ||
+    [...current].some((id) => !proposed.has(id))
+  ) {
+    return {
+      ok: false,
+      error: "La playlist cambió mientras la reordenaba. Recargue la página.",
+    };
+  }
+
+  for (const [i, id] of orderedItemIds.entries()) {
+    const { error } = await supabase
+      .from("playlist_items")
+      .update({ position: -(i + 1) })
+      .eq("id", id);
+    if (error) return { ok: false, error: error.message };
+  }
+
+  // Posiciones definitivas, base 0 como el resto del módulo.
+  for (const [i, id] of orderedItemIds.entries()) {
+    const { error } = await supabase
+      .from("playlist_items")
+      .update({ position: i })
+      .eq("id", id);
+    if (error) return { ok: false, error: error.message };
+  }
+
+  revalidate();
+  return { ok: true, data: undefined };
+}
+
+/**
  * Publica la playlist en las cuatro pantallas (sección 12/33): la marca activa,
  * fija la hora oficial de inicio, incrementa la versión, archiva cualquier otra
  * activa y genera el manifiesto de versión.

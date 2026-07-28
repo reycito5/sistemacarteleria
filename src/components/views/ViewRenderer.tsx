@@ -4,7 +4,12 @@ import { AgendaView } from "./AgendaView";
 import { ProgramaDestacadoView } from "./ProgramaDestacadoView";
 import { NoticiasView } from "./NoticiasView";
 import { ComunicadoView } from "./ComunicadoView";
-import { SincronizacionView } from "./SincronizacionView";
+import {
+  SincronizacionView,
+  SinConexionView,
+} from "./SincronizacionView";
+import { ProximosIniciosView } from "./ProximosIniciosView";
+import { MantenimientoView } from "./MantenimientoView";
 import { EmergenciaView } from "./EmergenciaView";
 import { BackupView } from "./BackupView";
 import {
@@ -31,6 +36,12 @@ export function ViewRenderer({ content }: { content: ViewContent }) {
       return <NoticiasView content={content} />;
     case "comunicado":
       return <ComunicadoView content={content} />;
+    case "proximos_inicios":
+      return <ProximosIniciosView content={content} />;
+    case "mantenimiento":
+      return <MantenimientoView content={content} />;
+    case "sin_conexion":
+      return <SinConexionView content={content} />;
     case "bienvenida":
       return <BienvenidaView content={content} />;
     case "reconocimientos":
@@ -50,7 +61,19 @@ export function ViewRenderer({ content }: { content: ViewContent }) {
   }
 }
 
-/** Indica si la vista debe renderizarse a sangre completa (sin cabecera/pie). */
-export function isBareView(content: ViewContent): boolean {
-  return content.kind === "emergencia" || content.kind === "sincronizacion";
+/**
+ * Cómo debe montarse la vista dentro del marco institucional.
+ *
+ *  - `emergency`: paleta roja en cabecera y pie; la vista ocupa todo el centro.
+ *  - `bare`: sin rejilla de 12 columnas ni rótulo (pantallas a sangre).
+ *
+ * La cabecera y el pie NUNCA se ocultan: la identidad institucional debe
+ * seguir visible incluso en una emergencia.
+ */
+export function screenModeFor(content: ViewContent): {
+  bare: boolean;
+  emergency: boolean;
+} {
+  const emergency = content.kind === "emergencia";
+  return { bare: emergency, emergency };
 }

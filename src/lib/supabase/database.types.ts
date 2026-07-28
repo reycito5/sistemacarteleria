@@ -116,6 +116,22 @@ export type MediaAssetRow = {
   created_at: string;
 }
 
+export type InstitutionSettingsRow = {
+  singleton: boolean;
+  university_name: string;
+  vicerrectorate_name: string;
+  logo_primary_path: string | null;
+  logo_secondary_path: string | null;
+  phones: string[];
+  email: string;
+  location: string;
+  social: string[];
+  ticker_label: string;
+  ticker_text: string;
+  updated_at: string;
+  updated_by: string | null;
+}
+
 export type TemplateRow = {
   id: string;
   name: string;
@@ -264,6 +280,11 @@ export interface Database {
         MediaAssetRow,
         Insertable<MediaAssetRow, "title" | "type" | "storage_path", "id" | "created_at">,
         Partial<MediaAssetRow>
+      >;
+      institution_settings: TableConfig<
+        InstitutionSettingsRow,
+        Insertable<InstitutionSettingsRow, never, "singleton" | "updated_at">,
+        Partial<InstitutionSettingsRow>
       >;
       templates: TableConfig<
         TemplateRow,

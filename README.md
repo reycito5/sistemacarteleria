@@ -76,16 +76,80 @@ npm run dev
 
 Rutas principales:
 
+### Portal público
+
 | Ruta | Descripción |
 | ---- | ----------- |
-| `/` | Portada y accesos |
+| `/` | Portada institucional: qué es el sistema y cómo funciona |
+| `/oferta` | Oferta académica del portal, con filtros por nivel y área |
+| `/agenda` | Actividades publicadas desde el panel, agrupadas por fecha |
+| `/pantallas` | Las cuatro pantallas y cómo se sincronizan |
+| `/preview` | Catálogo de las plantillas institucionales |
+| `/contacto` | Canales de atención y soporte del sistema |
+
+Todas comparten cabecera con menú y pie institucional.
+
+### Panel de administración
+
+| Ruta | Descripción |
+| ---- | ----------- |
+| `/admin/login` | Acceso — pantalla independiente, sin el marco del panel |
+| `/admin` | Panel general: estado de las pantallas y del contenido |
+| `/admin/ayuda` | Cómo funciona el sistema, paso a paso |
+| `/admin/biblioteca` | Paso 1 — subir videos e imágenes |
+| `/admin/plantillas` | Paso 2 — armar cada pantalla sobre una plantilla |
+| `/admin/oferta` | Importar programas del portal de oferta |
+| `/admin/playlist` | Paso 3 — ordenar y publicar la programación |
+| `/admin/calendario` | Programación por días y franjas horarias |
+| `/admin/comunicados` | Comunicados urgentes (prioridad absoluta) |
+| `/admin/pantallas` | Paso 4 — registrar y vigilar los televisores |
+| `/admin/seguridad` | Verificación en dos pasos |
+
+### Reproductor y servicios
+
+| Ruta | Descripción |
+| ---- | ----------- |
 | `/player?screen=REC-01` | Reproductor a pantalla completa (modo kiosco) |
 | `/player/activar` | Activación de la pantalla por código (sección 22) |
-| `/preview` | Galería de plantillas institucionales |
-| `/admin` | Panel de administración |
-| `/admin/login` | Acceso |
 | `/api/player/manifest` | Manifiesto de la playlist activa para las pantallas (GET) |
 | `/api/heartbeat` | Telemetría de reproductores (POST) |
+
+---
+
+## El recorrido del contenido
+
+Un archivo llega al televisor sólo si recorre los cuatro pasos:
+
+```
+Biblioteca  →  Plantilla  →  Playlist  →  Televisores
+ (subir)      (armar y       (ordenar y    (emiten en
+              aprobar)       publicar)     menos de 1 min)
+```
+
+Saltarse un paso es la causa más común de que algo no aparezca en pantalla.
+La pantalla `/admin/ayuda` explica el flujo completo dentro del propio panel.
+
+---
+
+## Portal de oferta académica
+
+Basta con definir el dominio del portal:
+
+```bash
+OFERTA_PORTAL_URL=https://ofertaposgrado.vercel.app
+```
+
+El sistema prueba solo las rutas JSON habituales, acepta campos en español o
+en inglés y, si nada responde, lee los datos incrustados en el HTML. El panel
+muestra el diagnóstico de cada intento.
+
+De cada programa se aprovechan nombre, **nivel** (Diplomado, Maestría…),
+**área**, modalidad, **estado** («Inscripción abierta», «En ejecución»…),
+inicio, duración, créditos, horas, lema, imagen y enlace.
+
+- Guía completa: [`docs/portal-oferta.md`](docs/portal-oferta.md)
+- Ruta JSON lista para copiar al portal:
+  [`docs/ejemplos/api-programas.route.ts`](docs/ejemplos/api-programas.route.ts)
 
 ---
 
@@ -100,11 +164,29 @@ npm run build       # Build de producción
 
 ---
 
-## Línea gráfica institucional V11.6
+## Sistema visual
 
-Cabecera, pie, colores y tipografía están **bloqueados** y centralizados en
-`src/lib/design/tokens.ts` y `src/app/globals.css`. No se modifican desde el
-panel ni desde plantillas.
+Dos capas bien separadas, ambas en `src/app/globals.css`:
+
+1. **Línea gráfica institucional V11.6** (`--color-inst-*`): lo que se ve en el
+   televisor. Cabecera, pie, colores y tipografía están **bloqueados** y
+   centralizados también en `src/lib/design/tokens.ts`. No se modifican desde
+   el panel ni desde plantillas.
+2. **Interfaz de gestión** (`--color-ui-*`): el panel y el portal web. Usa los
+   mismos colores institucionales sobre superficies, sombras y estados propios
+   de una aplicación web. Las primitivas compartidas están en
+   `src/components/ui/`. El portal público añade una serif académica
+   (`--font-serif`) para los nombres de programa, en línea con el portal de
+   oferta; el televisor no la usa.
+
+## Reproducción de video
+
+- En el televisor, `components/views/MediaPanel` reproduce el video de verdad
+  (autoplay silenciado con reintento y bucle) y muestra las imágenes limpias,
+  sin ninguna barra de controles encima.
+- En el panel, `components/media/VideoPlayer` ofrece controles funcionales
+  (reproducir, barra de posición arrastrable, volumen, reinicio y pantalla
+  completa) para revisar el material antes de publicarlo.
 
 ## Sincronización
 

@@ -2,16 +2,22 @@
 
 /*
  * ============================================================================
- * LÍNEA GRÁFICA INSTITUCIONAL V11.6 — SICD UABJB POSGRADO
+ * SISTEMA DE DISEÑO — SICD UABJB POSGRADO
  * ----------------------------------------------------------------------------
- * Estos tokens son la fuente única de verdad del sistema visual institucional.
- * La cabecera, el pie, los colores y la tipografía están BLOQUEADOS: no deben
- * modificarse desde el panel de administración ni desde plantillas.
+ * Dos capas bien separadas:
+ *
+ *  1. LÍNEA GRÁFICA INSTITUCIONAL (--color-inst-*): la que se ve en el
+ *     televisor. Azul, rojo, blanco y dorado. Bloqueada: no se edita desde el
+ *     panel ni desde las plantillas.
+ *
+ *  2. INTERFAZ DE GESTIÓN (--color-ui-*): el panel y el portal web. Usa los
+ *     mismos colores institucionales, pero con superficies, sombras y estados
+ *     propios de una aplicación web.
  * ============================================================================
  */
 
 @theme {
-  /* Paleta institucional (bloqueada) */
+  /* --- Paleta institucional (bloqueada) ----------------------------------- */
   --color-inst-blue: #0505fd;
   --color-inst-blue-top: #03037a;
   --color-inst-blue-bottom: #02024d;
@@ -20,24 +26,69 @@
   --color-inst-gold-strong: #f2b705;
   --color-inst-white: #ffffff;
 
-  /* Neutros de apoyo (solo UI de panel, no institucionales) */
-  --color-panel-bg: #f4f5f7;
-  --color-panel-border: #d9dce3;
-  --color-panel-ink: #1b1f2a;
-  --color-panel-muted: #5b6172;
+  /* --- Línea gráfica de cartelería V12 (lo que se ve en el televisor) -----
+   * Paleta editorial: azul tinta, rojo institucional y papel cálido. Es la
+   * que gobierna las plantillas; no se edita desde el panel.
+   */
+  --color-sig-ink: #121f5c;
+  --color-sig-ink-deep: #0a1440;
+  --color-sig-ink-soft: #1b2c78;
+  --color-sig-red: #d4181f;
+  --color-sig-red-deep: #9c0f14;
+  --color-sig-paper: #fbfaf7;
+  --color-sig-paper-2: #f3f1ea;
+  --color-sig-card: #ffffff;
+  --color-sig-rule: #e4e1d6;
+  --color-sig-text: #191b22;
+  --color-sig-text-soft: #5b5d6b;
+  --color-sig-text-faint: #8b8d9b;
 
-  /* Tipografía institucional */
+  /* --- Superficies de la interfaz de gestión ------------------------------ */
+  --color-ui-canvas: #f5f6fa;
+  --color-ui-surface: #ffffff;
+  --color-ui-raised: #fbfcfe;
+  --color-ui-border: #e2e5ee;
+  --color-ui-border-strong: #cdd2e0;
+  --color-ui-ink: #141a2b;
+  --color-ui-ink-soft: #3d4459;
+  --color-ui-muted: #626a80;
+  --color-ui-faint: #8b93a8;
+
+  /* --- Estados semánticos ------------------------------------------------- */
+  --color-ok: #0f7b3d;
+  --color-ok-soft: #e6f4ec;
+  --color-warn: #9a5b00;
+  --color-warn-soft: #fdf3e2;
+  --color-danger: #c52322;
+  --color-danger-soft: #fdecec;
+  --color-info: #03037a;
+  --color-info-soft: #ececfb;
+
+  /* --- Tipografía --------------------------------------------------------- */
   --font-sans: var(--font-inst-sans), "Inter", "Helvetica Neue", Arial,
     sans-serif;
+  /* Serif editorial: titulares de pantalla y del portal. */
+  --font-serif: var(--font-inst-serif), "Fraunces", Georgia, serif;
+  /* Monoespaciada: relojes, fechas, códigos de campo. */
+  --font-mono: var(--font-inst-mono), "IBM Plex Mono", ui-monospace, monospace;
 
-  /* Radios y filetes */
+  /* --- Radios ------------------------------------------------------------- */
   --radius-inst: 4px;
+  --radius-ui: 10px;
+  --radius-ui-lg: 16px;
+
+  /* --- Sombras ------------------------------------------------------------ */
+  --shadow-ui-sm: 0 1px 2px rgb(20 26 43 / 0.06),
+    0 1px 3px rgb(20 26 43 / 0.04);
+  --shadow-ui: 0 2px 4px rgb(20 26 43 / 0.05), 0 8px 20px rgb(20 26 43 / 0.06);
+  --shadow-ui-lg: 0 4px 8px rgb(20 26 43 / 0.06),
+    0 20px 40px rgb(20 26 43 / 0.10);
 }
 
 :root {
   color-scheme: light;
   --background: #ffffff;
-  --foreground: #1b1f2a;
+  --foreground: #141a2b;
 }
 
 html,
@@ -51,6 +102,13 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Anillo de foco accesible y uniforme en toda la aplicación de gestión. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-inst-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Filete dorado fino institucional */
@@ -69,4 +127,118 @@ body {
   inset: 0;
   background: #000;
   overflow: hidden;
+}
+
+/* ============================================================================
+ * Utilidades compartidas de la interfaz de gestión
+ * ==========================================================================*/
+
+/* Degradado institucional para cabeceras y barras destacadas. */
+.ui-gradient-inst {
+  background: linear-gradient(
+    135deg,
+    var(--color-inst-blue-bottom) 0%,
+    var(--color-inst-blue-top) 55%,
+    #0a0aa8 100%
+  );
+}
+
+/* Trama diagonal sutil sobre el degradado institucional. */
+.ui-gradient-inst-mesh {
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 85% 0%,
+      rgb(5 5 253 / 0.45),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 0% 100%,
+      rgb(212 160 23 / 0.18),
+      transparent 65%
+    ),
+    linear-gradient(
+      135deg,
+      var(--color-inst-blue-bottom) 0%,
+      var(--color-inst-blue-top) 100%
+    );
+}
+
+/* Tarjeta base del panel. */
+.ui-card {
+  background: var(--color-ui-surface);
+  border: 1px solid var(--color-ui-border);
+  border-radius: var(--radius-ui-lg);
+  box-shadow: var(--shadow-ui-sm);
+}
+
+/* Números tabulares para relojes, contadores y métricas. */
+.ui-tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Barra de desplazamiento discreta dentro de paneles. */
+.ui-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ui-border-strong) transparent;
+}
+
+/* ============================================================================
+ * Animaciones
+ * ==========================================================================*/
+
+@keyframes ui-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ui-pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes ui-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.ui-animate-in {
+  animation: ui-fade-up 0.28s ease-out both;
+}
+
+.ui-pulse {
+  animation: ui-pulse-soft 2s ease-in-out infinite;
+}
+
+.ui-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-ui-border) 25%,
+    var(--color-ui-raised) 50%,
+    var(--color-ui-border) 75%
+  );
+  background-size: 200% 100%;
+  animation: ui-shimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-animate-in,
+  .ui-pulse,
+  .ui-skeleton {
+    animation: none;
+  }
 }

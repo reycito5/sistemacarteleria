@@ -1,37 +1,47 @@
 import type { MantenimientoContent } from "@/lib/views/schemas";
-import { SigBadge, TechScreen } from "@/components/signage/primitives";
+import { DataPoint, StatusLayout } from "@/components/signage/layouts";
+import { T } from "@/components/signage/scale";
 
 /**
  * Vista 15 — Mantenimiento programado.
- * Aviso de parada técnica prevista, con su horario y alcance.
+ *
+ * Arquetipo ESTADO. A diferencia de la sincronización, aquí el horario SÍ es
+ * información útil para el público, así que va en casillas de dato y no en
+ * distintivos pequeños.
  */
 export function MantenimientoView({
   content,
 }: {
   content: MantenimientoContent;
 }) {
-  const chips = [
-    content.startAt && `Inicio ${content.startAt}`,
-    content.duration && `Duración estimada ${content.duration}`,
-    content.scope,
-  ].filter((c): c is string => Boolean(c));
+  const fields = [
+    { label: "Inicio", value: content.startAt },
+    { label: "Duración estimada", value: content.duration },
+    { label: "Alcance", value: content.scope },
+  ].filter((f) => Boolean(f.value));
 
   return (
-    <TechScreen glyph="⚙" title={content.title} sub={content.message}>
-      {chips.length > 0 && (
-        <div className="mt-1 flex flex-wrap justify-center gap-2.5">
-          {chips.map((c, i) => (
-            <SigBadge key={i} kind={i === 0 ? "onlight" : "neutral"}>
-              {c}
-            </SigBadge>
+    <StatusLayout
+      kicker="Aviso técnico"
+      title={content.title}
+      sub={content.message}
+    >
+      {fields.length > 0 && (
+        <div className="mt-10 flex flex-wrap gap-x-20 gap-y-8">
+          {fields.map((f) => (
+            <DataPoint key={f.label} label={f.label} value={f.value} />
           ))}
         </div>
       )}
+
       {content.supportContact && (
-        <p className="mt-2 text-[24px] text-sig-text-faint">
+        <p
+          className="mt-10 border-t border-sig-rule pt-6 text-sig-text-faint"
+          style={{ fontSize: T.body }}
+        >
           Contacto técnico · {content.supportContact}
         </p>
       )}
-    </TechScreen>
+    </StatusLayout>
   );
 }

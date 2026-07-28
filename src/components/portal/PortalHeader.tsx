@@ -3,122 +3,170 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogIn, Menu, X } from "lucide-react";
 import { INSTITUTION } from "@/lib/design/tokens";
 import { PORTAL_LINKS } from "@/lib/portal/navigation";
+import { Contenedor } from "./editorial";
 
-/** Cabecera del portal público: marca institucional, menú y acceso al panel. */
+/**
+ * Cabecera del portal: una marquilla de impreso institucional, no una barra de
+ * aplicación.
+ *
+ * La franja con el nombre de la universidad se desplaza con la página y sólo
+ * queda fija la barra de navegación; por eso la cabecera se ancla con un `top`
+ * negativo equivalente a la altura de esa franja (1.75rem más el filete rojo
+ * de 3px). Así se ve la marquilla completa al abrir y una barra ligera durante
+ * la lectura.
+ */
 export function PortalHeader() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const close = () => setOpen(false);
+  const [abierto, setAbierto] = useState(false);
+  const cerrar = () => setAbierto(false);
 
-  const isActive = (href: string) =>
+  const esActiva = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-40">
-      {/* Franja institucional superior */}
-      <div className="ui-gradient-inst px-4 py-1.5 sm:px-6">
-        <p className="mx-auto max-w-[1180px] text-center text-[10px] font-bold tracking-[0.16em] text-brand-white/85 sm:text-[11px]">
-          {INSTITUTION.university}
-        </p>
+    <header className="sticky top-[calc(-1.75rem-3px)] z-50">
+      {/* Marquilla institucional */}
+      <div className="bg-brand-ink-deep">
+        <Contenedor>
+          <p className="flex h-7 items-center justify-center text-center text-[9px] font-semibold uppercase tracking-[0.26em] text-white/65 sm:text-[10px]">
+            <span className="truncate">{INSTITUTION.university}</span>
+          </p>
+        </Contenedor>
       </div>
       <div className="inst-rule" />
 
-      <div className="border-b border-ui-border bg-ui-surface/92 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-[1180px] items-center gap-4 px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-3 transition hover:opacity-85">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-brand-ink-deep text-sm font-black text-brand-red">
-              UB
-            </span>
-            <span className="min-w-0">
-              <span className="block text-[9px] font-bold tracking-[0.2em] text-brand-red">
-                {INSTITUTION.systemName}
+      <div className="border-b border-sig-rule bg-sig-paper/92 backdrop-blur-md">
+        <Contenedor>
+          <div className="flex h-[4.25rem] items-center gap-6 sm:h-20">
+            {/* Logotipo tipográfico */}
+            <Link
+              href="/"
+              onClick={cerrar}
+              className="group flex shrink-0 items-center gap-3.5"
+            >
+              <span
+                aria-hidden
+                className="grid h-11 w-11 shrink-0 place-items-center border border-brand-ink/30 font-serif text-[17px] font-semibold text-brand-ink transition-colors group-hover:border-brand-red group-hover:text-brand-red"
+              >
+                UB
               </span>
-              <span className="block truncate text-[15px] font-black leading-tight text-brand-ink">
-                {INSTITUTION.commercialName}
+              <span className="min-w-0">
+                <span className="block text-[9px] font-semibold uppercase tracking-[0.26em] text-sig-text-soft">
+                  Vicerrectorado de
+                </span>
+                <span className="block font-serif text-[19px] font-semibold leading-tight tracking-[-0.01em] text-brand-ink sm:text-[21px]">
+                  Posgrado
+                </span>
               </span>
-            </span>
-          </Link>
+            </Link>
 
-          <nav className="ml-auto hidden items-center gap-1 md:flex">
-            {PORTAL_LINKS.map((l) => {
-              const active = isActive(l.href);
-              return (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={close}
-                  aria-current={active ? "page" : undefined}
-                  className={[
-                    "relative rounded-[8px] px-3 py-2 text-[13px] font-semibold transition",
-                    active
-                      ? "text-brand-ink"
-                      : "text-ui-muted hover:bg-ui-canvas hover:text-brand-ink",
-                  ].join(" ")}
-                >
-                  {l.label}
-                  {active && (
-                    <span
-                      aria-hidden
-                      className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-brand-red"
-                    />
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
+            <nav
+              aria-label="Secciones del portal"
+              className="ml-auto hidden lg:block"
+            >
+              <ul className="flex items-center gap-8">
+                {PORTAL_LINKS.map((enlace) => {
+                  const activa = esActiva(enlace.href);
+                  return (
+                    <li key={enlace.href}>
+                      <Link
+                        href={enlace.href}
+                        aria-current={activa ? "page" : undefined}
+                        className={`relative block py-2 text-[11px] font-semibold uppercase tracking-[0.16em] transition-colors ${
+                          activa
+                            ? "text-brand-ink"
+                            : "text-sig-text-soft hover:text-brand-ink"
+                        }`}
+                      >
+                        {enlace.label}
+                        {activa && (
+                          <span
+                            aria-hidden
+                            className="absolute inset-x-0 -bottom-0.5 h-[2px] bg-brand-red"
+                          />
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
 
-          <Link
-            href="/admin/login"
-            className="ml-auto hidden h-10 items-center gap-2 rounded-[10px] bg-brand-ink-deep px-4 text-[13px] font-bold text-brand-white transition hover:bg-brand-ink md:ml-3 md:inline-flex"
-          >
-            <LogIn size={15} aria-hidden />
-            Panel
-          </Link>
-
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-label={open ? "Cerrar menú" : "Abrir menú"}
-            aria-expanded={open}
-            className="ml-auto grid h-10 w-10 place-items-center rounded-[10px] border border-ui-border-strong text-brand-ink transition hover:bg-ui-canvas md:hidden"
-          >
-            {open ? <X size={19} /> : <Menu size={19} />}
-          </button>
-        </div>
-
-        {/* Menú móvil */}
-        {open && (
-          <nav className="border-t border-ui-border bg-ui-surface px-4 py-3 md:hidden">
-            <ul className="space-y-0.5">
-              {PORTAL_LINKS.map((l) => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    onClick={close}
-                    className={[
-                      "block rounded-[8px] px-3 py-2.5 text-sm font-semibold transition",
-                      isActive(l.href)
-                        ? "bg-info-soft text-brand-ink"
-                        : "text-ui-muted hover:bg-ui-canvas",
-                    ].join(" ")}
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {/* Acceso al panel: deliberadamente discreto, en letra de colofón. */}
             <Link
               href="/admin/login"
-              onClick={close}
-              className="mt-3 flex h-11 items-center justify-center gap-2 rounded-[10px] bg-brand-ink-deep text-sm font-bold text-brand-white"
+              className="hidden shrink-0 border-l border-sig-rule pl-8 text-[10px] font-semibold uppercase tracking-[0.18em] text-sig-text-soft transition-colors hover:text-brand-red lg:block"
             >
-              <LogIn size={16} aria-hidden />
-              Acceder al panel
+              Acceso
             </Link>
-          </nav>
+
+            <button
+              type="button"
+              onClick={() => setAbierto((v) => !v)}
+              aria-label={abierto ? "Cerrar el menú" : "Abrir el menú"}
+              aria-expanded={abierto}
+              aria-controls="menu-portal"
+              className="ml-auto flex h-11 w-11 shrink-0 flex-col items-center justify-center gap-[5px] text-brand-ink lg:hidden"
+            >
+              <span
+                aria-hidden
+                className={`h-px w-6 bg-current transition-transform duration-200 ${
+                  abierto ? "translate-y-[3px] rotate-45" : ""
+                }`}
+              />
+              <span
+                aria-hidden
+                className={`h-px w-6 bg-current transition-transform duration-200 ${
+                  abierto ? "-translate-y-[3px] -rotate-45" : ""
+                }`}
+              />
+            </button>
+          </div>
+        </Contenedor>
+
+        {/* Menú compacto: los enlaces se leen como el índice de un impreso. */}
+        {abierto && (
+          <div
+            id="menu-portal"
+            className="border-t border-sig-rule bg-sig-paper lg:hidden"
+          >
+            <Contenedor className="py-4">
+              <nav aria-label="Secciones del portal">
+                <ul>
+                  {PORTAL_LINKS.map((enlace, i) => (
+                    <li key={enlace.href}>
+                      <Link
+                        href={enlace.href}
+                        onClick={cerrar}
+                        aria-current={esActiva(enlace.href) ? "page" : undefined}
+                        className={`flex items-baseline gap-4 py-3.5 font-serif text-[22px] font-semibold tracking-[-0.01em] transition-colors ${
+                          i > 0 ? "border-t border-sig-rule" : ""
+                        } ${
+                          esActiva(enlace.href)
+                            ? "text-brand-red"
+                            : "text-brand-ink"
+                        }`}
+                      >
+                        <span className="font-mono text-[11px] font-medium text-sig-text-soft">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        {enlace.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+              <Link
+                href="/admin/login"
+                onClick={cerrar}
+                className="mt-5 inline-block border-t border-sig-rule pt-5 text-[10px] font-semibold uppercase tracking-[0.18em] text-sig-text-soft"
+              >
+                Acceso al panel de administración
+              </Link>
+            </Contenedor>
+          </div>
         )}
       </div>
     </header>

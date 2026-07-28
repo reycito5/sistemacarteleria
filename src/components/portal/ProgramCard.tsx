@@ -1,138 +1,126 @@
-import { ArrowUpRight, CalendarDays, Clock, GraduationCap } from "lucide-react";
 import {
   STATUS_LABEL,
   type PortalProgram,
   type ProgramStatus,
 } from "@/lib/integration/portal";
-
-/** Color de la etiqueta de estado, igual que en el portal de oferta. */
-const STATUS_STYLE: Record<ProgramStatus, string> = {
-  abierta: "bg-brand-red text-brand-white",
-  cerrada: "bg-brand-ink-deep/85 text-brand-white",
-  ejecucion: "bg-brand-ink-deep/85 text-brand-white",
-  proximo: "bg-brand-red text-brand-ink-deep",
-};
+import { DATO, ROTULO, TITULAR_S } from "./editorial";
 
 /**
- * Tarjeta de programa del portal público.
+ * Reseña de un programa de posgrado.
  *
- * Sigue la estructura del portal de oferta académica: imagen de portada con
- * el nivel y el estado superpuestos, la modalidad en la esquina, y debajo el
- * área, el nombre en serif y la ficha breve.
+ * Deliberadamente no es una tarjeta: no hay caja, ni sombra, ni botón
+ * flotante. La portada se apoya sobre un filete y debajo se compone la ficha
+ * como en un catálogo académico —área, nombre en serif, lema y datos duros en
+ * monoespaciada—. El nombre es el único enlace real; la superficie completa se
+ * vuelve pulsable con un pseudoelemento, de modo que el lector de pantalla
+ * anuncia un solo destino en lugar de una caja entera.
  */
+
+/** Sólo la inscripción abierta merece el rojo institucional. */
+const ESTADO_TONO: Record<ProgramStatus, string> = {
+  abierta: "text-brand-red",
+  cerrada: "text-sig-text-soft",
+  ejecucion: "text-sig-text-soft",
+  proximo: "text-sig-text-soft",
+};
+
 export function ProgramCard({ program }: { program: PortalProgram }) {
   const href = program.enrollmentUrl ?? undefined;
-  const Wrapper = href ? "a" : "div";
+
+  // Los datos duros se componen en una sola línea separada por filetes; los
+  // campos vacíos se descartan antes para no dejar separadores huérfanos.
+  const datos = [
+    program.level,
+    program.modality,
+    program.durationMonths ? `${program.durationMonths} meses` : "",
+    program.credits ? `${program.credits} créditos` : "",
+    program.hours ? `${program.hours} horas` : "",
+    program.startDate ? `Inicio ${program.startDate}` : "",
+  ].filter(Boolean);
 
   return (
-    <Wrapper
-      {...(href ? { href, target: "_blank", rel: "noreferrer" } : {})}
-      className="group flex h-full w-full flex-col overflow-hidden rounded-[18px] border border-ui-border bg-ui-surface shadow-[var(--shadow-ui-sm)] transition hover:-translate-y-1 hover:border-brand-ink-soft/30 hover:shadow-[var(--shadow-ui-lg)]"
-    >
-      {/* Portada */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-brand-ink-deep">
+    <article className="group relative flex h-full flex-col">
+      <div className="relative aspect-[5/4] w-full overflow-hidden bg-brand-ink-deep">
         {program.imageUrl ? (
+          // Las portadas llegan del portal de oferta como URL externa
+          // arbitraria, fuera del alcance del optimizador de imágenes.
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={program.imageUrl}
             alt=""
-            className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            loading="lazy"
+            className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
           />
         ) : (
-          <div className="ui-gradient-inst-mesh grid h-full w-full place-items-center">
-            <GraduationCap
-              size={44}
-              className="text-brand-red/50"
+          // Sin fotografía, la inicial del programa hace de portada: mejor una
+          // composición tipográfica que un icono genérico repetido.
+          <div className="grid h-full w-full place-items-center">
+            <span
               aria-hidden
-            />
+              className="font-serif text-[7rem] font-semibold leading-none text-white/12"
+            >
+              {program.name.trim().charAt(0).toUpperCase()}
+            </span>
           </div>
         )}
-
-        {/* Degradado para que las etiquetas se lean sobre cualquier foto. */}
         <span
           aria-hidden
-          className="absolute inset-0 bg-gradient-to-b from-black/45 via-transparent to-black/45"
+          className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand-red transition-transform duration-300 group-hover:scale-x-100"
         />
+      </div>
 
-        {/* Una sola fila para que las dos etiquetas nunca se solapen: el nivel
-            cede espacio y el estado se mantiene siempre legible. */}
-        <div className="absolute inset-x-3 top-3 flex items-start justify-between gap-2">
-          {program.level ? (
-            <span className="min-w-0 truncate rounded-full bg-brand-ink-deep/90 px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.06em] text-brand-white backdrop-blur-sm">
-              {program.level}
-            </span>
+      <div className="mt-6 flex flex-1 flex-col border-t border-sig-rule pt-5">
+        {/* Altura mínima de dos renglones: con áreas largas el rótulo salta de
+            línea y, sin ella, los nombres de la rejilla dejarían de alinearse. */}
+        <div className="flex min-h-[2.1rem] flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          {program.area ? (
+            <p className={`${ROTULO} text-brand-red`}>{program.area}</p>
           ) : (
             <span />
           )}
-
-          <span
-            className={`shrink-0 rounded-full px-2.5 py-1 text-[9px] font-bold uppercase backdrop-blur-sm ${
-              STATUS_STYLE[program.status]
-            }`}
-          >
+          <p className={`${ROTULO} ${ESTADO_TONO[program.status]}`}>
             {STATUS_LABEL[program.status]}
-          </span>
+          </p>
         </div>
 
-        {program.modality && (
-          <span className="absolute bottom-3 left-3 rounded-full bg-black/45 px-3 py-1 text-[11px] font-semibold text-brand-white backdrop-blur-sm">
-            {program.modality}
-          </span>
-        )}
-
-        {href && (
-          <span className="absolute bottom-3 right-3 grid h-9 w-9 place-items-center rounded-full bg-brand-white/95 text-brand-ink-deep transition group-hover:bg-brand-red">
-            <ArrowUpRight size={17} aria-hidden />
-          </span>
-        )}
-      </div>
-
-      {/* Ficha */}
-      <div className="flex flex-1 flex-col p-5">
-        {program.area && (
-          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-ui-faint">
-            {program.area}
-          </p>
-        )}
-
-        <span className="mt-2 self-start rounded-md bg-info-soft px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-brand-ink">
-          Programa del Vicerrectorado
-        </span>
-
-        <h3 className="mt-3 font-serif text-[19px] font-semibold leading-snug text-brand-ink">
-          {program.name}
+        <h3 className={`mt-4 text-pretty text-brand-ink ${TITULAR_S}`}>
+          {href ? (
+            <a
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              className="transition-colors after:absolute after:inset-0 hover:text-brand-red"
+            >
+              {program.name}
+              <span className="sr-only"> (se abre en una pestaña nueva)</span>
+            </a>
+          ) : (
+            program.name
+          )}
         </h3>
 
         {program.slogan && (
-          <p className="mt-2 text-sm italic leading-relaxed text-ui-muted">
-            “{program.slogan}”
+          <p className="mt-3 max-w-[42ch] font-serif text-[15px] italic leading-[1.6] text-sig-text-soft">
+            {program.slogan}
           </p>
         )}
 
-        <dl className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-ui-border pt-3.5 text-xs text-ui-muted">
-          {program.durationMonths && (
-            <div className="flex items-center gap-1.5">
-              <Clock size={13} className="text-brand-red" aria-hidden />
-              <dt className="sr-only">Duración</dt>
-              <dd>{program.durationMonths} meses</dd>
-            </div>
-          )}
-          {program.startDate && (
-            <div className="flex items-center gap-1.5">
-              <CalendarDays size={13} className="text-brand-red" aria-hidden />
-              <dt className="sr-only">Inicio</dt>
-              <dd>{program.startDate}</dd>
-            </div>
-          )}
-          {program.credits && (
-            <div className="flex items-center gap-1.5">
-              <GraduationCap size={13} className="text-brand-red" aria-hidden />
-              <dt className="sr-only">Créditos</dt>
-              <dd>{program.credits} créditos</dd>
-            </div>
-          )}
-        </dl>
+        {datos.length > 0 && (
+          <ul className="mt-auto flex flex-wrap items-center gap-x-3 gap-y-1.5 pt-6">
+            {datos.map((dato, i) => (
+              <li
+                key={dato}
+                className={`${DATO} flex items-center gap-3 text-[11px] uppercase tracking-[0.1em] text-sig-text-soft`}
+              >
+                {i > 0 && (
+                  <span aria-hidden className="h-3 w-px bg-sig-rule" />
+                )}
+                {dato}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
-    </Wrapper>
+    </article>
   );
 }

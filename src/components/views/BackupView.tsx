@@ -1,4 +1,4 @@
-import { TechScreen } from "@/components/signage/primitives";
+import { StatusLayout } from "@/components/signage/layouts";
 
 /**
  * Respaldo institucional (sección 28): se muestra cuando el contenido no se
@@ -6,9 +6,9 @@ import { TechScreen } from "@/components/signage/primitives";
  */
 export function BackupView() {
   return (
-    <TechScreen
-      glyph="◈"
-      title="Vicerrectorado de Posgrado"
+    <StatusLayout
+      kicker="Vicerrectorado de Posgrado"
+      title="Universidad Autónoma del Beni «José Ballivián»"
       sub="La programación institucional se reanudará en unos instantes."
     />
   );

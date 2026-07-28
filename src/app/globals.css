@@ -103,6 +103,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Fraunces es una fuente variable con eje óptico: dejar que `opsz` module los
+   remates según el tamaño real de composición. Se aplica a todo —portal y
+   televisor— porque es justo donde más se nota, en los titulares grandes.
+   `:where()` mantiene la especificidad en cero y no estorba a nada. */
+:where(.font-serif) {
+  font-optical-sizing: auto;
+}
+
 /* Anillo de foco accesible y uniforme en toda la aplicación de gestión. */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
   outline: 2px solid var(--color-brand-ink-soft);

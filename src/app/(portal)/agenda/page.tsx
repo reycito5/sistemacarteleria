@@ -1,135 +1,131 @@
-import { CalendarDays, MapPin } from "lucide-react";
 import { getPublicAgenda, type AgendaEntry } from "@/lib/data/publicAgenda";
-import { Badge } from "@/components/ui/Badge";
-import { Alert } from "@/components/ui/Alert";
-import { EmptyState } from "@/components/ui/EmptyState";
-import { ButtonLink } from "@/components/ui/Button";
+import {
+  Cifra,
+  Contenedor,
+  CUERPO,
+  DATO,
+  EnlaceEditorial,
+  NotaAlPie,
+  PortadaRuta,
+  ROTULO,
+  TITULAR_M,
+  TITULAR_S,
+} from "@/components/portal/editorial";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Agenda académica — UABJB Posgrado Digital",
+  title: "Agenda académica — Vicerrectorado de Posgrado UABJB",
   description:
-    "Defensas de tesis, conferencias y actividades del Vicerrectorado de Posgrado de la UABJB.",
+    "Defensas de tesis, conferencias y actos académicos del Vicerrectorado de Posgrado de la UABJB.",
 };
 
 /** Agrupa las actividades por fecha, conservando el orden recibido. */
-function groupByDate(entries: AgendaEntry[]): [string, AgendaEntry[]][] {
-  const groups = new Map<string, AgendaEntry[]>();
-  for (const entry of entries) {
-    const key = entry.date || "Sin fecha";
-    groups.set(key, [...(groups.get(key) ?? []), entry]);
+function agruparPorFecha(entries: AgendaEntry[]): [string, AgendaEntry[]][] {
+  const grupos = new Map<string, AgendaEntry[]>();
+  for (const entrada of entries) {
+    const clave = entrada.date || "Sin fecha";
+    grupos.set(clave, [...(grupos.get(clave) ?? []), entrada]);
   }
-  return [...groups.entries()];
+  return [...grupos.entries()];
 }
 
 export default async function AgendaPage() {
   const { entries, source } = await getPublicAgenda();
-  const groups = groupByDate(entries);
+  const grupos = agruparPorFecha(entries);
 
   return (
     <>
-      <section className="ui-gradient-inst-mesh text-brand-white">
-        <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 sm:py-20">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red">
-            Vicerrectorado de Posgrado
-          </p>
-          <h1 className="mt-3 max-w-3xl font-serif text-[36px] font-semibold leading-[1.1] sm:text-[50px]">
-            Agenda académica
-          </h1>
-          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-white/75">
-            Defensas de tesis, presentaciones de proyecto y conferencias. Es la
-            misma agenda que se emite en las pantallas del Vicerrectorado.
-          </p>
-        </div>
-      </section>
+      <PortadaRuta
+        rotulo="Agenda académica"
+        titulo="Defensas, conferencias y actos abiertos"
+        entradilla="Las actividades del Vicerrectorado de Posgrado son públicas. Esta es la misma agenda que se anuncia en las pantallas del edificio."
+        pie={
+          <div className="grid max-w-lg grid-cols-2 gap-8 border-t border-white/15 pt-8">
+            <Cifra
+              tono="tinta"
+              valor={String(entries.length).padStart(2, "0")}
+              glosa="Actividades programadas"
+            />
+            <Cifra
+              tono="tinta"
+              valor={String(grupos.length).padStart(2, "0")}
+              glosa="Jornadas con actividad"
+            />
+          </div>
+        }
+      />
 
-      <section className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 sm:py-16">
-        {source === "muestra" && (
-          <Alert tone="warn" className="mb-8" title="Agenda de ejemplo">
-            Todavía no hay contenidos de tipo «Agenda académica» aprobados en el
-            panel. En cuanto se apruebe el primero, esta página mostrará las
-            actividades reales.
-          </Alert>
-        )}
-
-        <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-2xl font-black text-brand-ink">
-            {entries.length} actividad{entries.length === 1 ? "" : "es"}{" "}
-            programada{entries.length === 1 ? "" : "s"}
-          </h2>
-          <Badge tone={source === "contenido" ? "ok" : "warn"} dot>
-            {source === "contenido" ? "Agenda publicada" : "Datos de muestra"}
-          </Badge>
-        </div>
-
+      <Contenedor className="py-16 sm:py-24">
         {entries.length === 0 ? (
-          <EmptyState
-            icon={<CalendarDays size={26} />}
-            title="No hay actividades programadas"
-            description="Vuelva a consultar más adelante o comuníquese con el Vicerrectorado."
-          />
+          <div className="max-w-[44rem]">
+            <h2 className={`max-w-[22ch] text-brand-ink ${TITULAR_M}`}>
+              No hay actividades programadas por ahora.
+            </h2>
+            <p className={`mt-5 max-w-[54ch] text-sig-text-soft ${CUERPO}`}>
+              Vuelva a consultar esta página en unos días o comuníquese con el
+              Vicerrectorado para conocer el calendario de defensas.
+            </p>
+            <div className="mt-8">
+              <EnlaceEditorial href="/contacto">
+                Formas de contacto
+              </EnlaceEditorial>
+            </div>
+          </div>
         ) : (
-          <div className="space-y-8">
-            {groups.map(([date, items]) => (
-              <div key={date}>
-                <div className="mb-4 flex items-center gap-3">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-brand-ink-deep text-brand-white">
-                    <CalendarDays size={18} aria-hidden />
-                  </span>
-                  <h3 className="text-lg font-extrabold text-brand-ink">
-                    {date}
-                  </h3>
-                  <span className="h-px flex-1 bg-ui-border" aria-hidden />
-                  <span className="text-xs font-semibold text-ui-muted">
-                    {items.length} actividad{items.length === 1 ? "" : "es"}
-                  </span>
+          <div className="space-y-16 sm:space-y-20">
+            {grupos.map(([fecha, actividades]) => (
+              <section key={fecha} className="grid gap-6 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12">
+                {/* La fecha queda en el margen y acompaña a su bloque durante
+                    el desplazamiento, como el folio de un programa impreso. */}
+                <div className="lg:sticky lg:top-28 lg:self-start">
+                  <h2
+                    className={`${DATO} text-[clamp(1.5rem,2.6vw,2rem)] font-semibold leading-none text-brand-ink`}
+                  >
+                    {fecha}
+                  </h2>
+                  <p className={`mt-3 ${ROTULO} text-sig-text-soft`}>
+                    {actividades.length} actividad
+                    {actividades.length === 1 ? "" : "es"}
+                  </p>
                 </div>
 
-                <ul className="space-y-3">
-                  {items.map((entry, i) => (
+                <ul className="border-t border-sig-rule">
+                  {actividades.map((actividad, i) => (
                     <li
-                      key={`${date}-${i}`}
-                      className="ui-card flex flex-wrap items-center gap-x-6 gap-y-3 p-5 transition hover:border-brand-ink-soft/30"
+                      key={`${fecha}-${i}`}
+                      className="grid gap-x-10 gap-y-2 border-b border-sig-rule py-7 sm:grid-cols-[5.5rem_minmax(0,1fr)]"
                     >
-                      {entry.time && (
-                        <span className="ui-tnum shrink-0 rounded-[10px] bg-info-soft px-3.5 py-2 text-lg font-black text-brand-ink">
-                          {entry.time}
-                        </span>
-                      )}
-
-                      <div className="min-w-[200px] flex-1">
-                        <p className="font-serif text-[17px] font-semibold leading-snug text-brand-ink">
-                          {entry.title}
-                        </p>
-                        {entry.place && (
-                          <p className="mt-1.5 flex items-center gap-1.5 text-xs text-ui-muted">
-                            <MapPin size={13} className="text-brand-red" aria-hidden />
-                            {entry.place}
+                      <p
+                        className={`${DATO} text-[15px] font-semibold text-brand-red sm:pt-1`}
+                      >
+                        {actividad.time || "—"}
+                      </p>
+                      <div className="min-w-0">
+                        <h3 className={`text-pretty text-brand-ink ${TITULAR_S}`}>
+                          {actividad.title}
+                        </h3>
+                        {actividad.place && (
+                          <p className="mt-2.5 text-[12px] uppercase tracking-[0.16em] text-sig-text-soft">
+                            {actividad.place}
                           </p>
                         )}
                       </div>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </section>
             ))}
           </div>
         )}
 
-        <div className="ui-card mt-12 flex flex-wrap items-center justify-between gap-6 p-8">
-          <div className="max-w-xl">
-            <h2 className="text-xl font-black text-brand-ink sm:text-2xl">
-              ¿Quiere anunciar una actividad en las pantallas?
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-ui-muted">
-              Desde el panel se crea un contenido con la plantilla «Agenda
-              académica»; al aprobarlo aparece aquí y en los televisores.
-            </p>
-          </div>
-          <ButtonLink href="/admin/plantillas">Ir al panel</ButtonLink>
-        </div>
-      </section>
+        {source === "muestra" && entries.length > 0 && (
+          <NotaAlPie>
+            Programación de referencia. Confirme fecha, hora y sala con el
+            Vicerrectorado antes de asistir.
+          </NotaAlPie>
+        )}
+      </Contenedor>
     </>
   );
 }

@@ -1,31 +1,44 @@
 import type { EmergenciaContent } from "@/lib/views/schemas";
+import { T, LH } from "@/components/signage/scale";
 
 /**
  * Vista 16 — Emergencia institucional.
  *
  * Prioridad absoluta: ocupa la pantalla completa sobre el fondo rojo del
- * marco. Sin decoración, sin medios y con el texto al mayor tamaño posible
- * para leerse desde lejos.
+ * marco. Sin decoración, sin medios y alineada a la izquierda —se lee más
+ * rápido que centrada— con el texto al mayor tamaño posible.
  */
 export function EmergenciaView({ content }: { content: EmergenciaContent }) {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-6 px-[120px] text-center">
-      <span className="bg-white px-8 py-3 text-[26px] font-bold uppercase tracking-[.14em] text-sig-red-deep">
+    <div className="flex flex-1 flex-col justify-center px-[96px] py-[48px]">
+      <span
+        className="self-start bg-white px-8 py-3.5 font-bold uppercase tracking-[.18em] text-sig-red-deep"
+        style={{ fontSize: T.meta }}
+      >
         Aviso de emergencia
       </span>
 
-      <h2 className="font-serif text-[64px] font-bold uppercase leading-[1.08] text-white">
+      <h2
+        className="mt-9 max-w-[1650px] font-serif font-black uppercase text-white"
+        style={{ fontSize: T.poster, lineHeight: LH.poster }}
+      >
         {content.title}
       </h2>
 
       {content.message && (
-        <p className="max-w-[1500px] text-[42px] font-medium leading-[1.3] text-white/90">
+        <p
+          className="mt-8 max-w-[1500px] font-medium text-white/90"
+          style={{ fontSize: T.bodyLg, lineHeight: 1.28 }}
+        >
           {content.message}
         </p>
       )}
 
       {content.instructions && (
-        <p className="mt-4 max-w-[1400px] border-t-2 border-white/35 pt-8 text-[36px] font-semibold leading-[1.35] text-white">
+        <p
+          className="mt-8 max-w-[1500px] border-t-[4px] border-white/40 pt-8 font-bold text-white"
+          style={{ fontSize: T.cardTitle, lineHeight: 1.25 }}
+        >
           {content.instructions}
         </p>
       )}

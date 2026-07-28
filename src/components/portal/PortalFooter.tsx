@@ -1,104 +1,118 @@
 import Link from "next/link";
-import { MessageCircle, Phone } from "lucide-react";
 import { INSTITUTION, INSTITUTIONAL_CONTACTS } from "@/lib/design/tokens";
-import { PORTAL_LINKS } from "@/lib/portal/navigation";
+import { PORTAL_ACCESOS_INTERNOS, PORTAL_LINKS } from "@/lib/portal/navigation";
+import {
+  CampoTinta,
+  Contenedor,
+  DATO,
+  FOCO_TINTA,
+  ROTULO,
+  TITULAR_M,
+} from "./editorial";
 
-const SYSTEM_LINKS = [
-  { href: "/admin/login", label: "Panel de administración" },
-  { href: "/player", label: "Reproductor (kiosco)" },
-  { href: "/player/activar", label: "Activar una pantalla" },
-];
+const [whatsapp, telefono] = INSTITUTIONAL_CONTACTS.phones;
 
-/** Pie institucional del portal público. */
+/**
+ * Colofón del portal.
+ *
+ * Cierra el impreso: quién firma, cómo se le encuentra y —en letra pequeña, al
+ * final de todo— los accesos operativos. El panel no puede desaparecer, pero
+ * tampoco puede competir con la información pública, así que baja al último
+ * renglón junto a la nota de créditos.
+ */
 export function PortalFooter() {
   return (
     <footer className="mt-auto">
       <div className="inst-rule" />
-      <div className="ui-gradient-inst text-brand-white">
-        <div className="mx-auto grid max-w-[1180px] gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="grid h-11 w-11 place-items-center rounded-[10px] border border-brand-red/45 bg-white/10 text-sm font-black text-brand-red">
-                UB
-              </span>
-              <div>
-                <p className="text-[10px] font-bold tracking-[0.2em] text-brand-red">
-                  {INSTITUTION.systemName}
-                </p>
-                <p className="text-[15px] font-black leading-tight">
-                  {INSTITUTION.commercialName}
-                </p>
-              </div>
+      <CampoTinta>
+        <Contenedor className="py-14 sm:py-20">
+          <div className="grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,1fr)] lg:gap-20">
+            <div>
+              <p className={`${ROTULO} text-white/60`}>
+                {INSTITUTION.university}
+              </p>
+              <p className={`mt-5 text-balance text-white ${TITULAR_M}`}>
+                Vicerrectorado de Posgrado
+              </p>
+              <p className="mt-6 max-w-[46ch] text-[15px] leading-[1.75] text-white/70">
+                Formación de cuarto nivel de la Universidad Autónoma del Beni
+                «José Ballivián»: doctorados, maestrías, especialidades y
+                diplomados para el ejercicio profesional en el departamento.
+              </p>
             </div>
-            <p className="mt-4 max-w-sm text-[13px] leading-relaxed text-white/65">
-              Sistema institucional de cartelería digital del Vicerrectorado de
-              Posgrado de la Universidad Autónoma del Beni «José Ballivián».
-            </p>
+
+            <div>
+              <p className={`${ROTULO} text-white/60`}>Informaciones</p>
+              <ul className="mt-6 space-y-5">
+                <li>
+                  <a
+                    href={`https://wa.me/591${whatsapp}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`${DATO} ${FOCO_TINTA} block text-[26px] font-semibold leading-none text-white transition-colors hover:text-brand-red sm:text-[30px]`}
+                  >
+                    {whatsapp}
+                  </a>
+                  <span className="mt-2 block text-[11px] uppercase tracking-[0.2em] text-white/60">
+                    WhatsApp
+                  </span>
+                </li>
+                <li>
+                  <a
+                    href={`tel:+591${telefono}`}
+                    className={`${DATO} ${FOCO_TINTA} block text-[26px] font-semibold leading-none text-white transition-colors hover:text-brand-red sm:text-[30px]`}
+                  >
+                    {telefono}
+                  </a>
+                  <span className="mt-2 block text-[11px] uppercase tracking-[0.2em] text-white/60">
+                    Teléfono · Lunes a viernes, 08:00 a 16:00
+                  </span>
+                </li>
+              </ul>
+            </div>
           </div>
 
-          <nav>
-            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
-              Portal
-            </p>
-            <ul className="mt-3 space-y-2">
-              {PORTAL_LINKS.map((l) => (
-                <li key={l.href}>
+          <nav
+            aria-label="Índice del portal"
+            className="mt-14 border-t border-white/15 pt-8"
+          >
+            <ul className="flex flex-wrap gap-x-10 gap-y-4">
+              {PORTAL_LINKS.map((enlace) => (
+                <li key={enlace.href}>
                   <Link
-                    href={l.href}
-                    className="text-[13px] text-white/70 transition hover:text-brand-white"
+                    href={enlace.href}
+                    className={`text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75 transition-colors hover:text-white ${FOCO_TINTA}`}
                   >
-                    {l.label}
+                    {enlace.label}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
+        </Contenedor>
 
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
-              Sistema
-            </p>
-            <ul className="mt-3 space-y-2">
-              {SYSTEM_LINKS.map((l) => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    className="text-[13px] text-white/70 transition hover:text-brand-white"
-                  >
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
-              Informaciones
-            </p>
-            <ul className="mt-3 space-y-2">
-              {INSTITUTIONAL_CONTACTS.phones.map((phone, i) => (
-                <li
-                  key={phone}
-                  className="flex items-center gap-2 text-[13px] text-white/70"
-                >
-                  {i === 0 ? (
-                    <MessageCircle size={14} className="text-brand-red" aria-hidden />
-                  ) : (
-                    <Phone size={14} className="text-brand-red" aria-hidden />
-                  )}
-                  <span className="ui-tnum">{phone}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <div className="border-t border-white/12">
+          <Contenedor>
+            <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-6 text-[10px] uppercase tracking-[0.18em] text-white/60">
+              <p>
+                {INSTITUTION.commercialName} · {INSTITUTION.generalGroup}
+              </p>
+              <ul className="flex flex-wrap items-center gap-x-6 gap-y-2">
+                {PORTAL_ACCESOS_INTERNOS.map((enlace) => (
+                  <li key={enlace.href}>
+                    <Link
+                      href={enlace.href}
+                      className={`transition-colors hover:text-white ${FOCO_TINTA}`}
+                    >
+                      {enlace.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Contenedor>
         </div>
-
-        <div className="border-t border-white/10">
-          <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-2 px-4 py-4 text-[11px] text-white/45 sm:px-6">
-            <p>{INSTITUTION.university}</p>
-            <p>Grupo {INSTITUTION.generalGroup}</p>
-          </div>
-        </div>
-      </div>
+      </CampoTinta>
     </footer>
   );
 }

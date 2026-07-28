@@ -57,7 +57,7 @@ function HeaderClock() {
       >
         {date}
       </p>
-      <p className="mt-1 font-mono text-[76px] font-bold leading-none tracking-tight text-sig-ink">
+      <p className="mt-1 font-mono text-[62px] font-bold leading-none tracking-tight text-sig-ink">
         {time}
       </p>
     </div>
@@ -80,13 +80,13 @@ function LogoSlot({
       <img
         src={url}
         alt=""
-        className="h-[104px] w-auto max-w-[230px] shrink-0 object-contain"
+        className="h-[86px] w-auto max-w-[200px] shrink-0 object-contain"
       />
     );
   }
   return (
     <div
-      className={`grid h-[104px] w-[104px] shrink-0 place-items-center border-2 border-white/55 font-serif text-[30px] font-bold text-white ${
+      className={`grid h-[86px] w-[86px] shrink-0 place-items-center border-2 border-white/55 font-serif text-[26px] font-bold text-white ${
         round ? "rounded-full" : "rounded-[6px]"
       }`}
     >
@@ -107,7 +107,7 @@ export function ScreenHeader({
   emergency?: boolean;
 }) {
   return (
-    <header className="relative h-[206px] shrink-0 overflow-hidden bg-sig-paper">
+    <header className="relative h-[168px] shrink-0 overflow-hidden bg-sig-paper">
       <div
         aria-hidden
         className={`absolute inset-0 w-[74%] ${
@@ -116,7 +116,7 @@ export function ScreenHeader({
         style={{
           clipPath: emergency
             ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
-            : "polygon(0 0, 100% 0, calc(100% - 120px) 100%, 0% 100%)",
+            : "polygon(0 0, 100% 0, calc(100% - 100px) 100%, 0% 100%)",
         }}
       >
         <span
@@ -129,11 +129,11 @@ export function ScreenHeader({
       <div className="relative z-[2] flex h-full items-center px-[52px]">
         <div className="flex shrink-0 items-center gap-6">
           <LogoSlot url={identity.logoPrimaryUrl} fallback="UAB" />
-          <span aria-hidden className="h-[68px] w-px bg-white/30" />
+          <span aria-hidden className="h-[58px] w-px bg-white/30" />
           {identity.logoSecondaryUrl ? (
             <LogoSlot url={identity.logoSecondaryUrl} fallback="" round={false} />
           ) : (
-            <p className="font-serif text-[26px] font-bold leading-[1.2] text-white/85">
+            <p className="font-serif text-[23px] font-bold leading-[1.2] text-white/85">
               Posgrado
               <br />
               UABJB
@@ -148,7 +148,7 @@ export function ScreenHeader({
           >
             {identity.universityName}
           </p>
-          <p className="mt-1 font-serif text-[52px] font-bold leading-none text-white">
+          <p className="mt-1 font-serif text-[44px] font-bold leading-none text-white">
             {identity.vicerrectorateName}
           </p>
         </div>
@@ -162,7 +162,7 @@ export function ScreenHeader({
 /** Rótulo desplazable inferior con la frase institucional. */
 export function ScreenTicker({ identity }: { identity: InstitutionIdentity }) {
   return (
-    <div className="flex h-[92px] shrink-0 items-center gap-7 overflow-hidden bg-sig-ink px-[52px]">
+    <div className="flex h-[78px] shrink-0 items-center gap-7 overflow-hidden bg-sig-ink px-[52px]">
       <span
         className="shrink-0 bg-sig-red px-6 py-3 font-bold uppercase tracking-[.12em] text-white"
         style={{ fontSize: T.eyebrow }}
@@ -195,7 +195,7 @@ export function ScreenFooter({
 
   return (
     <footer
-      className={`flex h-[132px] shrink-0 items-center justify-between gap-8 px-[52px] ${
+      className={`flex h-[108px] shrink-0 items-center justify-between gap-8 px-[52px] ${
         emergency
           ? "bg-sig-red-deep"
           : "border-t border-sig-rule bg-sig-paper"
@@ -239,7 +239,7 @@ export function ScreenFooter({
             title={name}
           >
             {hasSocialIcon(name) ? (
-              <SocialIcon name={name} size={40} />
+              <SocialIcon name={name} size={36} />
             ) : (
               <span
                 className="font-bold uppercase tracking-[.08em]"

@@ -1,167 +1,148 @@
+import { ScreenFrame } from "@/components/institutional/ScreenFrame";
+import { ViewRenderer, screenModeFor } from "@/components/views/ViewRenderer";
+import { SAMPLE_VIEWS } from "@/lib/views/samples";
+import { PUNTOS_CARTELERIA, QUE_COMUNICA, VISTAS_PUBLICAS } from "@/lib/portal/contenido";
 import {
-  Building2,
-  CheckCircle2,
-  MonitorPlay,
-  Radio,
-  Timer,
-  Wifi,
-} from "lucide-react";
-import { INSTITUTION } from "@/lib/design/tokens";
-import { ButtonLink } from "@/components/ui/Button";
-import { Badge } from "@/components/ui/Badge";
+  Contenedor,
+  CUERPO,
+  DATO,
+  EncabezadoSeccion,
+  EnlaceEditorial,
+  PortadaRuta,
+  Rotulo,
+  ROTULO,
+  TITULAR_M,
+  TITULAR_S,
+} from "@/components/portal/editorial";
 
 export const metadata = {
-  title: "Las pantallas — UABJB Posgrado Digital",
+  title: "Cartelería institucional — Vicerrectorado de Posgrado UABJB",
   description:
-    "Las cuatro pantallas del Vicerrectorado de Posgrado y cómo funciona su programación sincronizada.",
+    "Los cuatro puntos de información del Vicerrectorado de Posgrado y lo que se anuncia en ellos.",
 };
 
-const SCREENS = [
-  {
-    code: "REC-01",
-    name: "Recepción",
-    place: "Ingreso principal del Vicerrectorado",
-    audience: "Postulantes e informaciones",
-  },
-  {
-    code: "PAS-02",
-    name: "Pasillo",
-    place: "Corredor de aulas",
-    audience: "Estudiantes en tránsito",
-  },
-  {
-    code: "AUD-03",
-    name: "Auditorio",
-    place: "Sala de defensas y conferencias",
-    audience: "Asistentes a actos académicos",
-  },
-  {
-    code: "ADM-04",
-    name: "Administración",
-    place: "Oficinas administrativas",
-    audience: "Personal del Vicerrectorado",
-  },
-];
+/**
+ * Muestras de pantalla que se enseñan al público, en el orden en que están
+ * declaradas. Se resuelven contra `SAMPLE_VIEWS` con `flatMap` para que el
+ * tipo quede estrecho sin recurrir a aserciones.
+ */
+const VISTAS = VISTAS_PUBLICAS.flatMap((kind) => {
+  const vista = SAMPLE_VIEWS.find((v) => v.kind === kind);
+  return vista ? [vista] : [];
+});
 
-const FACTS = [
-  {
-    icon: Timer,
-    title: "Una sola hora oficial",
-    text: "Todas calculan su posición desde el mismo instante de inicio, no desde cuando se encendieron. Por eso muestran lo mismo al mismo tiempo.",
-  },
-  {
-    icon: Radio,
-    title: "Autonomía sin red",
-    text: "Cada equipo guarda la programación y los archivos. Si se cae internet sigue emitiendo y avisa en pantalla que está reconectando.",
-  },
-  {
-    icon: Wifi,
-    title: "Latido cada 20 segundos",
-    text: "Los televisores informan de su estado al panel. Si uno deja de responder, aparece como desconectado en el centro de pantallas.",
-  },
-  {
-    icon: CheckCircle2,
-    title: "Activación por código",
-    text: "Un televisor nuevo pide un código temporal que se confirma desde el panel. Sin esa confirmación no recibe programación.",
-  },
-];
-
-export default function PantallasPublicPage() {
+export default function CarteleriaPage() {
   return (
     <>
-      <section className="ui-gradient-inst-mesh text-brand-white">
-        <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 sm:py-20">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red">
-            Grupo {INSTITUTION.generalGroup}
-          </p>
-          <h1 className="mt-3 max-w-3xl text-[34px] font-black leading-[1.08] sm:text-[46px]">
-            Cuatro pantallas, una sola programación
-          </h1>
-          <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-white/75">
-            Las cuatro pantallas del Vicerrectorado de Posgrado pertenecen a un
-            único grupo y emiten exactamente el mismo contenido, en el mismo
-            orden y al mismo tiempo.
-          </p>
-        </div>
-      </section>
+      <PortadaRuta
+        rotulo="Cartelería institucional"
+        titulo="Lo que se anuncia dentro del Vicerrectorado"
+        entradilla="Cuatro pantallas reparten la misma información en los lugares por donde pasa la comunidad académica: la oferta vigente, la agenda del día y los avisos de la institución."
+      />
 
-      <section className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 sm:py-16">
-        <h2 className="text-2xl font-black text-brand-ink">
-          Ubicación de cada pantalla
-        </h2>
+      {/* ── Dónde verla ─────────────────────────────────────────────────── */}
+      <section aria-labelledby="puntos">
+        <Contenedor className="py-16 sm:py-24">
+          <EncabezadoSeccion
+            rotulo="Dónde verla"
+            titulo={<span id="puntos">Cuatro puntos de información</span>}
+            entradilla="Todas emiten el mismo contenido al mismo tiempo, de modo que la información no depende de por dónde se entre al edificio."
+          />
 
-        <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {SCREENS.map((s) => (
-            <li key={s.code} className="ui-card p-5">
-              <div className="flex items-center justify-between">
-                <span className="grid h-10 w-10 place-items-center rounded-[10px] bg-info-soft text-brand-ink">
-                  <MonitorPlay size={18} aria-hidden />
-                </span>
-                <Badge tone="neutral" className="ui-tnum">
-                  {s.code}
-                </Badge>
-              </div>
-              <h3 className="mt-4 text-lg font-extrabold text-brand-ink">
-                {s.name}
-              </h3>
-              <p className="mt-1.5 flex items-start gap-1.5 text-xs leading-relaxed text-ui-muted">
-                <Building2 size={13} className="mt-0.5 shrink-0" aria-hidden />
-                {s.place}
-              </p>
-              <p className="mt-3 border-t border-ui-border pt-3 text-xs text-ui-muted">
-                {s.audience}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="border-y border-ui-border bg-ui-surface">
-        <div className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 sm:py-16">
-          <h2 className="text-2xl font-black text-brand-ink">
-            Cómo se mantienen sincronizadas
-          </h2>
-
-          <div className="mt-8 grid gap-x-10 gap-y-8 sm:grid-cols-2">
-            {FACTS.map(({ icon: Icon, title, text }) => (
-              <div key={title} className="flex gap-4">
-                <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-info-soft text-brand-ink">
-                  <Icon size={19} aria-hidden />
-                </span>
-                <div>
-                  <h3 className="text-base font-extrabold text-brand-ink">
-                    {title}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-ui-muted">
-                    {text}
-                  </p>
-                </div>
-              </div>
+          <ul className="mt-14 border-t border-sig-rule">
+            {PUNTOS_CARTELERIA.map((punto, i) => (
+              <li
+                key={punto.codigo}
+                className="grid gap-x-10 gap-y-3 border-b border-sig-rule py-8 sm:grid-cols-[3rem_minmax(0,1fr)] lg:grid-cols-[3rem_16rem_minmax(0,1fr)_14rem]"
+              >
+                <p className={`${DATO} text-[13px] text-brand-red`}>
+                  {String(i + 1).padStart(2, "0")}
+                </p>
+                <h3 className={`text-brand-ink ${TITULAR_S}`}>{punto.nombre}</h3>
+                <p className={`text-sig-text-soft ${CUERPO}`}>{punto.lugar}</p>
+                <p className={`${ROTULO} text-sig-text-soft lg:text-right`}>
+                  {punto.publico}
+                </p>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </Contenedor>
       </section>
 
-      <section className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 sm:py-16">
-        <div className="ui-card flex flex-wrap items-center justify-between gap-6 p-8">
-          <div className="max-w-xl">
-            <h2 className="text-xl font-black text-brand-ink sm:text-2xl">
-              ¿Está instalando un televisor nuevo?
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-ui-muted">
-              Abra la pantalla de activación en el equipo, anote el código que
-              muestra y confírmelo desde el centro de pantallas del panel.
-            </p>
+      {/* ── Qué se anuncia ──────────────────────────────────────────────── */}
+      <section
+        aria-labelledby="que-se-anuncia"
+        className="border-y border-sig-rule bg-sig-paper-2"
+      >
+        <Contenedor className="py-16 sm:py-24">
+          <EncabezadoSeccion
+            rotulo="Qué se anuncia"
+            titulo={
+              <span id="que-se-anuncia">
+                Ocho maneras de contar lo mismo: lo que hace el Vicerrectorado.
+              </span>
+            }
+            entradilla="Cada pantalla se compone sobre la línea gráfica institucional, con la misma tipografía y los mismos colores que este portal."
+          />
+
+          <div className="mt-14 grid gap-x-10 gap-y-16 lg:grid-cols-2">
+            {VISTAS.map((contenido) => {
+              const glosa = QUE_COMUNICA[contenido.kind];
+              return (
+                <figure key={contenido.kind}>
+                  {/* El lienzo del televisor es siempre 16:9; el marco fino de
+                      tinta lo presenta como una lámina, no como una tarjeta. */}
+                  <div className="relative aspect-video w-full overflow-hidden border border-brand-ink/15 bg-black">
+                    <ScreenFrame {...screenModeFor(contenido)}>
+                      <ViewRenderer content={contenido} />
+                    </ScreenFrame>
+                  </div>
+                  <figcaption className="mt-5 border-t border-sig-rule pt-5">
+                    <h3 className={`text-brand-ink ${TITULAR_S}`}>
+                      {glosa?.titulo ?? "Pantalla institucional"}
+                    </h3>
+                    {glosa?.texto && (
+                      <p className="mt-2.5 max-w-[52ch] text-[15px] leading-[1.7] text-sig-text-soft">
+                        {glosa.texto}
+                      </p>
+                    )}
+                  </figcaption>
+                </figure>
+              );
+            })}
           </div>
-          <div className="flex flex-wrap gap-2">
-            <ButtonLink href="/player/activar" variant="secondary">
-              Activar una pantalla
-            </ButtonLink>
-            <ButtonLink href="/player" target="_blank">
-              Ver el reproductor
-            </ButtonLink>
+        </Contenedor>
+      </section>
+
+      {/* ── Cierre ──────────────────────────────────────────────────────── */}
+      <section aria-labelledby="anunciar">
+        <Contenedor className="py-16 sm:py-24">
+          <div className="grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-12">
+            <div className="lg:pt-3">
+              <Rotulo>Anunciar</Rotulo>
+            </div>
+            <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-8">
+              <div className="min-w-0 flex-1 basis-[26rem]">
+                <h2
+                  id="anunciar"
+                  className={`max-w-[22ch] text-balance text-brand-ink ${TITULAR_M}`}
+                >
+                  ¿Tiene una actividad académica para anunciar?
+                </h2>
+                <p className={`mt-5 max-w-[54ch] text-sig-text-soft ${CUERPO}`}>
+                  Comuníquela al Vicerrectorado con al menos dos días de
+                  antelación, indicando fecha, hora y sala. Se publicará en la
+                  agenda del portal y en las cuatro pantallas.
+                </p>
+              </div>
+              <div className="shrink-0">
+                <EnlaceEditorial href="/contacto">
+                  Comunicar una actividad
+                </EnlaceEditorial>
+              </div>
+            </div>
           </div>
-        </div>
+        </Contenedor>
       </section>
     </>
   );

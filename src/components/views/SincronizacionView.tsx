@@ -2,11 +2,15 @@ import type {
   SinConexionContent,
   SincronizacionContent,
 } from "@/lib/views/schemas";
-import { SigBadge, TechScreen } from "@/components/signage/primitives";
+import { SigBadge, StatusLayout } from "@/components/signage/layouts";
+import { T } from "@/components/signage/scale";
 
 /**
  * Vista 14 — Sincronización.
- * Pantalla técnica: aparece sola mientras el equipo descarga la programación.
+ *
+ * Arquetipo ESTADO: sin foto, sin tarjeta, alineado a la izquierda. Se
+ * distingue al instante de una pantalla de contenido, que es exactamente lo
+ * que hace falta cuando el equipo está trabajando y no emitiendo.
  */
 export function SincronizacionView({
   content,
@@ -14,19 +18,35 @@ export function SincronizacionView({
   content: SincronizacionContent;
 }) {
   return (
-    <TechScreen
-      glyph="⟳"
+    <StatusLayout
+      kicker="Estado del sistema"
       title="Actualizando contenido institucional"
-      sub={content.steps.join(" · ")}
+      sub="La programación se reanudará automáticamente al terminar la descarga."
     >
-      <div className="mt-2 h-[3px] w-[480px] overflow-hidden bg-sig-rule">
+      <div className="mt-9 h-[10px] w-[720px] overflow-hidden bg-sig-rule">
         <div className="h-full w-[64%] bg-sig-red" />
       </div>
-      <div className="mt-1 flex flex-wrap justify-center gap-2.5">
+
+      <ol className="mt-8 flex flex-wrap gap-x-12 gap-y-4">
+        {content.steps.map((step, i) => (
+          <li
+            key={i}
+            className="flex items-baseline gap-4 font-medium text-sig-text-soft"
+            style={{ fontSize: T.body }}
+          >
+            <span className="font-mono font-bold text-sig-red">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            {step}
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-9 flex flex-wrap gap-3">
         <SigBadge kind="neutral">Reproductor activo</SigBadge>
         <SigBadge kind="onlight">Programación en caché</SigBadge>
       </div>
-    </TechScreen>
+    </StatusLayout>
   );
 }
 
@@ -40,13 +60,13 @@ export function SinConexionView({
   content: SinConexionContent;
 }) {
   return (
-    <TechScreen
-      glyph="⚠"
+    <StatusLayout
       tone="red"
+      kicker="Contingencia"
       title="Conexión temporalmente interrumpida"
-      sub="El contenido almacenado localmente continuará reproduciéndose con normalidad."
+      sub="El contenido almacenado localmente continúa reproduciéndose con normalidad. No hace falta intervenir el equipo."
     >
-      <div className="mt-1 flex flex-wrap justify-center gap-2.5">
+      <div className="mt-9 flex flex-wrap gap-3">
         {content.lastSync && (
           <SigBadge kind="neutral">
             Última sincronización: {content.lastSync}
@@ -54,6 +74,6 @@ export function SinConexionView({
         )}
         <SigBadge kind="onlight-open">Reintentando conexión</SigBadge>
       </div>
-    </TechScreen>
+    </StatusLayout>
   );
 }

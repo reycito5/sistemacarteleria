@@ -18,7 +18,11 @@ const inter = Inter({
 const fraunces = Fraunces({
   variable: "--font-inst-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  // Fuente variable: se piden los ejes en lugar de instancias estáticas
+  // (`weight` es incompatible con `axes`). Así `font-optical-sizing: auto`
+  // adelgaza los remates en los titulares de 120 px del televisor y los
+  // engrosa en el cuerpo pequeño, que es para lo que existe el eje `opsz`.
+  axes: ["SOFT", "WONK", "opsz"],
   display: "swap",
 });
 

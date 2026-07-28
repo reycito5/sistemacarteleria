@@ -17,6 +17,46 @@ interface SignageMediaProps {
 }
 
 /**
+ * Respaldo cuando la pantalla no tiene medio asignado o el archivo falla.
+ *
+ * Un rectángulo negro deja la composición coja y parece una avería. Aquí se
+ * dibuja un fondo institucional —trama diagonal sobre azul profundo y una
+ * banda roja— que sostiene el texto superpuesto igual que lo haría una foto,
+ * de modo que una pantalla sin imagen sigue viéndose intencionada.
+ */
+function MediaFallback({ label }: { label: string }) {
+  return (
+    <div className="relative h-full w-full overflow-hidden bg-sig-ink-deep">
+      <span
+        aria-hidden
+        className="absolute inset-0 opacity-[.5]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(115deg, rgba(255,255,255,.05) 0 2px, transparent 2px 26px)",
+        }}
+      />
+      <span
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(115% 85% at 78% 12%, rgba(27,44,120,.85) 0%, transparent 62%)",
+        }}
+      />
+      <span
+        aria-hidden
+        className="absolute right-0 top-0 h-[38%] w-[14px] bg-sig-red"
+      />
+      {label && (
+        <span className="absolute bottom-[34px] right-[38px] font-mono text-[20px] font-bold uppercase tracking-[.28em] text-white/25">
+          {label}
+        </span>
+      )}
+    </div>
+  );
+}
+
+/**
  * Medio de una pantalla institucional: **acepta indistintamente video o
  * imagen** y los trata igual.
  *
@@ -58,11 +98,7 @@ export function SignageMedia({
   return (
     <div className={`absolute inset-0 ${className}`}>
       {showFallback ? (
-        <div className="grid h-full w-full place-items-center bg-sig-ink-deep">
-          <span className="font-serif text-[26px] font-semibold tracking-wide text-white/35">
-            {fallbackLabel}
-          </span>
-        </div>
+        <MediaFallback label={fallbackLabel} />
       ) : video ? (
         <video
           ref={videoRef}

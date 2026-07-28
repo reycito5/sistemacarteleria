@@ -145,12 +145,16 @@ export function PhotoPanel({
   showMediaKind = true,
   children,
 }: PhotoPanelProps) {
+  // Sólo se superpone el degradado y el texto cuando realmente hay rótulo.
+  // Un afiche o un video sin rótulo se ve limpio, sin texto encima.
+  const hasOverlay = Boolean(badge || eyebrow || title || sub || children);
+
   return (
     <div
       className="relative flex flex-col justify-end overflow-hidden rounded-[2px] bg-sig-ink-deep"
       style={{ gridColumn: `span ${span}` }}
     >
-      <SignageMedia media={media} overlayText />
+      <SignageMedia media={media} overlayText={hasOverlay} />
 
       {flag && (
         <span
@@ -170,30 +174,35 @@ export function PhotoPanel({
         </span>
       )}
 
-      <div className="relative z-[2] px-[44px] py-[40px]">
-        {badge && <div className="mb-4">{badge}</div>}
-        {eyebrow && <Eyebrow tone="light">{eyebrow}</Eyebrow>}
-        {title && (
-          <h4
-            className="mt-3 font-serif font-bold leading-[1.1] text-white"
-            style={{
-              fontSize: T.headline,
-              textShadow: "0 2px 24px rgba(0,0,0,.55)",
-            }}
-          >
-            {title}
-          </h4>
-        )}
-        {sub && (
-          <p
-            className="mt-4 max-w-[92%] font-medium leading-[1.4] text-white/85"
-            style={{ fontSize: T.body, textShadow: "0 1px 12px rgba(0,0,0,.5)" }}
-          >
-            {sub}
-          </p>
-        )}
-        {children}
-      </div>
+      {hasOverlay && (
+        <div className="relative z-[2] px-[44px] py-[40px]">
+          {badge && <div className="mb-4">{badge}</div>}
+          {eyebrow && <Eyebrow tone="light">{eyebrow}</Eyebrow>}
+          {title && (
+            <h4
+              className="mt-3 font-serif font-bold leading-[1.1] text-white"
+              style={{
+                fontSize: T.headline,
+                textShadow: "0 2px 24px rgba(0,0,0,.55)",
+              }}
+            >
+              {title}
+            </h4>
+          )}
+          {sub && (
+            <p
+              className="mt-4 max-w-[92%] font-medium leading-[1.4] text-white/85"
+              style={{
+                fontSize: T.body,
+                textShadow: "0 1px 12px rgba(0,0,0,.5)",
+              }}
+            >
+              {sub}
+            </p>
+          )}
+          {children}
+        </div>
+      )}
     </div>
   );
 }
@@ -252,7 +261,7 @@ export function CardBody({
 }) {
   return (
     <div
-      className={`flex min-h-0 flex-1 flex-col px-[38px] pb-[34px] pt-[22px] ${className}`}
+      className={`flex min-h-0 flex-1 flex-col overflow-hidden px-[38px] pb-[34px] pt-[22px] ${className}`}
     >
       {children}
     </div>

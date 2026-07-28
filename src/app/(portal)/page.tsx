@@ -1,18 +1,19 @@
 import Link from "next/link";
 import {
   ArrowRight,
+  ArrowUpRight,
   CalendarClock,
   LayoutGrid,
   LibraryBig,
   ListVideo,
   MonitorPlay,
+  QrCode,
   Radio,
   Siren,
-  Sparkles,
   Timer,
 } from "lucide-react";
-import { INSTITUTION } from "@/lib/design/tokens";
 import { ButtonLink } from "@/components/ui/Button";
+import { OFERTA_PORTAL_URL } from "@/lib/portal/navigation";
 
 export const metadata = {
   title: "UABJB Posgrado Digital — Cartelería institucional",
@@ -81,59 +82,197 @@ const FEATURES = [
   },
 ];
 
+/**
+ * Reproducción a pequeña escala de una plantilla real de señalización, para
+ * mostrar en el hero qué produce el sistema (no es un placeholder genérico).
+ */
+function HeroScreenMock() {
+  return (
+    <div className="flex h-full w-full flex-col bg-white">
+      {/* Cabecera */}
+      <div className="relative flex items-center gap-2 bg-brand-ink-deep px-3.5 py-2.5">
+        <div className="flex items-center gap-1.5">
+          <span className="grid h-6 w-6 place-items-center rounded-full border border-white/40 text-[8px] font-black text-white">
+            UAB
+          </span>
+          <span className="h-5 w-px bg-white/25" />
+        </div>
+        <div className="min-w-0 leading-tight">
+          <p className="truncate text-[6px] font-medium uppercase tracking-wide text-white/55">
+            Universidad Autónoma del Beni
+          </p>
+          <p className="font-serif text-[12px] font-bold text-white">
+            Vicerrectorado de Posgrado
+          </p>
+        </div>
+        <p className="ui-tnum ml-auto font-mono text-[15px] font-bold leading-none text-white">
+          16:09
+        </p>
+        <span className="absolute inset-x-0 bottom-0 h-[3px] bg-brand-red" />
+      </div>
+
+      {/* Cuerpo: retrato + ficha */}
+      <div className="flex min-h-0 flex-1">
+        <div className="flex w-[42%] flex-col justify-end bg-brand-ink p-3">
+          <span className="mb-1.5 inline-flex w-fit bg-brand-red px-1.5 py-0.5 text-[6px] font-black uppercase tracking-wider text-white">
+            Programa destacado
+          </span>
+          <p className="font-serif text-[15px] font-bold leading-[1.05] text-white">
+            Maestría en Educación Superior
+          </p>
+          <p className="mt-1 text-[7px] font-medium text-white/55">
+            UABJB · Posgrado
+          </p>
+        </div>
+
+        <div className="flex w-[58%] flex-col p-3">
+          <div className="flex items-center justify-between">
+            <p className="text-[6px] font-black uppercase tracking-[0.14em] text-brand-red">
+              Ficha del programa
+            </p>
+            <span className="rounded-sm bg-ok-soft px-1.5 py-0.5 text-[6px] font-black uppercase tracking-wide text-ok">
+              Inscripción abierta
+            </span>
+          </div>
+          <div className="mt-2 grid grid-cols-2 gap-x-2 gap-y-1.5">
+            {[
+              ["Modalidad", "Virtual"],
+              ["Duración", "18 meses"],
+              ["Créditos", "80"],
+              ["Inicio", "31/07/2026"],
+            ].map(([k, v]) => (
+              <div key={k}>
+                <p className="text-[6px] font-bold uppercase tracking-wide text-ui-faint">
+                  {k}
+                </p>
+                <p className="font-serif text-[10px] font-bold text-brand-ink">
+                  {v}
+                </p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-auto flex items-center gap-2 border-t border-ui-border pt-2">
+            <span className="grid h-7 w-7 place-items-center rounded-sm bg-brand-ink text-white">
+              <QrCode size={16} aria-hidden />
+            </span>
+            <p className="text-[7px] font-bold uppercase leading-tight tracking-wide text-brand-ink">
+              Escanea el código
+              <br />
+              <span className="text-brand-red">Inscríbete aquí</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Pie */}
+      <div className="flex items-center gap-2 bg-brand-ink-deep px-3.5 py-1.5">
+        <span className="h-1.5 w-1.5 rounded-full bg-brand-red" />
+        <p className="text-[7px] font-bold text-white/80">61948267 · 72814772</p>
+        <p className="ml-auto text-[7px] font-medium text-white/45">
+          escuelaposgrado@uabjb.edu.bo
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function PortalHome() {
   return (
     <>
       {/* Portada */}
       <section className="ui-gradient-inst-mesh relative overflow-hidden text-brand-white">
-        <div className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 sm:py-24">
-          <span className="inline-flex items-center gap-2 rounded-full border border-brand-red/40 bg-white/10 px-3 py-1 text-[11px] font-bold tracking-[0.16em] text-brand-red">
-            <Sparkles size={13} aria-hidden />
-            {INSTITUTION.systemName}
-          </span>
+        {/* Rejilla técnica sutil de fondo (aire de sala de control). */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+          }}
+        />
 
-          <h1 className="mt-6 max-w-3xl text-[38px] font-black leading-[1.05] sm:text-[56px]">
-            La programación institucional del Posgrado,{" "}
-            <span className="text-brand-red">en todas las pantallas</span> a la
-            vez.
-          </h1>
+        <div className="relative mx-auto grid max-w-[1180px] items-center gap-14 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+          {/* Columna de texto */}
+          <div>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm">
+              <span className="ui-pulse h-2 w-2 rounded-full bg-brand-red" />
+              Señalización digital · Vicerrectorado de Posgrado
+            </span>
 
-          <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-white/75 sm:text-base">
-            Cuatro televisores del Vicerrectorado de Posgrado muestran la misma
-            oferta académica, agenda y comunicados, con la línea gráfica
-            institucional bloqueada y administrados desde un solo panel web.
-          </p>
+            <h1 className="mt-6 text-[40px] font-black leading-[1.02] tracking-[-0.01em] sm:text-[58px]">
+              Una sola programación,
+              <br />
+              <span className="text-brand-red">en las cuatro pantallas</span>
+              <br />
+              del Posgrado.
+            </h1>
 
-          <div className="mt-9 flex flex-wrap gap-3">
-            <ButtonLink href="/oferta" variant="gold" size="lg">
-              Ver la oferta académica
-              <ArrowRight size={17} aria-hidden />
-            </ButtonLink>
-            <ButtonLink
-              href="/preview"
-              size="lg"
-              className="border border-white/25 bg-white/10 text-brand-white hover:bg-white/20"
+            <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-white/70">
+              La cartelería digital del Vicerrectorado: agenda, programas y
+              comunicados en los televisores de Recepción, Pasillo, Auditorio y
+              Administración, sincronizados al segundo y gestionados desde un
+              único panel.
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center gap-3">
+              <ButtonLink href="/admin/login" size="lg">
+                Acceder al panel
+                <ArrowRight size={17} aria-hidden />
+              </ButtonLink>
+              <ButtonLink
+                href="/preview"
+                size="lg"
+                className="border border-white/25 bg-white/10 text-brand-white hover:bg-white/20"
+              >
+                Ver las plantillas
+              </ButtonLink>
+            </div>
+
+            <a
+              href={OFERTA_PORTAL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-white/60 underline-offset-4 transition hover:text-white hover:underline"
             >
-              Conocer las plantillas
-            </ButtonLink>
+              ¿Buscas la oferta académica? Visita el portal de Posgrado
+              <ArrowUpRight size={15} aria-hidden />
+            </a>
           </div>
 
-          {/* Pantallas del grupo */}
-          <div className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {SCREENS.map((s) => (
-              <div
-                key={s.code}
-                className="rounded-[14px] border border-white/15 bg-white/10 px-4 py-3.5 backdrop-blur-sm"
-              >
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-extrabold uppercase">{s.name}</p>
-                  <MonitorPlay size={16} className="text-brand-red" aria-hidden />
-                </div>
-                <p className="ui-tnum mt-1 text-[11px] tracking-widest text-white/50">
-                  {s.code}
-                </p>
+          {/* Maqueta de televisor con una plantilla real de señalización */}
+          <div className="relative mx-auto w-full max-w-[540px]">
+            <div className="absolute -right-4 -top-4 z-20 inline-flex items-center gap-2 rounded-full bg-brand-red px-3.5 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-white shadow-lg">
+              <span className="ui-pulse h-2 w-2 rounded-full bg-white" />
+              En vivo
+            </div>
+
+            {/* Bisel del monitor */}
+            <div className="rounded-[18px] border border-white/10 bg-[#05060f] p-3 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.7)] ring-1 ring-white/5">
+              <div className="overflow-hidden rounded-[8px] bg-brand-ink-deep [aspect-ratio:16/9]">
+                <HeroScreenMock />
               </div>
-            ))}
+            </div>
+            {/* Pie / soporte del monitor */}
+            <div aria-hidden className="mx-auto mt-0 h-5 w-24 rounded-b-[10px] bg-[#05060f]" />
+            <div aria-hidden className="mx-auto h-1.5 w-40 rounded-full bg-black/40" />
+
+            {/* Pastillas de las cuatro pantallas */}
+            <div className="mt-7 grid grid-cols-4 gap-2">
+              {SCREENS.map((s) => (
+                <div
+                  key={s.code}
+                  className="rounded-[10px] border border-white/12 bg-white/5 px-2.5 py-2 text-center backdrop-blur-sm"
+                >
+                  <p className="truncate text-[11px] font-bold uppercase tracking-wide text-white/80">
+                    {s.name}
+                  </p>
+                  <p className="ui-tnum text-[9px] tracking-widest text-white/40">
+                    {s.code}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 interface RotatorProps {
   /** Elementos a mostrar de uno en uno. */
@@ -23,26 +23,35 @@ interface RotatorProps {
 export function Rotator({ items, seconds = 8, className = "" }: RotatorProps) {
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(true);
+  const indexRef = useRef(0);
 
   useEffect(() => {
     if (items.length <= 1) return;
 
+    let swapTimer: ReturnType<typeof setTimeout> | undefined;
+
     const tick = () => {
       // Posición derivada del reloj: sincroniza todos los televisores.
-      const next =
-        Math.floor(Date.now() / (seconds * 1000)) % items.length;
-      setIndex((current) => {
-        if (current === next) return current;
-        // Fundido de salida y entrada.
-        setVisible(false);
-        setTimeout(() => setVisible(true), 260);
-        return next;
-      });
+      const next = Math.floor(Date.now() / (seconds * 1000)) % items.length;
+      if (next === indexRef.current) return;
+
+      // Primero se desvanece; el contenido sólo cambia cuando ya es invisible,
+      // así el paso es un fundido cruzado limpio y no un salto/tembleque.
+      setVisible(false);
+      clearTimeout(swapTimer);
+      swapTimer = setTimeout(() => {
+        indexRef.current = next;
+        setIndex(next);
+        setVisible(true);
+      }, 300);
     };
 
     tick();
     const id = setInterval(tick, 500);
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+      clearTimeout(swapTimer);
+    };
   }, [items.length, seconds]);
 
   if (items.length === 0) return null;

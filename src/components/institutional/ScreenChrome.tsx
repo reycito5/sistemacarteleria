@@ -52,12 +52,12 @@ function HeaderClock() {
   return (
     <div className="ml-auto shrink-0 whitespace-nowrap pl-12 text-right">
       <p
-        className="font-semibold capitalize text-sig-text-soft"
+        className="font-semibold capitalize text-white/60"
         style={{ fontSize: T.meta }}
       >
         {date}
       </p>
-      <p className="mt-1 font-mono text-[76px] font-bold leading-none tracking-tight text-sig-ink">
+      <p className="mt-1 font-mono text-[76px] font-bold leading-none tracking-tight text-white">
         {time}
       </p>
     </div>
@@ -107,29 +107,23 @@ export function ScreenHeader({
   emergency?: boolean;
 }) {
   return (
-    <header className="relative h-[206px] shrink-0 overflow-hidden bg-sig-paper">
-      <div
+    <header
+      className={`relative flex h-[206px] shrink-0 items-center overflow-hidden px-[52px] ${
+        emergency ? "bg-sig-red-deep" : "bg-sig-ink"
+      }`}
+    >
+      {/* Franja de acento inferior a todo el ancho (sin corte diagonal). */}
+      <span
         aria-hidden
-        className={`absolute inset-0 w-[74%] ${
-          emergency ? "bg-sig-red-deep" : "bg-sig-ink"
+        className={`absolute inset-x-0 bottom-0 h-[8px] ${
+          emergency ? "bg-white" : "bg-sig-red"
         }`}
-        style={{
-          clipPath: emergency
-            ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
-            : "polygon(0 0, 100% 0, calc(100% - 120px) 100%, 0% 100%)",
-        }}
-      >
-        <span
-          className={`absolute inset-x-0 bottom-0 h-[8px] ${
-            emergency ? "bg-white" : "bg-sig-red"
-          }`}
-        />
-      </div>
+      />
 
-      <div className="relative z-[2] flex h-full items-center px-[52px]">
+      <div className="relative z-[2] flex w-full items-center">
         <div className="flex shrink-0 items-center gap-6">
           <LogoSlot url={identity.logoPrimaryUrl} fallback="UAB" />
-          <span aria-hidden className="h-[68px] w-px bg-white/30" />
+          <span aria-hidden className="h-[68px] w-px bg-white/25" />
           {identity.logoSecondaryUrl ? (
             <LogoSlot url={identity.logoSecondaryUrl} fallback="" round={false} />
           ) : (
@@ -143,7 +137,7 @@ export function ScreenHeader({
 
         <div className="min-w-0 pl-[34px]">
           <p
-            className="truncate font-medium text-white/65"
+            className="truncate font-medium text-white/60"
             style={{ fontSize: T.meta }}
           >
             {identity.universityName}

@@ -3,6 +3,9 @@ import {
   type EmergenciaContent,
   type ViewContent,
 } from "@/lib/views/schemas";
+// Sólo el tipo: `import type` se borra al compilar, así que el módulo
+// `server-only` de identidad nunca llega al reproductor.
+import type { InstitutionIdentity } from "@/lib/institution/identity";
 
 /**
  * Manifiesto del reproductor (Fase 7).
@@ -32,6 +35,12 @@ export interface PlayerManifest {
   items: PlayerManifestItem[];
   /** Emergencia activa con prioridad absoluta, o null */
   emergency: EmergenciaContent | null;
+  /**
+   * Identidad institucional (logos, contactos, rótulo) que pinta la cabecera
+   * y el pie. Viaja dentro del manifiesto para que el reproductor la conserve
+   * en la caché y siga mostrándola aunque se caiga la red.
+   */
+  identity?: InstitutionIdentity;
   /** Momento de generación del manifiesto (epoch ms) */
   generatedAt: number;
 }

@@ -1,36 +1,45 @@
 import type { SincronizacionContent } from "@/lib/views/schemas";
-import { INSTITUTION } from "@/lib/design/tokens";
+import { SigBadge, TechScreen } from "@/components/signage/primitives";
 
-/** Vista 14 — Sincronización (técnica, sección 11). */
+/**
+ * Vista 14 — Sincronización.
+ * Pantalla técnica: aparece sola mientras el equipo descarga la programación.
+ */
 export function SincronizacionView({
   content,
 }: {
   content: SincronizacionContent;
 }) {
   return (
-    <div
-      className="grid h-full place-items-center"
-      style={{ background: "var(--color-inst-blue-bottom)" }}
+    <TechScreen
+      glyph="⟳"
+      title="Actualizando contenido institucional"
+      sub={content.steps.join(" · ")}
     >
-      <div className="text-center text-inst-white">
-        <div
-          className="mx-auto h-20 w-20 animate-spin rounded-full border-4 border-inst-white/25"
-          style={{ borderTopColor: "var(--color-inst-gold)" }}
-        />
-        <h1 className="mt-8 text-[48px] font-black tracking-wide">
-          {INSTITUTION.commercialName}
-        </h1>
-        <p className="mt-2 text-[26px] font-semibold text-inst-gold">
-          Preparando la programación institucional
-        </p>
-        <ul className="mt-8 space-y-2 text-[24px] font-medium">
-          {content.steps.map((step) => (
-            <li key={step} className="flex items-center justify-center gap-3">
-              <span className="text-inst-gold">›</span> {step}
-            </li>
-          ))}
-        </ul>
+      <div className="mt-2 h-[3px] w-[480px] overflow-hidden bg-sig-rule">
+        <div className="h-full w-[64%] bg-sig-red" />
       </div>
-    </div>
+      <div className="mt-1 flex flex-wrap justify-center gap-2.5">
+        <SigBadge kind="neutral">Reproductor activo</SigBadge>
+        <SigBadge kind="onlight">Programación en caché</SigBadge>
+      </div>
+    </TechScreen>
+  );
+}
+
+/** Pantalla técnica de contingencia: la red se cayó, se emite desde la caché. */
+export function SinConexionView() {
+  return (
+    <TechScreen
+      glyph="⚠"
+      tone="red"
+      title="Conexión temporalmente interrumpida"
+      sub="El contenido almacenado localmente continuará reproduciéndose con normalidad."
+    >
+      <div className="mt-1 flex flex-wrap justify-center gap-2.5">
+        <SigBadge kind="neutral">Reproduciendo desde la caché</SigBadge>
+        <SigBadge kind="onlight-open">Reintentando conexión</SigBadge>
+      </div>
+    </TechScreen>
   );
 }

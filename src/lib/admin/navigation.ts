@@ -19,7 +19,8 @@ export type AdminIconName =
   | "portal"
   | "screens"
   | "security"
-  | "help";
+  | "help"
+  | "identity";
 
 export interface AdminModule {
   href: string;
@@ -46,6 +47,13 @@ export const ADMIN_SECTIONS: readonly AdminSection[] = [
         summary:
           "Estado de las cuatro pantallas, qué se está emitiendo ahora y avisos activos.",
         icon: "dashboard",
+      },
+      {
+        href: "/admin/identidad",
+        label: "Identidad institucional",
+        summary:
+          "Logos, contactos y rótulo de la cabecera y el pie de todas las pantallas.",
+        icon: "identity",
       },
       {
         href: "/admin/ayuda",

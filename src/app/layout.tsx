@@ -1,12 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Source_Serif_4 } from "next/font/google";
+import { Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { INSTITUTION } from "@/lib/design/tokens";
 
-/**
- * Inter como alternativa web de Neue Haas Grotesk / Helvetica Now (V11.6).
- * Pesos institucionales: 400/500 texto, 600/700 subtítulos, 800/900 títulos.
- */
+/** Texto de interfaz y cuerpos de las pantallas. */
 const inter = Inter({
   variable: "--font-inst-sans",
   subsets: ["latin"],
@@ -15,14 +12,21 @@ const inter = Inter({
 });
 
 /**
- * Serif académica para los nombres de programa del portal público, en línea
- * con el portal de oferta académica. No se usa en las pantallas del televisor,
- * cuya tipografía sigue bloqueada por la línea gráfica V11.6.
+ * Serif editorial de la línea gráfica institucional: titulares de las
+ * pantallas, nombres de programa y encabezados del portal.
  */
-const sourceSerif = Source_Serif_4({
+const fraunces = Fraunces({
   variable: "--font-inst-serif",
   subsets: ["latin"],
-  weight: ["400", "600", "700"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+/** Monoespaciada para relojes, fechas, códigos y numeración de campos. */
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-inst-mono",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
   display: "swap",
 });
 
@@ -47,7 +51,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${inter.variable} ${sourceSerif.variable} h-full antialiased`}
+      className={`${inter.variable} ${fraunces.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-dvh">{children}</body>
     </html>

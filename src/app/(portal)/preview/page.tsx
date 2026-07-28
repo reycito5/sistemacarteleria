@@ -1,6 +1,6 @@
 import { Lock, Monitor } from "lucide-react";
 import { ScreenFrame } from "@/components/institutional/ScreenFrame";
-import { ViewRenderer, isBareView } from "@/components/views/ViewRenderer";
+import { ViewRenderer, screenModeFor } from "@/components/views/ViewRenderer";
 import { SAMPLE_VIEWS } from "@/lib/views/samples";
 import { VIEW_REGISTRY } from "@/lib/views/registry";
 import type { ViewContent } from "@/lib/views/schemas";
@@ -73,7 +73,7 @@ export default function PreviewPage() {
             return (
               <figure key={i} className="ui-card overflow-hidden p-0">
                 <div className="relative aspect-video w-full overflow-hidden bg-black">
-                  <ScreenFrame bare={isBareView(content)}>
+                  <ScreenFrame {...screenModeFor(content)}>
                     <ViewRenderer content={content} />
                   </ScreenFrame>
                 </div>

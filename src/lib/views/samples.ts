@@ -1,4 +1,8 @@
-import type { ViewContent } from "@/lib/views/schemas";
+import {
+  viewContentSchema,
+  type ViewContent,
+  type ViewContentInput,
+} from "@/lib/views/schemas";
 
 /**
  * Contenido de ejemplo del catálogo completo de vistas institucionales.
@@ -7,132 +11,226 @@ import type { ViewContent } from "@/lib/views/schemas";
  * mientras no exista una playlist real publicada desde el panel. Las cinco
  * primeras reproducen las referencias visuales originales.
  */
-export const SAMPLE_VIEWS: ViewContent[] = [
+const SAMPLE_INPUTS: ViewContentInput[] = [
   {
     kind: "programacion_general",
-    sectionTitle: "OFERTA ACADÉMICA",
-    offers: [
-      { title: "Maestría en Educación Superior", modality: "Virtual", start: "31/07/2026" },
-      { title: "Diplomado en Inteligencia Artificial", modality: "Virtual", start: "10/08/2026" },
-      { title: "Diplomado en Manejo y Administración de Plataformas Virtuales", modality: "Virtual", start: "28/08/2026" },
+    headlineEyebrow: "Oferta de posgrado",
+    headline: "Impulsa tu carrera profesional con un posgrado de la UABJB",
+    subheadline:
+      "Doctorados · Maestrías · Especialidades · Diplomados pensados para la realidad beniana.",
+    cardEyebrow: "Vicerrectorado",
+    sectionTitle: "Oferta académica",
+    programs: [
+      {
+        name: "Maestría en Educación Superior",
+        type: "Maestría",
+        version: "IV Versión",
+        modality: "Virtual",
+        duration: "18 meses",
+        credits: "64 créditos",
+        dateShort: "17 AGO 2026",
+        status: "open",
+      },
+      {
+        name: "Especialidad en Gestión Universitaria",
+        type: "Especialidad",
+        version: "II Versión",
+        modality: "Semipresencial",
+        duration: "10 meses",
+        credits: "40 créditos",
+        dateShort: "24 AGO 2026",
+        status: "open",
+      },
+      {
+        name: "Diplomado en Tributación y Legislación Fiscal Boliviana",
+        type: "Diplomado",
+        version: "I Versión",
+        modality: "Virtual",
+        duration: "4 meses",
+        credits: "20 créditos",
+        dateShort: "14 SEP 2026",
+        status: "soon",
+      },
     ],
-    nextLabel: "A CONTINUACIÓN",
-    strapline: "Conocimiento que transforma el desarrollo del Beni",
+    nextLabel: "Agenda académica de la semana",
+    qrCaption: "Explorar oferta completa",
   },
   {
     kind: "agenda",
-    sectionTitle: "AGENDA ACADÉMICA",
-    badge: "ACTIVIDADES DE ESTA SEMANA",
+    headlineEyebrow: "Semana académica",
+    headline: "Actividades y defensas de esta semana",
+    subheadline: "Coordinación académica · Dirección de Posgrado",
+    badge: "Actividades",
+    sectionTitle: "Agenda de la semana",
     items: [
-      { title: "Inicio de Diplomado", date: "24/07/2026", time: "19:00", place: "Aula Virtual Posgrado" },
-      { title: "Defensa de Tesis", date: "26/07/2026", time: "16:00", place: "Auditorio de Posgrado" },
-      { title: "Conferencia Académica", date: "28/07/2026", time: "18:30", place: "Paraninfo Universitario" },
+      {
+        title: "Defensa de tesis doctoral",
+        time: "08:30",
+        place: "Sala de Defensas · Doctorado en Educación Superior",
+        status: "en_curso",
+      },
+      {
+        title: "Coordinación académica",
+        time: "10:00",
+        place: "Dirección de Posgrado",
+        status: "proxima",
+      },
+      {
+        title: "Inicio de clases · Docencia Universitaria",
+        time: "14:00",
+        place: "Modalidad virtual",
+        status: "proxima",
+      },
+      {
+        title: "Taller de inducción",
+        time: "16:30",
+        place: "Auditorio del Vicerrectorado",
+        status: "finalizada",
+      },
     ],
-    strapline: "Formación avanzada para transformar el Beni",
+    nextLabel: "Taller de inducción · 16:30",
   },
   {
     kind: "programa_destacado",
-    badge: "PROGRAMA DESTACADO",
-    programName: "Diplomado en Inteligencia Artificial",
-    specs: [
-      { label: "Modalidad", value: "Virtual" },
-      { label: "Duración", value: "5 meses" },
-      { label: "Créditos", value: "20 créditos" },
-      { label: "Horas", value: "800 horas" },
-      { label: "Inicio", value: "10 de agosto de 2026" },
-    ],
-    quote: "Transforma datos en decisiones inteligentes",
-    qrCaption: "CONOCE EL PROGRAMA",
-    strapline: "Programas de Posgrado para profesionales que lideran el cambio",
+    badge: "Programa destacado",
+    programName: "Diplomado en Manejo y Administración de Plataformas Virtuales",
+    level: "Diplomado",
+    version: "I Versión",
+    parallel: 'Paralelo "A"',
+    description:
+      "Competencias técnicas y de gestión para administrar, configurar y optimizar plataformas educativas virtuales.",
+    startDate: "31 de julio de 2026",
+    modality: "Virtual",
+    duration: "5 meses",
+    credits: "20 créditos",
+    hours: "800 horas académicas",
+    phones: "72811478 · 71125341",
+    audience: "Todos los profesionales",
+    address: "Oficinas del Vicerrectorado de Posgrado",
+    enrollmentOpen: true,
+    quote: "Excelencia académica · Compromiso · Gestión",
+    qrCaption: "Ver ficha completa e inscribirse",
   },
   {
     kind: "noticias",
-    title: "NOTICIAS Y LOGROS DE POSGRADO",
-    badge: "ACREDITACIÓN INTERNACIONAL",
-    items: [
-      { date: "21/07/2026", tag: "Logro institucional", headline: "Posgrado fortalece su proyección académica internacional." },
-      { date: "19/07/2026", tag: "Defensa académica", headline: "Nuevos profesionales culminan con éxito sus programas de posgrado." },
-      { date: "17/07/2026", tag: "Convenios", headline: "UABJB Posgrado consolida alianzas para ampliar su oferta académica." },
+    headlineEyebrow: "Titular institucional",
+    headline: "UABJB firma convenio de cooperación académica con CEMLA",
+    subheadline:
+      "Fortalece la oferta de diplomados en tributación y legislación fiscal.",
+    badge: "Institucional",
+    title: "Noticias y logros",
+    entries: [
+      {
+        title: "Convenio de cooperación académica con CEMLA",
+        meta: "Fortalece la oferta de diplomados en tributación.",
+        kind: "noticia",
+      },
+      {
+        title: "Resumen del año académico 2025",
+        meta: "Memoria audiovisual de logros institucionales",
+        kind: "video",
+        duration: "2:14",
+      },
+      {
+        title: "Nueva convocatoria: Maestría en Educación Superior",
+        meta: "Inscripciones abiertas hasta el 17 de agosto de 2026",
+        kind: "noticia",
+      },
+      {
+        title: "Testimonios de egresados 2025",
+        meta: "Historias de titulación y aplicación profesional",
+        kind: "video",
+        duration: "3:08",
+      },
     ],
-    bigStat: "+500",
-    bigStatLabel: "Profesionales formados",
-    strapline: "Excelencia académica, investigación y compromiso con el desarrollo del Beni",
+    stats: [
+      { value: "15", label: "Programas activos" },
+      { value: "1,240+", label: "Profesionales titulados" },
+    ],
   },
   {
     kind: "comunicado",
-    badge: "COMUNICADO IMPORTANTE",
-    title: "Cierre de inscripciones",
-    subtitle: "Últimos días para formar parte de nuestros programas de Posgrado.",
-    highlight: "Viernes 28 de agosto",
+    badge: "Comunicado importante",
+    title: "Suspensión temporal de atención administrativa",
+    subtitle:
+      "Por trabajos de mantenimiento eléctrico, la atención presencial se suspenderá el miércoles por la mañana.",
+    body: "Las gestiones en línea continuarán con normalidad.",
     specs: [
-      { label: "Atención de", value: "08:00 a 16:00" },
-      { label: "Modalidad", value: "Presencial y virtual" },
+      { label: "Fecha", value: "29 de julio de 2026" },
+      { label: "Horario", value: "08:00 – 12:00" },
+      { label: "Área responsable", value: "Dirección Administrativa" },
+      { label: "Contacto", value: "escuelaposgrado@uabjb.edu.bo" },
     ],
-    qrCaption: "INSCRÍBETE AQUÍ",
+    mediaEyebrow: "Vicerrectorado",
+    mediaTitle: "Posgrado UABJB",
+    mediaSub: "Trinidad · Beni",
   },
   {
     kind: "bienvenida",
-    title: "BIENVENIDOS AL POSGRADO",
-    subtitle: "Le orientamos para que encuentre lo que necesita.",
+    title: "Bienvenido al Vicerrectorado de Posgrado",
+    subtitle: "Formación continua, especialización e investigación avanzada.",
     locations: [
-      { label: "Informaciones e inscripciones", place: "Recepción · Planta baja" },
-      { label: "Coordinación académica", place: "Segundo piso · Oficina 204" },
-      { label: "Defensas y conferencias", place: "Auditorio de Posgrado" },
+      { label: "Recepción", place: "Planta baja" },
+      { label: "Coordinación académica", place: "1er piso" },
+      { label: "Sala de defensas", place: "1er piso, ala este" },
+      { label: "Dirección de Posgrado", place: "1er piso" },
+      { label: "Área administrativa", place: "2do piso" },
     ],
-    strapline: "Formación avanzada al servicio del desarrollo del Beni",
   },
   {
     kind: "reconocimientos",
-    title: "RECONOCIMIENTOS",
-    badge: "ORGULLO INSTITUCIONAL",
+    title: "Liderazgo en gestión de posgrado",
+    badge: "Mérito institucional",
     items: [
       {
-        name: "Lic. María Fernanda Suárez",
-        role: "Maestría en Educación Superior",
-        detail: "Defensa de tesis aprobada con mención de honor.",
+        name: "Dr. Camilo Antonio Rosas Ardaya, Ph.D.",
+        role: "Vicerrector de Posgrado · UABJB",
+        detail: "Acreditación internacional CIEES · Gestión 2023–2026",
       },
       {
-        name: "Ing. Carlos Andrés Rojas",
-        role: "Diplomado en Inteligencia Artificial",
-        detail: "Mejor proyecto final de la promoción 2026.",
+        name: "Ampliación de la oferta académica",
+        role: "",
+        detail: "De 8 a 15 programas de posgrado en tres gestiones.",
       },
       {
-        name: "Dra. Lucía Camacho",
-        role: "Docente investigadora",
-        detail: "Publicación destacada en innovación educativa.",
+        name: "Convenio internacional de acreditación",
+        role: "",
+        detail: "Gestionado con el CIEES de México.",
       },
     ],
-    strapline: "Reconocemos el esfuerzo de quienes elevan el nivel académico",
+    strapline:
+      "Formar posgraduados con pertinencia amazónica es nuestro compromiso.",
   },
   {
     kind: "evento_vivo",
-    badge: "EN VIVO",
-    title: "DEFENSA DE TESIS",
-    speaker: "Lic. María Fernanda Suárez",
+    badge: "En vivo",
+    title: "Defensa pública de tesis doctoral",
+    speaker: 'Modelo de Gestión Educativa "COMUNICA" · Doctorado en Educación Superior',
     schedule: [
-      { time: "09:00", label: "Presentación del tribunal" },
-      { time: "09:15", label: "Exposición de la tesis" },
-      { time: "10:00", label: "Preguntas del tribunal" },
+      { time: "08:30", label: "Apertura y presentación del tribunal" },
+      { time: "09:00", label: "Exposición del sustentante" },
+      { time: "09:45", label: "Preguntas del tribunal" },
       { time: "10:30", label: "Deliberación y resultado" },
     ],
-    qrCaption: "SÍGUELO EN LÍNEA",
+    qrCaption: "Seguir la transmisión",
   },
   {
     kind: "testimonio",
-    name: "Lic. Andrea Suárez",
-    program: "Maestría en Educación Superior · Gestión 2026",
-    quote: "El Posgrado me dio herramientas para liderar mejor",
+    name: "Ing. Fabiola Suárez Añez",
+    program: "Maestría en Educación Superior · Gestión 2024",
+    quote: "La Maestría me dio herramientas reales para mi región",
     result:
-      "Hoy lidero proyectos con más visión, seguridad y compromiso con mi comunidad.",
+      "Egresada destacada que hoy aplica el modelo de gestión educativa aprendido en su institución.",
     strapline: "Profesionales que convierten el conocimiento en transformación",
   },
   {
     kind: "mensaje",
-    authority: "Vicerrector de Posgrado — UABJB",
-    name: "Camilo Antonio Rosas Ardaya Ph.D.",
+    authority: "Vicerrector de Posgrado · UABJB",
+    name: "Dr. Camilo Antonio Rosas Ardaya, Ph.D.",
+    quote:
+      "Formar posgraduados con pertinencia amazónica es nuestro compromiso: cada programa responde a una necesidad real del Beni y de Bolivia.",
     message:
-      "Desde el Posgrado impulsamos la formación, la investigación y el liderazgo al servicio del desarrollo del Beni.",
-    quote: "El conocimiento transforma nuestro futuro",
+      "Desde el Posgrado impulsamos la formación, la investigación y el liderazgo al servicio del desarrollo regional.",
   },
   {
     kind: "sincronizacion",
@@ -145,10 +243,18 @@ export const SAMPLE_VIEWS: ViewContent[] = [
   },
   {
     kind: "emergencia",
-    title: "SUSPENSIÓN DE ACTIVIDADES",
+    title: "Evacuación preventiva del edificio",
     message:
-      "Las actividades académicas de hoy quedan suspendidas por disposición del Vicerrectorado.",
+      "Diríjase con calma a la salida más cercana siguiendo la señalización.",
     instructions:
-      "Diríjase a la salida más cercana con calma y siga las indicaciones del personal.",
+      "El personal de seguridad guiará el proceso. No use los ascensores.",
   },
 ];
+
+/**
+ * Ejemplos ya normalizados: al pasar por el esquema reciben todos los valores
+ * por defecto, igual que el contenido que llega de la base de datos.
+ */
+export const SAMPLE_VIEWS: ViewContent[] = SAMPLE_INPUTS.map((v) =>
+  viewContentSchema.parse(v),
+);

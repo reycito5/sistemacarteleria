@@ -6,6 +6,7 @@ import {
   LifeBuoy,
   ListVideo,
   MonitorPlay,
+  Landmark,
   ShieldCheck,
   Siren,
   SquareStack,
@@ -24,6 +25,7 @@ const ICONS: Record<AdminIconName, React.ComponentType<LucideProps>> = {
   screens: MonitorPlay,
   security: ShieldCheck,
   help: LifeBuoy,
+  identity: Landmark,
 };
 
 /** Icono del módulo, resuelto por nombre para no acoplar el mapa a lucide. */

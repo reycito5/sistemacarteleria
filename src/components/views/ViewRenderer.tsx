@@ -50,7 +50,19 @@ export function ViewRenderer({ content }: { content: ViewContent }) {
   }
 }
 
-/** Indica si la vista debe renderizarse a sangre completa (sin cabecera/pie). */
-export function isBareView(content: ViewContent): boolean {
-  return content.kind === "emergencia" || content.kind === "sincronizacion";
+/**
+ * Cómo debe montarse la vista dentro del marco institucional.
+ *
+ *  - `emergency`: paleta roja en cabecera y pie; la vista ocupa todo el centro.
+ *  - `bare`: sin rejilla de 12 columnas ni rótulo (pantallas a sangre).
+ *
+ * La cabecera y el pie NUNCA se ocultan: la identidad institucional debe
+ * seguir visible incluso en una emergencia.
+ */
+export function screenModeFor(content: ViewContent): {
+  bare: boolean;
+  emergency: boolean;
+} {
+  const emergency = content.kind === "emergencia";
+  return { bare: emergency, emergency };
 }

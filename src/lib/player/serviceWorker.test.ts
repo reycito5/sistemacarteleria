@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { collectMediaUrls } from "./serviceWorker";
 import { manifestFromViews } from "./manifest";
-import type { ViewContent } from "@/lib/views/schemas";
+import { viewContentSchema, type ViewContentInput } from "@/lib/views/schemas";
 
 describe("collectMediaUrls", () => {
   it("recoge URLs de medios de distintas vistas y campos", () => {
-    const views: ViewContent[] = [
+    const views: ViewContentInput[] = [
       {
         kind: "programacion_general",
         sectionTitle: "X",
@@ -26,7 +26,7 @@ describe("collectMediaUrls", () => {
         imageSrc: "https://cdn.test/foto.png",
       },
     ];
-    const manifest = manifestFromViews(views);
+    const manifest = manifestFromViews(views.map((v) => viewContentSchema.parse(v)));
     const urls = collectMediaUrls(manifest);
     expect(urls).toContain("https://cdn.test/storage/v1/object/public/media/video/a.mp4");
     expect(urls).toContain("https://cdn.test/thumb.jpg");
@@ -35,7 +35,7 @@ describe("collectMediaUrls", () => {
 
   it("ignora textos que no son URLs de medios", () => {
     const manifest = manifestFromViews([
-      { kind: "comunicado", badge: "B", title: "Sin medios", subtitle: "", highlight: "", specs: [], qrCaption: "Q" },
+      viewContentSchema.parse({ kind: "comunicado", title: "Sin medios" }),
     ]);
     expect(collectMediaUrls(manifest)).toHaveLength(0);
   });

@@ -26,6 +26,23 @@
   --color-inst-gold-strong: #f2b705;
   --color-inst-white: #ffffff;
 
+  /* --- Línea gráfica de cartelería V12 (lo que se ve en el televisor) -----
+   * Paleta editorial: azul tinta, rojo institucional y papel cálido. Es la
+   * que gobierna las plantillas; no se edita desde el panel.
+   */
+  --color-sig-ink: #121f5c;
+  --color-sig-ink-deep: #0a1440;
+  --color-sig-ink-soft: #1b2c78;
+  --color-sig-red: #d4181f;
+  --color-sig-red-deep: #9c0f14;
+  --color-sig-paper: #fbfaf7;
+  --color-sig-paper-2: #f3f1ea;
+  --color-sig-card: #ffffff;
+  --color-sig-rule: #e4e1d6;
+  --color-sig-text: #191b22;
+  --color-sig-text-soft: #5b5d6b;
+  --color-sig-text-faint: #8b8d9b;
+
   /* --- Superficies de la interfaz de gestión ------------------------------ */
   --color-ui-canvas: #f5f6fa;
   --color-ui-surface: #ffffff;
@@ -50,8 +67,10 @@
   /* --- Tipografía --------------------------------------------------------- */
   --font-sans: var(--font-inst-sans), "Inter", "Helvetica Neue", Arial,
     sans-serif;
-  /* Serif académica: nombres de programa del portal público. */
-  --font-serif: var(--font-inst-serif), "Source Serif 4", Georgia, serif;
+  /* Serif editorial: titulares de pantalla y del portal. */
+  --font-serif: var(--font-inst-serif), "Fraunces", Georgia, serif;
+  /* Monoespaciada: relojes, fechas, códigos de campo. */
+  --font-mono: var(--font-inst-mono), "IBM Plex Mono", ui-monospace, monospace;
 
   /* --- Radios ------------------------------------------------------------- */
   --radius-inst: 4px;

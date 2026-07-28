@@ -1,7 +1,9 @@
 import { z } from "zod";
-import type {
-  ProgramaDestacadoContent,
-  ProgramacionGeneralContent,
+import {
+  programaDestacadoSchema,
+  programacionGeneralSchema,
+  type ProgramaDestacadoContent,
+  type ProgramacionGeneralContent,
 } from "@/lib/views/schemas";
 
 /**
@@ -363,31 +365,48 @@ export function programToDestacado(
   if (program.startDate) specs.push({ label: "Inicio", value: program.startDate });
   if (program.area) specs.push({ label: "Área", value: program.area });
 
-  return {
+  return programaDestacadoSchema.parse({
     kind: "programa_destacado",
     // El nivel del programa encabeza la vista cuando el portal lo publica.
     badge: (program.level || "Programa destacado").toUpperCase(),
     programName: program.name,
-    specs: specs.slice(0, 6),
+    level: program.level,
+    description: program.slogan,
+    startDate: program.startDate,
+    modality: program.modality,
+    duration: program.durationMonths ? `${program.durationMonths} meses` : "",
+    credits: program.credits ? `${program.credits} créditos` : "",
+    hours: program.hours ? `${program.hours} horas académicas` : "",
+    enrollmentOpen: program.enrollmentOpen,
+    specs: specs.slice(0, 8),
     quote: program.slogan,
     qrCaption: program.enrollmentOpen ? "INSCRÍBETE AQUÍ" : "CONOCE EL PROGRAMA",
     strapline: "Programas de Posgrado para profesionales que lideran el cambio",
-  };
+  });
 }
 
 /** Construye la vista «Programación general» con la oferta del portal. */
 export function programsToOfertaGeneral(
   programs: readonly PortalProgram[],
 ): ProgramacionGeneralContent {
-  return {
+  return programacionGeneralSchema.parse({
     kind: "programacion_general",
-    sectionTitle: "OFERTA ACADÉMICA",
+    sectionTitle: "Oferta académica",
+    headline: "Impulsa tu carrera profesional con un posgrado de la UABJB",
+    programs: programs.slice(0, 4).map((p) => ({
+      name: p.name,
+      type: p.level,
+      modality: p.modality,
+      duration: p.durationMonths ? `${p.durationMonths} meses` : "",
+      credits: p.credits ? `${p.credits} créditos` : "",
+      dateShort: p.startDate,
+      status: p.enrollmentOpen ? ("open" as const) : ("soon" as const),
+    })),
     offers: programs.slice(0, 4).map((p) => ({
       title: p.name,
       modality: p.modality,
       start: p.startDate,
     })),
-    nextLabel: "A CONTINUACIÓN",
     strapline: "Conocimiento que transforma el desarrollo del Beni",
-  };
+  });
 }

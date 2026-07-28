@@ -33,6 +33,8 @@ export const agendaItemSchema = z.object({
   date: z.string().default(""),
   time: z.string().default(""),
   place: z.string().default(""),
+  /** Estado de la actividad; pinta el distintivo de la derecha. */
+  status: z.enum(["proxima", "en_curso", "finalizada"]).default("proxima"),
   imageSrc: z.string().optional(),
 });
 
@@ -47,24 +49,68 @@ export const specSchema = z.object({
   value: z.string(),
 });
 
+/** Métrica destacada de un bloque de estadísticas. */
+export const statSchema = z.object({
+  value: z.string().min(1),
+  label: z.string().default(""),
+});
+
+/**
+ * Programa mostrado dentro de un listado o rejilla. Cada uno admite su propio
+ * video o imagen, de modo que la miniatura no tiene por qué ser una foto.
+ */
+export const programEntrySchema = z.object({
+  name: z.string().min(1),
+  type: z.string().default(""),
+  version: z.string().default(""),
+  modality: z.string().default(""),
+  duration: z.string().default(""),
+  credits: z.string().default(""),
+  dateShort: z.string().default(""),
+  status: z.enum(["open", "soon"]).default("open"),
+  media: mediaRefSchema.optional(),
+});
+
+/** Elemento de noticias: artículo o video, con su propia portada. */
+export const newsEntrySchema = z.object({
+  title: z.string().min(1),
+  meta: z.string().default(""),
+  kind: z.enum(["noticia", "video"]).default("noticia"),
+  duration: z.string().default(""),
+  media: mediaRefSchema.optional(),
+});
+
 /** Vista 1 — Programación general */
 export const programacionGeneralSchema = z.object({
   kind: z.literal("programacion_general"),
-  sectionTitle: z.string().default("OFERTA ACADÉMICA"),
+  sectionTitle: z.string().default("Oferta académica"),
+  cardEyebrow: z.string().default("Vicerrectorado"),
+  /** Titular sobre el panel de video o imagen. */
+  headline: z.string().default(""),
+  headlineEyebrow: z.string().default("Oferta de posgrado"),
+  subheadline: z.string().default(""),
   media: mediaRefSchema.optional(),
+  /** Fichas completas (con su propio medio). Es la vía recomendada. */
+  programs: z.array(programEntrySchema).max(4).default([]),
+  /** Formato antiguo y simple; se usa si `programs` está vacío. */
   offers: z.array(offerItemSchema).max(4).default([]),
-  nextLabel: z.string().default("A CONTINUACIÓN"),
+  nextLabel: z.string().default(""),
   nextThumb: z.string().optional(),
+  qrCaption: z.string().default("Explorar oferta completa"),
   strapline: z.string().default(""),
 });
 
 /** Vista 2 / 8 — Agenda académica / Actividades del día */
 export const agendaSchema = z.object({
   kind: z.literal("agenda"),
-  sectionTitle: z.string().default("AGENDA ACADÉMICA"),
-  badge: z.string().default("ACTIVIDADES DE ESTA SEMANA"),
+  sectionTitle: z.string().default("Agenda de la semana"),
+  badge: z.string().default("Actividades"),
+  headline: z.string().default("Actividades y defensas de esta semana"),
+  headlineEyebrow: z.string().default("Semana académica"),
+  subheadline: z.string().default(""),
   media: mediaRefSchema.optional(),
-  items: z.array(agendaItemSchema).max(3).default([]),
+  items: z.array(agendaItemSchema).max(5).default([]),
+  nextLabel: z.string().default(""),
   strapline: z.string().default(""),
 });
 
@@ -73,20 +119,43 @@ export const programaDestacadoSchema = z.object({
   kind: z.literal("programa_destacado"),
   badge: z.string().default("PROGRAMA DESTACADO"),
   programName: z.string().min(1),
+  /** Nivel: Maestría, Especialidad, Diplomado, Doctorado… */
+  level: z.string().default(""),
+  version: z.string().default(""),
+  parallel: z.string().default(""),
+  description: z.string().default(""),
   media: mediaRefSchema.optional(),
-  specs: z.array(specSchema).max(6).default([]),
+  /* Ficha del programa: cada campo alimenta una casilla de la rejilla. */
+  startDate: z.string().default(""),
+  modality: z.string().default(""),
+  duration: z.string().default(""),
+  credits: z.string().default(""),
+  hours: z.string().default(""),
+  phones: z.string().default(""),
+  audience: z.string().default(""),
+  address: z.string().default(""),
+  enrollmentOpen: z.boolean().default(true),
+  /** Formato antiguo; se usa si no se llenó ningún campo de la ficha. */
+  specs: z.array(specSchema).max(8).default([]),
   quote: z.string().default(""),
-  qrCaption: z.string().default("CONOCE EL PROGRAMA"),
+  qrCaption: z.string().default("Ver ficha completa e inscribirse"),
   strapline: z.string().default(""),
 });
 
 /** Vista 4 / 9 — Noticias y logros / Reconocimientos */
 export const noticiasSchema = z.object({
   kind: z.literal("noticias"),
-  title: z.string().default("NOTICIAS Y LOGROS DE POSGRADO"),
-  badge: z.string().default("ACREDITACIÓN INTERNACIONAL"),
+  title: z.string().default("Noticias y logros"),
+  badge: z.string().default("Institucional"),
+  headline: z.string().default(""),
+  headlineEyebrow: z.string().default("Titular institucional"),
+  subheadline: z.string().default(""),
   media: mediaRefSchema.optional(),
-  items: z.array(newsItemSchema).max(3).default([]),
+  /** Entradas con portada propia; admiten artículo o video. */
+  entries: z.array(newsEntrySchema).max(4).default([]),
+  /** Formato antiguo; se usa si `entries` está vacío. */
+  items: z.array(newsItemSchema).max(4).default([]),
+  stats: z.array(statSchema).max(2).default([]),
   bigStat: z.string().default(""),
   bigStatLabel: z.string().default(""),
   strapline: z.string().default(""),
@@ -95,12 +164,19 @@ export const noticiasSchema = z.object({
 /** Vista 5 — Comunicado importante */
 export const comunicadoSchema = z.object({
   kind: z.literal("comunicado"),
-  badge: z.string().default("COMUNICADO IMPORTANTE"),
+  badge: z.string().default("Comunicado importante"),
   title: z.string().min(1),
   subtitle: z.string().default(""),
+  /** Cuerpo explicativo del comunicado. */
+  body: z.string().default(""),
   highlight: z.string().default(""),
-  specs: z.array(specSchema).max(3).default([]),
-  qrCaption: z.string().default("INSCRÍBETE AQUÍ"),
+  media: mediaRefSchema.optional(),
+  mediaEyebrow: z.string().default("Vicerrectorado"),
+  mediaTitle: z.string().default(""),
+  mediaSub: z.string().default(""),
+  /** Filas de datos: fecha, horario, área responsable, contacto… */
+  specs: z.array(specSchema).max(6).default([]),
+  qrCaption: z.string().default(""),
   imageSrc: z.string().optional(),
 });
 
@@ -208,6 +284,13 @@ export const viewContentSchema = z.discriminatedUnion("kind", [
 ]);
 
 export type ViewContent = z.infer<typeof viewContentSchema>;
+
+/**
+ * Contenido tal como se ESCRIBE (antes de aplicar los valores por defecto).
+ * Es el tipo que deben usar los literales del código —ejemplos, adaptadores,
+ * pruebas— para no tener que repetir cada campo opcional.
+ */
+export type ViewContentInput = z.input<typeof viewContentSchema>;
 export type ProgramacionGeneralContent = z.infer<
   typeof programacionGeneralSchema
 >;

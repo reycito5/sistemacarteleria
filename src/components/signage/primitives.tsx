@@ -145,57 +145,56 @@ export function PhotoPanel({
   showMediaKind = true,
   children,
 }: PhotoPanelProps) {
-  // Sólo se superpone el degradado y el texto cuando realmente hay rótulo.
-  // Un afiche o un video sin rótulo se ve limpio, sin texto encima.
-  const hasOverlay = Boolean(badge || eyebrow || title || sub || children);
+  // Regla de arquitectura: el texto NUNCA va encima del medio. El medio ocupa
+  // su propia área limpia (arriba) y, si hay rótulo, éste va en un bloque
+  // sólido separado debajo. Cada cosa tiene su lado.
+  const hasCaption = Boolean(badge || eyebrow || title || sub || children);
 
   return (
     <div
-      className="relative flex flex-col justify-end overflow-hidden rounded-[2px] bg-sig-ink-deep"
+      className="flex flex-col overflow-hidden rounded-[2px] bg-sig-ink-deep"
       style={{ gridColumn: `span ${span}` }}
     >
-      <SignageMedia media={media} overlayText={hasOverlay} />
+      {/* Área del medio: foto o video, limpia, sin texto encima. */}
+      <div className="relative min-h-0 flex-1 overflow-hidden">
+        <SignageMedia media={media} overlayText={false} />
 
-      {flag && (
-        <span
-          aria-hidden
-          className="absolute right-0 top-0 z-[3] h-[170px] w-[170px] bg-sig-red"
-          style={{ clipPath: "polygon(100% 0, 100% 100%, 0 0)" }}
-        />
-      )}
+        {flag && (
+          <span
+            aria-hidden
+            className="absolute right-0 top-0 z-[3] h-[150px] w-[150px] bg-sig-red"
+            style={{ clipPath: "polygon(100% 0, 100% 100%, 0 0)" }}
+          />
+        )}
 
-      {showMediaKind && isVideoRef(media) && (
-        <span
-          className="absolute left-[44px] top-[40px] z-[3] inline-flex items-center gap-2.5 rounded-[3px] bg-black/60 px-4 py-2 font-bold uppercase tracking-[.08em] text-white backdrop-blur-sm"
-          style={{ fontSize: T.eyebrow }}
-        >
-          <span aria-hidden>▶</span>
-          Video
-        </span>
-      )}
+        {showMediaKind && isVideoRef(media) && (
+          <span
+            className="absolute left-[36px] top-[34px] z-[3] inline-flex items-center gap-2.5 rounded-[3px] bg-black/60 px-4 py-2 font-bold uppercase tracking-[.08em] text-white backdrop-blur-sm"
+            style={{ fontSize: T.eyebrow }}
+          >
+            <span aria-hidden>▶</span>
+            Video
+          </span>
+        )}
+      </div>
 
-      {hasOverlay && (
-        <div className="relative z-[2] px-[44px] py-[40px]">
+      {/* Bloque de texto: sólido, separado del medio (nunca superpuesto). */}
+      {hasCaption && (
+        <div className="shrink-0 bg-sig-ink px-[44px] py-[34px]">
           {badge && <div className="mb-4">{badge}</div>}
           {eyebrow && <Eyebrow tone="light">{eyebrow}</Eyebrow>}
           {title && (
             <h4
               className="mt-3 font-serif font-bold leading-[1.1] text-white"
-              style={{
-                fontSize: T.headline,
-                textShadow: "0 2px 24px rgba(0,0,0,.55)",
-              }}
+              style={{ fontSize: T.headline }}
             >
               {title}
             </h4>
           )}
           {sub && (
             <p
-              className="mt-4 max-w-[92%] font-medium leading-[1.4] text-white/85"
-              style={{
-                fontSize: T.body,
-                textShadow: "0 1px 12px rgba(0,0,0,.5)",
-              }}
+              className="mt-4 max-w-[94%] font-medium leading-[1.4] text-white/80"
+              style={{ fontSize: T.body }}
             >
               {sub}
             </p>
@@ -283,6 +282,9 @@ export function FieldGrid({
   columns?: 2 | 3 | 4;
 }) {
   if (fields.length === 0) return null;
+  // Rellena la última fila para que no quede una celda vacía con el color del
+  // filete: las celdas de relleno usan el fondo de la tarjeta.
+  const remainder = (columns - (fields.length % columns)) % columns;
   return (
     <div
       className="grid gap-px border-y border-sig-rule bg-sig-rule"
@@ -312,6 +314,9 @@ export function FieldGrid({
             {f.value}
           </span>
         </div>
+      ))}
+      {Array.from({ length: remainder }).map((_, i) => (
+        <div key={`filler-${i}`} aria-hidden className="bg-sig-card" />
       ))}
     </div>
   );

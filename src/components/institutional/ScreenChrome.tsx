@@ -142,8 +142,18 @@ export function ScreenHeader({
           >
             {identity.universityName}
           </p>
-          <p className="mt-1 font-serif text-[52px] font-bold leading-none text-white">
+          <p className="mt-1 font-serif text-[50px] font-bold leading-none text-white">
             {identity.vicerrectorateName}
+          </p>
+          <p
+            className="mt-2.5 inline-flex items-center gap-2.5 font-semibold uppercase tracking-[0.1em] text-white/75"
+            style={{ fontSize: 20 }}
+          >
+            <span
+              aria-hidden
+              className="h-[9px] w-[9px] shrink-0 rounded-full bg-sig-red"
+            />
+            Acreditado internacionalmente · CIEES (México)
           </p>
         </div>
 

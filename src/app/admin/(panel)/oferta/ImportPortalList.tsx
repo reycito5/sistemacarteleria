@@ -65,10 +65,10 @@ export function ImportPortalList({ programs }: { programs: PortalProgram[] }) {
           return (
             <li
               key={p.id}
-              className="flex flex-col rounded-[14px] border border-ui-border bg-ui-surface p-4 transition hover:border-inst-blue/30"
+              className="flex flex-col rounded-[14px] border border-ui-border bg-ui-surface p-4 transition hover:border-brand-ink-soft/30"
             >
               <div className="flex items-start justify-between gap-3">
-                <h3 className="text-sm font-extrabold leading-snug text-inst-blue-top">
+                <h3 className="text-sm font-extrabold leading-snug text-brand-ink">
                   {p.name}
                 </h3>
                 {imported && (

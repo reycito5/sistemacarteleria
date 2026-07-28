@@ -311,11 +311,11 @@ export function MediaUploader() {
   return (
     <div className="ui-card p-5 sm:p-6">
       <div className="flex items-start gap-3">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-info-soft text-inst-blue-top">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-info-soft text-brand-ink">
           <UploadCloud size={18} aria-hidden />
         </span>
         <div>
-          <h2 className="text-base font-extrabold text-inst-blue-top">
+          <h2 className="text-base font-extrabold text-brand-ink">
             Subir video o imagen
           </h2>
           <p className="mt-1 text-sm leading-relaxed text-ui-muted">
@@ -337,16 +337,16 @@ export function MediaUploader() {
           className={[
             "mt-5 rounded-[14px] border-2 border-dashed px-6 py-10 text-center transition",
             dragging
-              ? "border-inst-blue bg-info-soft"
-              : "border-ui-border-strong bg-ui-raised hover:border-inst-blue/45",
+              ? "border-brand-ink-soft bg-info-soft"
+              : "border-ui-border-strong bg-ui-raised hover:border-brand-ink-soft/45",
           ].join(" ")}
         >
           <UploadCloud
             size={34}
-            className="mx-auto text-inst-blue-top/60"
+            className="mx-auto text-brand-ink/60"
             aria-hidden
           />
-          <p className="mt-3 text-sm font-bold text-inst-blue-top">
+          <p className="mt-3 text-sm font-bold text-brand-ink">
             Arrastre el archivo aquí
           </p>
           <p className="mt-1 text-xs text-ui-muted">
@@ -364,7 +364,7 @@ export function MediaUploader() {
       ) : (
         /* Vista previa del archivo elegido */
         <div className="mt-5 overflow-hidden rounded-[14px] border border-ui-border">
-          <div className="relative aspect-video bg-inst-blue-bottom">
+          <div className="relative aspect-video bg-brand-ink-deep">
             {picked.mediaType === "image" ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -408,7 +408,7 @@ export function MediaUploader() {
               type="button"
               onClick={reset}
               disabled={busy}
-              className="ml-auto inline-flex items-center gap-1.5 font-semibold text-inst-red transition hover:underline disabled:opacity-50"
+              className="ml-auto inline-flex items-center gap-1.5 font-semibold text-brand-red transition hover:underline disabled:opacity-50"
             >
               <Trash2 size={14} aria-hidden />
               Quitar
@@ -493,7 +493,7 @@ export function MediaUploader() {
               aria-valuenow={progress}
               aria-valuemin={0}
               aria-valuemax={100}
-              className="h-full rounded-full bg-inst-blue-bottom transition-[width] duration-200"
+              className="h-full rounded-full bg-brand-ink-deep transition-[width] duration-200"
               style={{ width: `${progress}%` }}
             />
           </div>

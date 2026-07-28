@@ -2,6 +2,8 @@ import type { ReactNode } from "react";
 import type { MediaRef } from "@/lib/views/schemas";
 import { SignageMedia } from "./SignageMedia";
 import { isVideoRef } from "./mediaKind";
+import { QrCode } from "./QrCode";
+import { T } from "./scale";
 
 /* ==========================================================================
  * Primitivas de la línea gráfica de cartelería V12.
@@ -32,7 +34,8 @@ export function Eyebrow({
         : "text-sig-text-faint";
   return (
     <p
-      className={`font-mono text-[10.5px] font-bold uppercase tracking-[1.8px] ${color} ${className}`}
+      className={`font-mono font-bold uppercase tracking-[.14em] ${color} ${className}`}
+      style={{ fontSize: T.eyebrow }}
     >
       {children}
     </p>
@@ -41,7 +44,7 @@ export function Eyebrow({
 
 export function SerifTitle({
   children,
-  size = 24,
+  size = T.cardTitle,
   className = "",
 }: {
   children: ReactNode;
@@ -95,12 +98,13 @@ export function SigBadge({
   const pulses = kind === "live" || kind === "onlight-live";
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-[2px] px-[13px] py-[6px] text-[11px] font-bold uppercase tracking-[.5px] ${BADGE_STYLES[kind]}`}
+      className={`inline-flex items-center gap-2.5 rounded-[3px] px-5 py-2.5 font-bold uppercase tracking-[.06em] ${BADGE_STYLES[kind]}`}
+      style={{ fontSize: T.eyebrow }}
     >
       {BADGE_DOT.includes(kind) && (
         <span
           aria-hidden
-          className={`text-[8px] leading-none ${pulses ? "ui-pulse" : ""}`}
+          className={`text-[14px] leading-none ${pulses ? "ui-pulse" : ""}`}
         >
           ●
         </span>
@@ -146,35 +150,45 @@ export function PhotoPanel({
       className="relative flex flex-col justify-end overflow-hidden rounded-[2px] bg-sig-ink-deep"
       style={{ gridColumn: `span ${span}` }}
     >
-      <SignageMedia media={media} />
+      <SignageMedia media={media} overlayText />
 
       {flag && (
         <span
           aria-hidden
-          className="absolute right-0 top-0 z-[3] h-[130px] w-[130px] bg-sig-red"
+          className="absolute right-0 top-0 z-[3] h-[170px] w-[170px] bg-sig-red"
           style={{ clipPath: "polygon(100% 0, 100% 100%, 0 0)" }}
         />
       )}
 
       {showMediaKind && isVideoRef(media) && (
-        <span className="absolute left-[36px] top-[32px] z-[3] inline-flex items-center gap-2 rounded-[2px] bg-black/55 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[.6px] text-white backdrop-blur-sm">
-          <span aria-hidden className="text-[9px]">
-            ▶
-          </span>
+        <span
+          className="absolute left-[44px] top-[40px] z-[3] inline-flex items-center gap-2.5 rounded-[3px] bg-black/60 px-4 py-2 font-bold uppercase tracking-[.08em] text-white backdrop-blur-sm"
+          style={{ fontSize: T.eyebrow }}
+        >
+          <span aria-hidden>▶</span>
           Video
         </span>
       )}
 
-      <div className="relative z-[2] px-[36px] py-[32px]">
-        {badge && <div className="mb-3.5">{badge}</div>}
+      <div className="relative z-[2] px-[44px] py-[40px]">
+        {badge && <div className="mb-4">{badge}</div>}
         {eyebrow && <Eyebrow tone="light">{eyebrow}</Eyebrow>}
         {title && (
-          <h4 className="mt-2 font-serif text-[34px] font-semibold leading-[1.16] tracking-[.1px] text-white">
+          <h4
+            className="mt-3 font-serif font-bold leading-[1.1] text-white"
+            style={{
+              fontSize: T.headline,
+              textShadow: "0 2px 24px rgba(0,0,0,.55)",
+            }}
+          >
             {title}
           </h4>
         )}
         {sub && (
-          <p className="mt-2.5 max-w-[90%] text-[14.5px] font-medium text-white/70">
+          <p
+            className="mt-4 max-w-[92%] font-medium leading-[1.4] text-white/85"
+            style={{ fontSize: T.body, textShadow: "0 1px 12px rgba(0,0,0,.5)" }}
+          >
             {sub}
           </p>
         )}
@@ -219,10 +233,10 @@ export function CardHead({
   right?: ReactNode;
 }) {
   return (
-    <div className="flex items-start justify-between px-[30px] pb-1 pt-[26px]">
-      <div>
+    <div className="flex items-start justify-between gap-6 px-[38px] pb-2 pt-[34px]">
+      <div className="min-w-0">
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-        <SerifTitle className="mt-2">{title}</SerifTitle>
+        <SerifTitle className="mt-2.5">{title}</SerifTitle>
       </div>
       {right}
     </div>
@@ -238,7 +252,7 @@ export function CardBody({
 }) {
   return (
     <div
-      className={`flex min-h-0 flex-1 flex-col px-[30px] pb-[28px] pt-[18px] ${className}`}
+      className={`flex min-h-0 flex-1 flex-col px-[38px] pb-[34px] pt-[22px] ${className}`}
     >
       {children}
     </div>
@@ -268,15 +282,24 @@ export function FieldGrid({
       {fields.map((f, i) => (
         <div
           key={`${f.label}-${i}`}
-          className="flex min-w-0 flex-col gap-1.5 bg-sig-card px-[18px] pb-[17px] pt-[15px]"
+          className="flex min-w-0 flex-col gap-2 bg-sig-card px-[24px] pb-[24px] pt-[20px]"
         >
-          <span className="font-mono text-[9.5px] font-bold tracking-[1.2px] text-sig-red">
+          <span
+            className="font-mono font-bold tracking-[.12em] text-sig-red"
+            style={{ fontSize: 18 }}
+          >
             {String(i + 1).padStart(2, "0")}
           </span>
-          <span className="text-[9.5px] font-bold uppercase tracking-[.9px] text-sig-text-faint">
+          <span
+            className="font-bold uppercase tracking-[.08em] text-sig-text-faint"
+            style={{ fontSize: 19 }}
+          >
             {f.label}
           </span>
-          <span className="break-words font-serif text-[14px] font-bold leading-[1.3] text-sig-ink">
+          <span
+            className="break-words font-serif font-bold leading-[1.25] text-sig-ink"
+            style={{ fontSize: T.meta }}
+          >
             {f.value}
           </span>
         </div>
@@ -287,45 +310,32 @@ export function FieldGrid({
 
 /* --- Bandas inferiores --------------------------------------------------- */
 
-/** Cuadrícula QR decorativa, estable y legible a distancia. */
-function QrGlyph() {
-  const cells = [
-    [9, 1], [12, 1], [9, 4], [15, 9], [9, 9], [12, 12], [18, 12], [21, 15],
-    [9, 15], [15, 18], [18, 21], [9, 21], [24, 9], [12, 24], [21, 24],
-    [15, 24], [24, 18],
-  ];
+export function QrStrip({
+  label,
+  url,
+}: {
+  label: string;
+  /** Contenido del código. Sin él no se dibuja el QR, sólo el texto. */
+  url?: string;
+}) {
   return (
-    <svg viewBox="0 0 29 29" className="h-full w-full" fill="#121F5C">
-      <rect width="29" height="29" fill="#fff" />
-      {[
-        [0, 0],
-        [22, 0],
-        [0, 22],
-      ].map(([x, y]) => (
-        <g key={`${x}-${y}`}>
-          <rect x={x} y={y} width="7" height="7" />
-          <rect x={x + 1.5} y={y + 1.5} width="4" height="4" fill="#fff" />
-          <rect x={x + 2.5} y={y + 2.5} width="2" height="2" />
-        </g>
-      ))}
-      {cells.map(([x, y]) => (
-        <rect key={`${x}-${y}`} x={x} y={y} width="2" height="2" />
-      ))}
-    </svg>
-  );
-}
-
-export function QrStrip({ label }: { label: string }) {
-  return (
-    <div className="mt-auto flex items-center gap-4 bg-sig-ink px-[30px] py-[18px]">
-      <div className="h-[62px] w-[62px] shrink-0 rounded-[2px] bg-white p-[5px]">
-        <QrGlyph />
-      </div>
-      <div>
-        <p className="text-[10px] font-bold uppercase tracking-[1.2px] text-white/55">
-          Código QR
+    <div className="mt-auto flex items-center gap-6 bg-sig-ink px-[38px] py-[26px]">
+      {url && (
+        <div className="shrink-0 rounded-[4px] bg-white p-2.5">
+          <QrCode value={url} size={124} />
+        </div>
+      )}
+      <div className="min-w-0">
+        <p
+          className="font-bold uppercase tracking-[.14em] text-white/60"
+          style={{ fontSize: 19 }}
+        >
+          Escanea el código
         </p>
-        <p className="mt-0.5 font-serif text-[15px] font-semibold text-white">
+        <p
+          className="mt-1 font-serif font-bold leading-tight text-white"
+          style={{ fontSize: T.itemTitle }}
+        >
           {label}
         </p>
       </div>
@@ -335,14 +345,22 @@ export function QrStrip({ label }: { label: string }) {
 
 export function NextStrip({ label }: { label: string }) {
   return (
-    <div className="flex items-center justify-between border-t border-sig-rule px-[30px] py-3.5">
-      <div>
-        <p className="text-[10px] font-bold uppercase tracking-[1.2px] text-sig-text-faint">
-          Próximo contenido
+    <div className="flex items-center justify-between gap-6 border-t border-sig-rule px-[38px] py-[22px]">
+      <div className="min-w-0">
+        <p
+          className="font-bold uppercase tracking-[.14em] text-sig-text-faint"
+          style={{ fontSize: 19 }}
+        >
+          A continuación
         </p>
-        <p className="mt-0.5 text-[13.5px] font-semibold text-sig-ink">{label}</p>
+        <p
+          className="mt-1 truncate font-semibold text-sig-ink"
+          style={{ fontSize: T.meta }}
+        >
+          {label}
+        </p>
       </div>
-      <span aria-hidden className="text-[18px] text-sig-red">
+      <span aria-hidden className="text-[34px] leading-none text-sig-red">
         →
       </span>
     </div>
@@ -361,11 +379,17 @@ export function StatRow({
       style={{ gridTemplateColumns: `repeat(${stats.length}, minmax(0,1fr))` }}
     >
       {stats.map((s, i) => (
-        <div key={i} className="bg-sig-card px-6 py-5">
-          <p className="font-serif text-[36px] font-semibold leading-none text-sig-ink">
+        <div key={i} className="bg-sig-card px-8 py-7">
+          <p
+            className="font-serif font-bold leading-none text-sig-ink"
+            style={{ fontSize: T.stat }}
+          >
             {s.value}
           </p>
-          <p className="mt-1 text-[11.5px] font-semibold text-sig-text-soft">
+          <p
+            className="mt-2 font-semibold text-sig-text-soft"
+            style={{ fontSize: T.meta }}
+          >
             {s.label}
           </p>
         </div>
@@ -382,12 +406,18 @@ export function InfoList({ rows }: { rows: FieldEntry[] }) {
       {rows.map((r, i) => (
         <div
           key={i}
-          className="flex items-baseline justify-between border-b border-sig-rule py-[13px] last:border-b-0"
+          className="flex items-baseline justify-between gap-6 border-b border-sig-rule py-[20px] last:border-b-0"
         >
-          <span className="text-[12.5px] font-semibold text-sig-text-soft">
+          <span
+            className="font-semibold text-sig-text-soft"
+            style={{ fontSize: T.meta }}
+          >
             {r.label}
           </span>
-          <span className="text-right text-[14.5px] font-bold text-sig-ink">
+          <span
+            className="text-right font-bold text-sig-ink"
+            style={{ fontSize: T.body }}
+          >
             {r.value}
           </span>
         </div>
@@ -408,14 +438,27 @@ export function AgendaRow({
   badge?: ReactNode;
 }) {
   return (
-    <div className="flex items-start gap-5 border-b border-sig-rule py-[15px] last:border-b-0">
-      <span className="w-[56px] shrink-0 pt-0.5 font-mono text-[15px] font-bold text-sig-red">
+    <div className="flex items-start gap-7 border-b border-sig-rule py-[22px] last:border-b-0">
+      <span
+        className="w-[110px] shrink-0 font-mono font-bold leading-tight text-sig-red"
+        style={{ fontSize: T.itemTitle }}
+      >
         {time}
       </span>
       <div className="min-w-0 flex-1">
-        <p className="font-serif text-[16px] font-bold text-sig-ink">{title}</p>
+        <p
+          className="font-serif font-bold leading-[1.2] text-sig-ink"
+          style={{ fontSize: T.itemTitle }}
+        >
+          {title}
+        </p>
         {meta && (
-          <p className="mt-0.5 text-[12px] text-sig-text-soft">{meta}</p>
+          <p
+            className="mt-1.5 text-sig-text-soft"
+            style={{ fontSize: T.meta }}
+          >
+            {meta}
+          </p>
         )}
       </div>
       {badge}
@@ -425,19 +468,19 @@ export function AgendaRow({
 
 export function PullQuote({
   children,
-  size = 21,
+  size = T.bodyLg,
 }: {
   children: ReactNode;
   size?: number;
 }) {
   return (
     <blockquote
-      className="relative pl-[22px] font-serif font-medium italic leading-[1.42] text-sig-ink"
+      className="relative pl-[30px] font-serif font-medium italic leading-[1.35] text-sig-ink"
       style={{ fontSize: size }}
     >
       <span
         aria-hidden
-        className="absolute bottom-1 left-0 top-1 w-[3px] bg-sig-red"
+        className="absolute bottom-1 left-0 top-1 w-[6px] bg-sig-red"
       />
       {children}
     </blockquote>
@@ -446,13 +489,14 @@ export function PullQuote({
 
 export function LogroList({ items }: { items: string[] }) {
   return (
-    <ul className="flex flex-col gap-[11px]">
+    <ul className="flex flex-col gap-[18px]">
       {items.map((text, i) => (
         <li
           key={i}
-          className="flex items-start gap-3 text-[13.5px] leading-[1.55] text-sig-text-soft"
+          className="flex items-start gap-4 leading-[1.45] text-sig-text-soft"
+          style={{ fontSize: T.body }}
         >
-          <span className="shrink-0 pt-0.5 font-mono text-[11px] font-bold text-sig-red">
+          <span className="shrink-0 pt-1 font-mono text-[22px] font-bold text-sig-red">
             {String(i + 1).padStart(2, "0")}
           </span>
           <span>{text}</span>
@@ -480,32 +524,41 @@ export interface ProgramLike {
 export function ProgramTicket({ program }: { program: ProgramLike }) {
   const open = program.status !== "soon";
   return (
-    <div className="flex items-center gap-4 border-b border-sig-rule py-3.5 last:border-b-0">
-      <div className="relative w-[60px] shrink-0 overflow-hidden rounded-[2px] bg-sig-ink-deep [aspect-ratio:4/5]">
+    <div className="flex items-center gap-6 border-b border-sig-rule py-[22px] last:border-b-0">
+      <div className="relative w-[104px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep [aspect-ratio:4/5]">
         <SignageMedia media={program.media} fallbackLabel="" />
       </div>
       <div className="min-w-0 flex-1">
         {program.type && (
-          <p className="text-[10px] font-bold uppercase tracking-[.9px] text-sig-red">
+          <p
+            className="font-bold uppercase tracking-[.1em] text-sig-red"
+            style={{ fontSize: 20 }}
+          >
             {program.type}
             {program.version ? ` · ${program.version}` : ""}
           </p>
         )}
-        <p className="mt-0.5 line-clamp-2 font-serif text-[16.5px] font-semibold leading-[1.25] text-sig-ink">
+        <p
+          className="mt-1 line-clamp-2 font-serif font-bold leading-[1.2] text-sig-ink"
+          style={{ fontSize: T.itemTitle }}
+        >
           {program.name}
         </p>
-        <p className="mt-1 text-[11.5px] text-sig-text-soft">
+        <p className="mt-2 text-sig-text-soft" style={{ fontSize: T.meta }}>
           {[program.modality, program.duration, program.credits]
             .filter(Boolean)
             .join(" · ")}
         </p>
       </div>
-      <div className="w-[112px] shrink-0 text-right">
+      <div className="w-[230px] shrink-0 text-right">
         <SigBadge kind={open ? "onlight-open" : "onlight-soon"}>
           {open ? "Inscripción abierta" : "Próximamente"}
         </SigBadge>
         {program.dateShort && (
-          <p className="mt-2 whitespace-nowrap font-mono text-[11.5px] font-bold text-sig-ink">
+          <p
+            className="mt-3 whitespace-nowrap font-mono font-bold text-sig-ink"
+            style={{ fontSize: T.meta }}
+          >
             {program.dateShort}
           </p>
         )}
@@ -520,27 +573,42 @@ export function ProgramMini({ program }: { program: ProgramLike }) {
   const open = program.status !== "soon";
   return (
     <div className="flex min-w-0 flex-1 flex-col">
-      <div className="relative max-h-[210px] shrink-0 overflow-hidden [aspect-ratio:4/5]">
+      <div className="relative max-h-[300px] shrink-0 overflow-hidden [aspect-ratio:4/5]">
         <SignageMedia media={program.media} fallbackLabel="" />
+        <span
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/85 to-transparent"
+        />
         {day && (
-          <div className="absolute bottom-3 left-4 z-[2] text-white">
-            <p className="font-serif text-[28px] font-bold leading-none">{day}</p>
-            <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[1px] text-[#FF9DA0]">
+          <div className="absolute bottom-5 left-6 z-[2] text-white">
+            <p className="font-serif text-[64px] font-bold leading-none">
+              {day}
+            </p>
+            <p
+              className="mt-1 font-bold uppercase tracking-[.12em] text-[#FF9DA0]"
+              style={{ fontSize: 20 }}
+            >
               {rest.join(" ")}
             </p>
           </div>
         )}
       </div>
-      <div className="flex min-h-0 flex-1 flex-col gap-2 px-[18px] pb-[18px] pt-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-3 px-[24px] pb-[24px] pt-5">
         {program.type && (
-          <p className="text-[9.5px] font-bold uppercase tracking-[1px] text-sig-red">
+          <p
+            className="font-bold uppercase tracking-[.1em] text-sig-red"
+            style={{ fontSize: 19 }}
+          >
             {program.type}
           </p>
         )}
-        <p className="font-serif text-[15.5px] font-semibold leading-[1.28] text-sig-ink">
+        <p
+          className="font-serif font-bold leading-[1.2] text-sig-ink"
+          style={{ fontSize: 30 }}
+        >
           {program.name}
         </p>
-        <p className="text-[11px] text-sig-text-soft">
+        <p className="text-sig-text-soft" style={{ fontSize: 22 }}>
           {[program.modality, program.duration, program.credits]
             .filter(Boolean)
             .join(" · ")}
@@ -572,16 +640,16 @@ export function NewsRow({
 }) {
   const video = isVideo ?? isVideoRef(media);
   return (
-    <div className="flex gap-4 border-b border-sig-rule py-4 last:border-b-0">
-      <div className="relative h-[70px] w-[70px] shrink-0 overflow-hidden rounded-[2px] bg-sig-ink-deep">
+    <div className="flex gap-6 border-b border-sig-rule py-6 last:border-b-0">
+      <div className="relative h-[124px] w-[124px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep">
         <SignageMedia media={media} fallbackLabel="" />
         {video && (
           <>
-            <span className="absolute inset-0 z-[2] grid place-items-center text-[13px] text-white">
+            <span className="absolute inset-0 z-[2] grid place-items-center text-[30px] text-white drop-shadow">
               ▶
             </span>
             {duration && (
-              <span className="absolute bottom-1 right-1 z-[2] bg-black/70 px-1 py-px font-mono text-[8px] font-bold tracking-[.3px] text-white">
+              <span className="absolute bottom-1.5 right-1.5 z-[2] bg-black/75 px-2 py-0.5 font-mono text-[16px] font-bold text-white">
                 {duration}
               </span>
             )}
@@ -589,14 +657,22 @@ export function NewsRow({
         )}
       </div>
       <div className="min-w-0">
-        <p className="text-[9.5px] font-bold uppercase tracking-[.9px] text-sig-red">
+        <p
+          className="font-bold uppercase tracking-[.1em] text-sig-red"
+          style={{ fontSize: 19 }}
+        >
           {video ? "Video" : "Noticia"}
         </p>
-        <p className="mt-0.5 font-serif text-[14.5px] font-bold leading-[1.35] text-sig-ink">
+        <p
+          className="mt-1.5 font-serif font-bold leading-[1.2] text-sig-ink"
+          style={{ fontSize: T.itemTitle }}
+        >
           {title}
         </p>
         {meta && (
-          <p className="mt-1 text-[11.5px] text-sig-text-soft">{meta}</p>
+          <p className="mt-2 text-sig-text-soft" style={{ fontSize: T.meta }}>
+            {meta}
+          </p>
         )}
       </div>
     </div>
@@ -624,17 +700,23 @@ export function TechScreen({
       style={{ gridColumn: "1 / -1" }}
     >
       <div
-        className={`grid h-[88px] w-[88px] place-items-center rounded-full border border-sig-rule text-[34px] ${
+        className={`grid h-[150px] w-[150px] place-items-center rounded-full border-2 border-sig-rule text-[64px] ${
           tone === "red" ? "text-sig-red" : "text-sig-ink"
         }`}
       >
         {glyph}
       </div>
-      <h2 className="font-serif text-[36px] font-semibold tracking-[.2px] text-sig-ink">
+      <h2
+        className="font-serif font-bold leading-tight text-sig-ink"
+        style={{ fontSize: T.headline }}
+      >
         {title}
       </h2>
       {sub && (
-        <p className="max-w-[740px] text-[16px] font-medium leading-[1.6] text-sig-text-soft">
+        <p
+          className="max-w-[1200px] font-medium leading-[1.45] text-sig-text-soft"
+          style={{ fontSize: T.bodyLg }}
+        >
           {sub}
         </p>
       )}

@@ -167,8 +167,8 @@ export function ScheduleManager({ playlists, schedules }: Props) {
                       className={[
                         "h-9 w-14 rounded-[10px] text-sm font-bold transition",
                         on
-                          ? "bg-inst-blue-bottom text-inst-white shadow-[var(--shadow-ui-sm)]"
-                          : "border border-ui-border-strong text-ui-muted hover:border-inst-blue/40 hover:text-ui-ink",
+                          ? "bg-brand-ink-deep text-brand-white shadow-[var(--shadow-ui-sm)]"
+                          : "border border-ui-border-strong text-ui-muted hover:border-brand-ink-soft/40 hover:text-ui-ink",
                       ].join(" ")}
                     >
                       {d.label}
@@ -247,7 +247,7 @@ export function ScheduleManager({ playlists, schedules }: Props) {
                 >
                   <div className="min-w-[200px] flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-sm font-extrabold text-inst-blue-top">
+                      <p className="text-sm font-extrabold text-brand-ink">
                         {s.playlistName}
                       </p>
                       <Badge tone="neutral">Prioridad {s.priority}</Badge>
@@ -268,7 +268,7 @@ export function ScheduleManager({ playlists, schedules }: Props) {
                       type="button"
                       onClick={() => run(() => toggleSchedule(s.id, !s.active))}
                       disabled={pending}
-                      className="inline-flex items-center gap-1.5 rounded-[8px] border border-ui-border-strong px-2.5 py-1 text-xs font-bold text-inst-blue-top transition hover:border-inst-blue/45 hover:bg-info-soft disabled:opacity-50"
+                      className="inline-flex items-center gap-1.5 rounded-[8px] border border-ui-border-strong px-2.5 py-1 text-xs font-bold text-brand-ink transition hover:border-brand-ink-soft/45 hover:bg-info-soft disabled:opacity-50"
                     >
                       <Power size={13} aria-hidden />
                       {s.active ? "Desactivar" : "Activar"}
@@ -277,7 +277,7 @@ export function ScheduleManager({ playlists, schedules }: Props) {
                       type="button"
                       onClick={() => run(() => deleteSchedule(s.id))}
                       disabled={pending}
-                      className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-inst-red transition hover:bg-danger-soft disabled:opacity-50"
+                      className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-brand-red transition hover:bg-danger-soft disabled:opacity-50"
                     >
                       <Trash2 size={13} aria-hidden />
                       Eliminar

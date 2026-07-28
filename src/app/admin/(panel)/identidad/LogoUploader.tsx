@@ -77,7 +77,7 @@ export function LogoUploader({
       <p className="mt-0.5 text-xs leading-relaxed text-ui-muted">{hint}</p>
 
       <div className="mt-3 flex items-center gap-4">
-        <div className="grid h-[72px] w-[120px] shrink-0 place-items-center overflow-hidden rounded-[10px] border border-ui-border bg-inst-blue-bottom">
+        <div className="grid h-[72px] w-[120px] shrink-0 place-items-center overflow-hidden rounded-[10px] border border-ui-border bg-brand-ink-deep">
           {shownUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -129,7 +129,7 @@ export function LogoUploader({
       />
 
       {error && (
-        <p role="alert" className="mt-2 text-xs font-semibold text-inst-red">
+        <p role="alert" className="mt-2 text-xs font-semibold text-brand-red">
           {error}
         </p>
       )}

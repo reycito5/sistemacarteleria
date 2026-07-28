@@ -52,8 +52,8 @@ export function ContentStatusControls({
           className={[
             "rounded-[8px] border px-2.5 py-1 text-xs font-bold transition disabled:opacity-50",
             t.emphasis === "danger"
-              ? "border-danger/25 text-inst-red hover:bg-danger-soft"
-              : "border-ui-border-strong text-inst-blue-top hover:border-inst-blue/45 hover:bg-info-soft",
+              ? "border-danger/25 text-brand-red hover:bg-danger-soft"
+              : "border-ui-border-strong text-brand-ink hover:border-brand-ink-soft/45 hover:bg-info-soft",
           ].join(" ")}
         >
           {t.label}
@@ -61,7 +61,7 @@ export function ContentStatusControls({
       ))}
 
       {error && (
-        <span role="alert" className="text-xs font-semibold text-inst-red">
+        <span role="alert" className="text-xs font-semibold text-brand-red">
           {error}
         </span>
       )}

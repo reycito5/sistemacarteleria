@@ -85,16 +85,16 @@ export default function PortalHome() {
   return (
     <>
       {/* Portada */}
-      <section className="ui-gradient-inst-mesh relative overflow-hidden text-inst-white">
+      <section className="ui-gradient-inst-mesh relative overflow-hidden text-brand-white">
         <div className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 sm:py-24">
-          <span className="inline-flex items-center gap-2 rounded-full border border-inst-gold/40 bg-white/10 px-3 py-1 text-[11px] font-bold tracking-[0.16em] text-inst-gold">
+          <span className="inline-flex items-center gap-2 rounded-full border border-brand-red/40 bg-white/10 px-3 py-1 text-[11px] font-bold tracking-[0.16em] text-brand-red">
             <Sparkles size={13} aria-hidden />
             {INSTITUTION.systemName}
           </span>
 
           <h1 className="mt-6 max-w-3xl text-[38px] font-black leading-[1.05] sm:text-[56px]">
             La programación institucional del Posgrado,{" "}
-            <span className="text-inst-gold">en todas las pantallas</span> a la
+            <span className="text-brand-red">en todas las pantallas</span> a la
             vez.
           </h1>
 
@@ -112,7 +112,7 @@ export default function PortalHome() {
             <ButtonLink
               href="/preview"
               size="lg"
-              className="border border-white/25 bg-white/10 text-inst-white hover:bg-white/20"
+              className="border border-white/25 bg-white/10 text-brand-white hover:bg-white/20"
             >
               Conocer las plantillas
             </ButtonLink>
@@ -127,7 +127,7 @@ export default function PortalHome() {
               >
                 <div className="flex items-center justify-between">
                   <p className="text-sm font-extrabold uppercase">{s.name}</p>
-                  <MonitorPlay size={16} className="text-inst-gold" aria-hidden />
+                  <MonitorPlay size={16} className="text-brand-red" aria-hidden />
                 </div>
                 <p className="ui-tnum mt-1 text-[11px] tracking-widest text-white/50">
                   {s.code}
@@ -141,10 +141,10 @@ export default function PortalHome() {
       {/* Cómo llega el contenido a la pantalla */}
       <section className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 sm:py-20">
         <div className="max-w-2xl">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-inst-gold">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red">
             Cómo funciona
           </p>
-          <h2 className="mt-2 text-[30px] font-black leading-tight text-inst-blue-top sm:text-[38px]">
+          <h2 className="mt-2 text-[30px] font-black leading-tight text-brand-ink sm:text-[38px]">
             Del archivo al televisor, en cuatro pasos
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-ui-muted">
@@ -159,23 +159,23 @@ export default function PortalHome() {
             <li key={title} className="relative">
               <Link
                 href={href}
-                className="ui-card group flex h-full flex-col p-6 transition hover:-translate-y-1 hover:border-inst-blue/30 hover:shadow-[var(--shadow-ui-lg)]"
+                className="ui-card group flex h-full flex-col p-6 transition hover:-translate-y-1 hover:border-brand-ink-soft/30 hover:shadow-[var(--shadow-ui-lg)]"
               >
                 <div className="flex items-center gap-3">
-                  <span className="grid h-11 w-11 place-items-center rounded-[12px] bg-inst-blue-bottom text-inst-white">
+                  <span className="grid h-11 w-11 place-items-center rounded-[12px] bg-brand-ink-deep text-brand-white">
                     <Icon size={19} aria-hidden />
                   </span>
                   <span className="ui-tnum text-[34px] font-black leading-none text-ui-border-strong">
                     {step}
                   </span>
                 </div>
-                <h3 className="mt-4 text-lg font-extrabold text-inst-blue-top">
+                <h3 className="mt-4 text-lg font-extrabold text-brand-ink">
                   {title}
                 </h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-ui-muted">
                   {text}
                 </p>
-                <span className="mt-4 inline-flex items-center gap-1 text-[13px] font-bold text-inst-red transition group-hover:gap-2">
+                <span className="mt-4 inline-flex items-center gap-1 text-[13px] font-bold text-brand-red transition group-hover:gap-2">
                   Abrir <ArrowRight size={14} aria-hidden />
                 </span>
               </Link>
@@ -194,18 +194,18 @@ export default function PortalHome() {
       {/* Capacidades */}
       <section className="border-y border-ui-border bg-ui-surface">
         <div className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 sm:py-20">
-          <h2 className="max-w-2xl text-[30px] font-black leading-tight text-inst-blue-top sm:text-[38px]">
+          <h2 className="max-w-2xl text-[30px] font-black leading-tight text-brand-ink sm:text-[38px]">
             Pensado para funcionar solo, todo el día
           </h2>
 
           <div className="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
             {FEATURES.map(({ icon: Icon, title, text }) => (
               <div key={title} className="flex gap-4">
-                <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-info-soft text-inst-blue-top">
+                <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-info-soft text-brand-ink">
                   <Icon size={19} aria-hidden />
                 </span>
                 <div>
-                  <h3 className="text-base font-extrabold text-inst-blue-top">
+                  <h3 className="text-base font-extrabold text-brand-ink">
                     {title}
                   </h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-ui-muted">
@@ -222,7 +222,7 @@ export default function PortalHome() {
       <section className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 sm:py-20">
         <div className="ui-card flex flex-wrap items-center justify-between gap-6 p-8 sm:p-10">
           <div className="max-w-xl">
-            <h2 className="text-2xl font-black text-inst-blue-top sm:text-[28px]">
+            <h2 className="text-2xl font-black text-brand-ink sm:text-[28px]">
               ¿Administra la cartelería del Posgrado?
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-ui-muted">

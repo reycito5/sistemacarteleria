@@ -6,31 +6,33 @@ import { isVideoRef } from "./mediaKind";
 
 interface SignageMediaProps {
   media?: MediaRef;
-  /**
-   * Tratamiento duotono institucional (escala de grises + velo azul/rojo).
-   * Se desactiva cuando la imagen debe verse con sus colores reales.
-   */
-  duotone?: boolean;
   className?: string;
   /** Texto del respaldo cuando no hay medio asignado. */
   fallbackLabel?: string;
+  /**
+   * Hay texto superpuesto: se oscurece el borde inferior lo justo para que se
+   * lea. Sin texto encima, el medio se muestra sin ningún velo.
+   */
+  overlayText?: boolean;
 }
 
 /**
  * Medio de una pantalla institucional: **acepta indistintamente video o
  * imagen** y los trata igual.
  *
- *  - Video: se reproduce de verdad, silenciado y en bucle, con reintento de
- *    autoplay (los navegadores lo bloquean en el primer intento tras recargar).
- *  - Imagen: se muestra a sangre, sin ningún control encima.
+ *  - Video: se reproduce de verdad, en bucle, con reintento de autoplay (los
+ *    navegadores lo bloquean en el primer intento tras recargar). El sonido se
+ *    activa por contenido; con audio, el navegador puede exigir que el kiosco
+ *    arranque con `--autoplay-policy=no-user-gesture-required`.
+ *  - Imagen: se muestra a sangre, con sus colores reales.
  *  - Sin medio o archivo roto: respaldo institucional sólido. Nunca queda un
  *    hueco negro en el televisor.
  */
 export function SignageMedia({
   media,
-  duotone = true,
   className = "",
   fallbackLabel = "UABJB · POSGRADO",
+  overlayText = false,
 }: SignageMediaProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [broken, setBroken] = useState(false);
@@ -49,9 +51,9 @@ export function SignageMedia({
   }, [video, src]);
 
   const showFallback = !src || broken;
-  const filter = duotone
-    ? "grayscale(1) contrast(1.15) brightness(.85)"
-    : undefined;
+  // El audio sólo suena si el contenido lo pide expresamente. Por defecto la
+  // cartelería va silenciada: son cuatro televisores en zonas de paso.
+  const muted = media?.muted !== false;
 
   return (
     <div className={`absolute inset-0 ${className}`}>
@@ -65,12 +67,11 @@ export function SignageMedia({
         <video
           ref={videoRef}
           className="h-full w-full object-cover"
-          style={{ filter, mixBlendMode: duotone ? "luminosity" : undefined }}
           src={src}
           poster={media?.poster}
           onError={() => setBroken(true)}
           autoPlay
-          muted
+          muted={muted}
           loop
           playsInline
           preload="auto"
@@ -90,34 +91,23 @@ export function SignageMedia({
         // eslint-disable-next-line @next/next/no-img-element
         <img
           className="h-full w-full object-cover"
-          style={{ filter, mixBlendMode: duotone ? "luminosity" : undefined }}
           src={src}
           onError={() => setBroken(true)}
           alt=""
         />
       )}
 
-      {/* Velos del duotono institucional. */}
-      {duotone && !showFallback && (
-        <>
-          <span
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(135deg, rgba(18,31,92,.94) 0%, rgba(18,31,92,.55) 42%, rgba(212,24,31,.28) 100%)",
-              mixBlendMode: "multiply",
-            }}
-          />
-          <span
-            aria-hidden
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(0deg, rgba(10,20,64,.92) 0%, rgba(10,20,64,.15) 55%, transparent 75%)",
-            }}
-          />
-        </>
+      {/* Sin velos de color: la foto y el video se ven tal cual. Sólo se
+          oscurece el borde inferior, y únicamente si hay texto encima. */}
+      {overlayText && !showFallback && (
+        <span
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-1/2"
+          style={{
+            background:
+              "linear-gradient(0deg, rgba(10,20,64,.85) 0%, rgba(10,20,64,.35) 45%, transparent 100%)",
+          }}
+        />
       )}
     </div>
   );

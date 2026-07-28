@@ -194,8 +194,8 @@ export function VideoPlayer({
       </video>
 
       {failed && (
-        <div className="absolute inset-0 grid place-items-center bg-inst-blue-bottom/90 px-6 text-center">
-          <p className="text-sm font-bold text-inst-white">
+        <div className="absolute inset-0 grid place-items-center bg-brand-ink-deep/90 px-6 text-center">
+          <p className="text-sm font-bold text-brand-white">
             No se pudo cargar el video.
             <span className="mt-1 block font-normal text-white/70">
               Verifique que el archivo siga en la biblioteca y que el formato sea
@@ -213,7 +213,7 @@ export function VideoPlayer({
           aria-label="Reproducir"
           className="absolute inset-0 grid place-items-center bg-black/25 transition hover:bg-black/35"
         >
-          <span className="grid h-16 w-16 place-items-center rounded-full bg-inst-white/95 text-inst-blue-bottom shadow-lg transition group-hover:scale-105">
+          <span className="grid h-16 w-16 place-items-center rounded-full bg-brand-white/95 text-brand-ink-deep shadow-lg transition group-hover:scale-105">
             <Play size={26} className="ml-1" fill="currentColor" />
           </span>
         </button>
@@ -230,7 +230,7 @@ export function VideoPlayer({
             className="pointer-events-none absolute inset-x-0 h-1 rounded-full bg-white/30"
           >
             <div
-              className="h-full rounded-full bg-inst-red"
+              className="h-full rounded-full bg-brand-red"
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -246,14 +246,14 @@ export function VideoPlayer({
             className="relative z-10 h-4 w-full cursor-pointer appearance-none bg-transparent
               [&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5
               [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full
-              [&::-webkit-slider-thumb]:bg-inst-red
+              [&::-webkit-slider-thumb]:bg-brand-red
               [&::-moz-range-thumb]:h-3.5 [&::-moz-range-thumb]:w-3.5
               [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-0
-              [&::-moz-range-thumb]:bg-inst-red"
+              [&::-moz-range-thumb]:bg-brand-red"
           />
         </div>
 
-        <div className="mt-1 flex items-center gap-2 text-inst-white">
+        <div className="mt-1 flex items-center gap-2 text-brand-white">
           <button
             type="button"
             onClick={togglePlay}

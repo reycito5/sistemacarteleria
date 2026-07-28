@@ -95,7 +95,7 @@ export function LoginForm() {
         <div className="flex items-start gap-3 rounded-[12px] bg-info-soft p-4">
           <ShieldCheck
             size={18}
-            className="mt-0.5 shrink-0 text-inst-blue-top"
+            className="mt-0.5 shrink-0 text-brand-ink"
             aria-hidden
           />
           <p className="text-sm leading-relaxed text-ui-ink-soft">

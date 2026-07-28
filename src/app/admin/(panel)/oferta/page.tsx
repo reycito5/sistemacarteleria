@@ -96,7 +96,7 @@ export default async function OfertaPage() {
 
         {attempts.length > 0 && (
           <details className="mt-5 rounded-[12px] border border-ui-border bg-ui-raised p-4">
-            <summary className="cursor-pointer text-sm font-bold text-inst-blue-top">
+            <summary className="cursor-pointer text-sm font-bold text-brand-ink">
               Detalle de los intentos ({attempts.length})
             </summary>
             <ul className="mt-3 space-y-2">

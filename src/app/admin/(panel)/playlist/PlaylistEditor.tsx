@@ -103,7 +103,7 @@ export function PlaylistEditor({
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-lg font-black text-inst-blue-top">
+              <h2 className="text-lg font-black text-brand-ink">
                 {playlist.name}
               </h2>
               <Badge tone={published ? "ok" : "warn"} dot>

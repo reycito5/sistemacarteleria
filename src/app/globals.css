@@ -17,18 +17,10 @@
  */
 
 @theme {
-  /* --- Paleta institucional (bloqueada) ----------------------------------- */
-  --color-inst-blue: #0505fd;
-  --color-inst-blue-top: #03037a;
-  --color-inst-blue-bottom: #02024d;
-  --color-inst-red: #c52322;
-  --color-inst-gold: #d4a017;
-  --color-inst-gold-strong: #f2b705;
-  --color-inst-white: #ffffff;
-
-  /* --- Línea gráfica de cartelería V12 (lo que se ve en el televisor) -----
-   * Paleta editorial: azul tinta, rojo institucional y papel cálido. Es la
-   * que gobierna las plantillas; no se edita desde el panel.
+  /* --- Línea gráfica institucional V12 ------------------------------------
+   * Una sola paleta para todo el sistema: azul tinta, rojo institucional y
+   * papel cálido. `--color-sig-*` gobierna las pantallas del televisor;
+   * `--color-brand-*` reutiliza los mismos colores en el panel y el portal.
    */
   --color-sig-ink: #121f5c;
   --color-sig-ink-deep: #0a1440;
@@ -42,6 +34,14 @@
   --color-sig-text: #191b22;
   --color-sig-text-soft: #5b5d6b;
   --color-sig-text-faint: #8b8d9b;
+
+  /* --- Marca en la interfaz de gestión ------------------------------------ */
+  --color-brand-ink: #121f5c;
+  --color-brand-ink-deep: #0a1440;
+  --color-brand-ink-soft: #1b2c78;
+  --color-brand-red: #d4181f;
+  --color-brand-red-soft: #fbe5e6;
+  --color-brand-white: #ffffff;
 
   /* --- Superficies de la interfaz de gestión ------------------------------ */
   --color-ui-canvas: #f5f6fa;
@@ -59,10 +59,10 @@
   --color-ok-soft: #e6f4ec;
   --color-warn: #9a5b00;
   --color-warn-soft: #fdf3e2;
-  --color-danger: #c52322;
+  --color-danger: #d4181f;
   --color-danger-soft: #fdecec;
-  --color-info: #03037a;
-  --color-info-soft: #ececfb;
+  --color-info: #121f5c;
+  --color-info-soft: #eceffa;
 
   /* --- Tipografía --------------------------------------------------------- */
   --font-sans: var(--font-inst-sans), "Inter", "Helvetica Neue", Arial,
@@ -73,7 +73,6 @@
   --font-mono: var(--font-inst-mono), "IBM Plex Mono", ui-monospace, monospace;
 
   /* --- Radios ------------------------------------------------------------- */
-  --radius-inst: 4px;
   --radius-ui: 10px;
   --radius-ui-lg: 16px;
 
@@ -106,15 +105,15 @@ body {
 
 /* Anillo de foco accesible y uniforme en toda la aplicación de gestión. */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {
-  outline: 2px solid var(--color-inst-blue);
+  outline: 2px solid var(--color-brand-ink-soft);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Filete dorado fino institucional */
-.inst-rule-gold {
+/* Filete rojo institucional */
+.inst-rule {
   height: 3px;
-  background: var(--color-inst-gold);
+  background: var(--color-brand-red);
 }
 
 /*
@@ -137,9 +136,9 @@ body {
 .ui-gradient-inst {
   background: linear-gradient(
     135deg,
-    var(--color-inst-blue-bottom) 0%,
-    var(--color-inst-blue-top) 55%,
-    #0a0aa8 100%
+    var(--color-brand-ink-deep) 0%,
+    var(--color-brand-ink) 60%,
+    var(--color-brand-ink-soft) 100%
   );
 }
 
@@ -148,18 +147,18 @@ body {
   background:
     radial-gradient(
       ellipse 80% 60% at 85% 0%,
-      rgb(5 5 253 / 0.45),
+      rgb(27 44 120 / 0.55),
       transparent 60%
     ),
     radial-gradient(
       ellipse 60% 50% at 0% 100%,
-      rgb(212 160 23 / 0.18),
+      rgb(212 24 31 / 0.22),
       transparent 65%
     ),
     linear-gradient(
       135deg,
-      var(--color-inst-blue-bottom) 0%,
-      var(--color-inst-blue-top) 100%
+      var(--color-brand-ink-deep) 0%,
+      var(--color-brand-ink) 100%
     );
 }
 

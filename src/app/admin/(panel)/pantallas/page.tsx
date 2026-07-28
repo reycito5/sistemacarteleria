@@ -81,7 +81,7 @@ export default async function PantallasPage() {
             {screens.map((s) => (
               <li key={s.id} className="ui-card p-5">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="text-sm font-extrabold uppercase leading-tight text-inst-blue-top">
+                  <p className="text-sm font-extrabold uppercase leading-tight text-brand-ink">
                     {s.location || s.name}
                   </p>
                   <Badge tone={s.online ? "ok" : "danger"} dot>
@@ -120,7 +120,7 @@ export default async function PantallasPage() {
                       {!s.online && (
                         <TriangleAlert
                           size={11}
-                          className="text-inst-red"
+                          className="text-brand-red"
                           aria-hidden
                         />
                       )}

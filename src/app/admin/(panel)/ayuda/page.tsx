@@ -127,7 +127,7 @@ export default function AyudaPage() {
         <div className="mt-5 space-y-6">
           {ADMIN_SECTIONS.map((section) => (
             <div key={section.title}>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-inst-gold">
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
                 {section.title}
               </p>
               <ul className="mt-2.5 divide-y divide-ui-border rounded-[12px] border border-ui-border">
@@ -137,12 +137,12 @@ export default function AyudaPage() {
                       href={m.href}
                       className="group flex items-start gap-3.5 p-4 transition hover:bg-ui-raised"
                     >
-                      <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-info-soft text-inst-blue-top">
+                      <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-info-soft text-brand-ink">
                         <AdminIcon name={m.icon} size={17} />
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="flex items-center gap-2">
-                          <span className="text-sm font-extrabold text-inst-blue-top">
+                          <span className="text-sm font-extrabold text-brand-ink">
                             {m.label}
                           </span>
                           {m.step && <Badge tone="info">Paso {m.step}</Badge>}
@@ -154,7 +154,7 @@ export default function AyudaPage() {
                       <ArrowRight
                         size={16}
                         aria-hidden
-                        className="mt-1 shrink-0 text-ui-faint transition group-hover:translate-x-0.5 group-hover:text-inst-red"
+                        className="mt-1 shrink-0 text-ui-faint transition group-hover:translate-x-0.5 group-hover:text-brand-red"
                       />
                     </Link>
                   </li>
@@ -208,7 +208,7 @@ export default function AyudaPage() {
               key={item.q}
               className="group rounded-[12px] border border-ui-border bg-ui-raised px-4 py-3 transition open:bg-ui-surface"
             >
-              <summary className="cursor-pointer list-none text-sm font-bold text-inst-blue-top marker:hidden">
+              <summary className="cursor-pointer list-none text-sm font-bold text-brand-ink marker:hidden">
                 <span className="flex items-center justify-between gap-3">
                   {item.q}
                   <ArrowRight
@@ -228,7 +228,7 @@ export default function AyudaPage() {
 
       <Card className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-base font-extrabold text-inst-blue-top">
+          <h2 className="text-base font-extrabold text-brand-ink">
             ¿Quiere ver cómo queda antes de publicar?
           </h2>
           <p className="mt-1 text-sm text-ui-muted">
@@ -239,7 +239,7 @@ export default function AyudaPage() {
         <Link
           href="/preview"
           target="_blank"
-          className="inline-flex items-center gap-2 text-[13px] font-bold text-inst-red transition hover:gap-3"
+          className="inline-flex items-center gap-2 text-[13px] font-bold text-brand-red transition hover:gap-3"
         >
           <MonitorPlay size={15} aria-hidden />
           Abrir la galería

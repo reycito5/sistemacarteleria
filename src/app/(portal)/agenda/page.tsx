@@ -29,9 +29,9 @@ export default async function AgendaPage() {
 
   return (
     <>
-      <section className="ui-gradient-inst-mesh text-inst-white">
+      <section className="ui-gradient-inst-mesh text-brand-white">
         <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 sm:py-20">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-inst-gold">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red">
             Vicerrectorado de Posgrado
           </p>
           <h1 className="mt-3 max-w-3xl font-serif text-[36px] font-semibold leading-[1.1] sm:text-[50px]">
@@ -54,7 +54,7 @@ export default async function AgendaPage() {
         )}
 
         <div className="mb-8 flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-2xl font-black text-inst-blue-top">
+          <h2 className="text-2xl font-black text-brand-ink">
             {entries.length} actividad{entries.length === 1 ? "" : "es"}{" "}
             programada{entries.length === 1 ? "" : "s"}
           </h2>
@@ -74,10 +74,10 @@ export default async function AgendaPage() {
             {groups.map(([date, items]) => (
               <div key={date}>
                 <div className="mb-4 flex items-center gap-3">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-inst-blue-bottom text-inst-white">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[12px] bg-brand-ink-deep text-brand-white">
                     <CalendarDays size={18} aria-hidden />
                   </span>
-                  <h3 className="text-lg font-extrabold text-inst-blue-top">
+                  <h3 className="text-lg font-extrabold text-brand-ink">
                     {date}
                   </h3>
                   <span className="h-px flex-1 bg-ui-border" aria-hidden />
@@ -90,21 +90,21 @@ export default async function AgendaPage() {
                   {items.map((entry, i) => (
                     <li
                       key={`${date}-${i}`}
-                      className="ui-card flex flex-wrap items-center gap-x-6 gap-y-3 p-5 transition hover:border-inst-blue/30"
+                      className="ui-card flex flex-wrap items-center gap-x-6 gap-y-3 p-5 transition hover:border-brand-ink-soft/30"
                     >
                       {entry.time && (
-                        <span className="ui-tnum shrink-0 rounded-[10px] bg-info-soft px-3.5 py-2 text-lg font-black text-inst-blue-top">
+                        <span className="ui-tnum shrink-0 rounded-[10px] bg-info-soft px-3.5 py-2 text-lg font-black text-brand-ink">
                           {entry.time}
                         </span>
                       )}
 
                       <div className="min-w-[200px] flex-1">
-                        <p className="font-serif text-[17px] font-semibold leading-snug text-inst-blue-top">
+                        <p className="font-serif text-[17px] font-semibold leading-snug text-brand-ink">
                           {entry.title}
                         </p>
                         {entry.place && (
                           <p className="mt-1.5 flex items-center gap-1.5 text-xs text-ui-muted">
-                            <MapPin size={13} className="text-inst-gold" aria-hidden />
+                            <MapPin size={13} className="text-brand-red" aria-hidden />
                             {entry.place}
                           </p>
                         )}
@@ -119,7 +119,7 @@ export default async function AgendaPage() {
 
         <div className="ui-card mt-12 flex flex-wrap items-center justify-between gap-6 p-8">
           <div className="max-w-xl">
-            <h2 className="text-xl font-black text-inst-blue-top sm:text-2xl">
+            <h2 className="text-xl font-black text-brand-ink sm:text-2xl">
               ¿Quiere anunciar una actividad en las pantallas?
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-ui-muted">

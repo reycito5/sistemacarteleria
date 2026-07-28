@@ -20,23 +20,23 @@ export function PortalHeader() {
     <header className="sticky top-0 z-40">
       {/* Franja institucional superior */}
       <div className="ui-gradient-inst px-4 py-1.5 sm:px-6">
-        <p className="mx-auto max-w-[1180px] text-center text-[10px] font-bold tracking-[0.16em] text-inst-white/85 sm:text-[11px]">
+        <p className="mx-auto max-w-[1180px] text-center text-[10px] font-bold tracking-[0.16em] text-brand-white/85 sm:text-[11px]">
           {INSTITUTION.university}
         </p>
       </div>
-      <div className="inst-rule-gold" />
+      <div className="inst-rule" />
 
       <div className="border-b border-ui-border bg-ui-surface/92 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1180px] items-center gap-4 px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3 transition hover:opacity-85">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-inst-blue-bottom text-sm font-black text-inst-gold">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-brand-ink-deep text-sm font-black text-brand-red">
               UB
             </span>
             <span className="min-w-0">
-              <span className="block text-[9px] font-bold tracking-[0.2em] text-inst-gold">
+              <span className="block text-[9px] font-bold tracking-[0.2em] text-brand-red">
                 {INSTITUTION.systemName}
               </span>
-              <span className="block truncate text-[15px] font-black leading-tight text-inst-blue-top">
+              <span className="block truncate text-[15px] font-black leading-tight text-brand-ink">
                 {INSTITUTION.commercialName}
               </span>
             </span>
@@ -54,15 +54,15 @@ export function PortalHeader() {
                   className={[
                     "relative rounded-[8px] px-3 py-2 text-[13px] font-semibold transition",
                     active
-                      ? "text-inst-blue-top"
-                      : "text-ui-muted hover:bg-ui-canvas hover:text-inst-blue-top",
+                      ? "text-brand-ink"
+                      : "text-ui-muted hover:bg-ui-canvas hover:text-brand-ink",
                   ].join(" ")}
                 >
                   {l.label}
                   {active && (
                     <span
                       aria-hidden
-                      className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-inst-red"
+                      className="absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-brand-red"
                     />
                   )}
                 </Link>
@@ -72,7 +72,7 @@ export function PortalHeader() {
 
           <Link
             href="/admin/login"
-            className="ml-auto hidden h-10 items-center gap-2 rounded-[10px] bg-inst-blue-bottom px-4 text-[13px] font-bold text-inst-white transition hover:bg-inst-blue-top md:ml-3 md:inline-flex"
+            className="ml-auto hidden h-10 items-center gap-2 rounded-[10px] bg-brand-ink-deep px-4 text-[13px] font-bold text-brand-white transition hover:bg-brand-ink md:ml-3 md:inline-flex"
           >
             <LogIn size={15} aria-hidden />
             Panel
@@ -83,7 +83,7 @@ export function PortalHeader() {
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Cerrar menú" : "Abrir menú"}
             aria-expanded={open}
-            className="ml-auto grid h-10 w-10 place-items-center rounded-[10px] border border-ui-border-strong text-inst-blue-top transition hover:bg-ui-canvas md:hidden"
+            className="ml-auto grid h-10 w-10 place-items-center rounded-[10px] border border-ui-border-strong text-brand-ink transition hover:bg-ui-canvas md:hidden"
           >
             {open ? <X size={19} /> : <Menu size={19} />}
           </button>
@@ -101,7 +101,7 @@ export function PortalHeader() {
                     className={[
                       "block rounded-[8px] px-3 py-2.5 text-sm font-semibold transition",
                       isActive(l.href)
-                        ? "bg-info-soft text-inst-blue-top"
+                        ? "bg-info-soft text-brand-ink"
                         : "text-ui-muted hover:bg-ui-canvas",
                     ].join(" ")}
                   >
@@ -113,7 +113,7 @@ export function PortalHeader() {
             <Link
               href="/admin/login"
               onClick={close}
-              className="mt-3 flex h-11 items-center justify-center gap-2 rounded-[10px] bg-inst-blue-bottom text-sm font-bold text-inst-white"
+              className="mt-3 flex h-11 items-center justify-center gap-2 rounded-[10px] bg-brand-ink-deep text-sm font-bold text-brand-white"
             >
               <LogIn size={16} aria-hidden />
               Acceder al panel

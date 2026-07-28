@@ -17,9 +17,9 @@ export default async function OfertaPublicaPage() {
 
   return (
     <>
-      <section className="ui-gradient-inst-mesh text-inst-white">
+      <section className="ui-gradient-inst-mesh text-brand-white">
         <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 sm:py-20">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-inst-gold">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red">
             Vicerrectorado de Posgrado
           </p>
           <h1 className="mt-3 max-w-3xl font-serif text-[36px] font-semibold leading-[1.1] sm:text-[50px]">
@@ -33,11 +33,11 @@ export default async function OfertaPublicaPage() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[13px] font-semibold">
-              <strong className="text-inst-gold">{programs.length}</strong>{" "}
+              <strong className="text-brand-red">{programs.length}</strong>{" "}
               programa{programs.length === 1 ? "" : "s"} en total
             </span>
             <span className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[13px] font-semibold">
-              <strong className="text-inst-gold">{open}</strong> con inscripción
+              <strong className="text-brand-red">{open}</strong> con inscripción
               abierta
             </span>
           </div>

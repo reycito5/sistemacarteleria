@@ -10,7 +10,7 @@ import { ButtonLink } from "@/components/ui/Button";
 export const metadata = {
   title: "Plantillas institucionales — UABJB Posgrado Digital",
   description:
-    "Catálogo de plantillas de cartelería del Vicerrectorado de Posgrado, con la línea gráfica institucional V11.6.",
+    "Catálogo de plantillas de cartelería del Vicerrectorado de Posgrado.",
 };
 
 /** Descripción de cuándo conviene usar cada plantilla. */
@@ -46,9 +46,9 @@ function metaFor(kind: ViewContent["kind"]) {
 export default function PreviewPage() {
   return (
     <>
-      <section className="ui-gradient-inst-mesh text-inst-white">
+      <section className="ui-gradient-inst-mesh text-brand-white">
         <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 sm:py-20">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-inst-gold">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red">
             Catálogo de vistas
           </p>
           <h1 className="mt-3 max-w-3xl text-[34px] font-black leading-[1.08] sm:text-[46px]">
@@ -61,11 +61,11 @@ export default function PreviewPage() {
 
           <div className="mt-7 flex flex-wrap gap-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-[12px] font-semibold">
-              <Lock size={13} className="text-inst-gold" aria-hidden />
-              Línea gráfica V11.6 bloqueada
+              <Lock size={13} className="text-brand-red" aria-hidden />
+              Línea gráfica institucional
             </span>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-[12px] font-semibold">
-              <Monitor size={13} className="text-inst-gold" aria-hidden />
+              <Monitor size={13} className="text-brand-red" aria-hidden />
               Lienzo 1920×1080 (16:9)
             </span>
           </div>
@@ -85,7 +85,7 @@ export default function PreviewPage() {
                 </div>
                 <figcaption className="p-5">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-base font-extrabold text-inst-blue-top">
+                    <h2 className="text-base font-extrabold text-brand-ink">
                       {meta?.label ?? content.kind}
                     </h2>
                     {meta && <Badge tone="neutral">Vista {meta.viewNumber}</Badge>}
@@ -102,7 +102,7 @@ export default function PreviewPage() {
 
         <div className="ui-card mt-10 flex flex-wrap items-center justify-between gap-6 p-8">
           <div className="max-w-xl">
-            <h2 className="text-xl font-black text-inst-blue-top sm:text-2xl">
+            <h2 className="text-xl font-black text-brand-ink sm:text-2xl">
               ¿Quiere crear una pantalla con alguna de estas plantillas?
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-ui-muted">

@@ -1,39 +1,27 @@
 /**
- * Línea Gráfica Institucional V11.6 — tokens bloqueados.
+ * Línea gráfica institucional V12 — tokens de identidad.
  *
- * Fuente única de verdad para el sistema visual. Estos valores NO pueden ser
- * modificados desde el panel ni desde plantillas: cabecera, pie, colores y
- * tipografía son inmutables por requisito institucional (secciones 8 y 34 del
- * prompt maestro).
- *
- * `as const` garantiza inmutabilidad a nivel de tipos.
+ * Fuente única de verdad del sistema visual. Los colores viven en
+ * `globals.css` (`--color-sig-*` para el televisor, `--color-brand-*` para la
+ * interfaz de gestión); aquí quedan los datos de identidad y las medidas del
+ * lienzo.
  */
 
-export const INSTITUTIONAL_COLORS = {
-  blue: "#0505FD",
-  blueTop: "#03037A",
-  blueBottom: "#02024D",
-  red: "#C52322",
-  gold: "#D4A017",
-  goldStrong: "#F2B705",
-  white: "#FFFFFF",
-} as const;
-
 export const INSTITUTION = {
-  university: 'UNIVERSIDAD AUTÓNOMA DEL BENI "JOSÉ BALLIVIÁN"',
-  vicerrectorate: "VICERRECTORADO DE POSGRADO",
+  university: 'Universidad Autónoma del Beni "José Ballivián"',
+  vicerrectorate: "Vicerrectorado de Posgrado",
   commercialName: "UABJB Posgrado Digital",
-  systemName: "SICD UABJB POSGRADO",
-  generalGroup: "PANTALLAS GENERALES POSGRADO",
+  systemName: "Cartelería Digital",
+  generalGroup: "Pantallas generales Posgrado",
 } as const;
 
 /**
- * Contactos institucionales por defecto (editables por plantilla, no por línea
- * gráfica). Se muestran en el pie de las vistas.
+ * Contactos institucionales por defecto. Son sólo el respaldo: los reales se
+ * editan en «Identidad institucional» y se guardan en la base de datos.
  */
 export const INSTITUTIONAL_CONTACTS = {
   phones: ["61948267", "72814772"],
-  enrollmentLabel: "INSCRIPCIONES ABIERTAS",
+  enrollmentLabel: "Inscripciones abiertas",
 } as const;
 
 /** Lienzo institucional base: siempre 1920x1080 (16:9, Full HD). */
@@ -42,5 +30,3 @@ export const CANVAS = {
   height: 1080,
   aspectRatio: 16 / 9,
 } as const;
-
-export type InstitutionalColor = keyof typeof INSTITUTIONAL_COLORS;

@@ -37,7 +37,7 @@ export default function SeguridadPage() {
         <ol className="mt-5 space-y-3">
           {STEPS.map((text, i) => (
             <li key={i} className="flex gap-3">
-              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-info-soft text-[11px] font-black text-inst-blue-top">
+              <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-info-soft text-[11px] font-black text-brand-ink">
                 {i + 1}
               </span>
               <p className="text-sm leading-relaxed text-ui-muted">{text}</p>

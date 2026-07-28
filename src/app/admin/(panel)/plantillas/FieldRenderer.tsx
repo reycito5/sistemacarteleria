@@ -84,7 +84,7 @@ export function FieldRenderer({
           type="checkbox"
           checked={checked}
           onChange={(e) => onChange(field.key, e.target.checked)}
-          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-inst-blue-bottom)]"
+          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-brand-ink-deep)]"
         />
         <span>
           <span className="block text-sm font-semibold text-ui-ink">
@@ -171,13 +171,13 @@ export function FieldRenderer({
               className="rounded-[12px] border border-ui-border bg-ui-raised p-3.5"
             >
               <div className="flex items-center justify-between">
-                <span className="grid h-6 w-6 place-items-center rounded-full bg-info-soft text-[11px] font-black text-inst-blue-top">
+                <span className="grid h-6 w-6 place-items-center rounded-full bg-info-soft text-[11px] font-black text-brand-ink">
                   {idx + 1}
                 </span>
                 <button
                   type="button"
                   onClick={() => removeItem(idx)}
-                  className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-inst-red transition hover:bg-danger-soft"
+                  className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-brand-red transition hover:bg-danger-soft"
                 >
                   <Trash2 size={12} aria-hidden />
                   Quitar

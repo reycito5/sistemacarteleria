@@ -7,6 +7,7 @@ import {
   SigCard,
   StatRow,
 } from "@/components/signage/primitives";
+import { Rotator } from "@/components/signage/Rotator";
 
 /**
  * Vistas 4 y 9 — Noticias y logros.
@@ -45,17 +46,22 @@ export function NoticiasView({ content }: { content: NoticiasContent }) {
 
       <SigCard span={5}>
         <CardHead eyebrow={content.badge} title={content.title} />
-        <CardBody className="pb-2">
-          {entries.slice(0, 4).map((n, i) => (
-            <NewsRow
-              key={`${n.title}-${i}`}
-              title={n.title}
-              meta={n.meta}
-              media={n.media}
-              isVideo={n.kind === "video"}
-              duration={n.duration}
-            />
-          ))}
+        <CardBody className="pb-4">
+          {/* Una noticia a la vez: en un televisor, cuatro apiladas no se leen.
+              El paso se sincroniza por reloj en las cuatro pantallas. */}
+          <Rotator
+            seconds={8}
+            items={entries.slice(0, 4).map((n, i) => (
+              <NewsRow
+                key={`${n.title}-${i}`}
+                title={n.title}
+                meta={n.meta}
+                media={n.media}
+                isVideo={n.kind === "video"}
+                duration={n.duration}
+              />
+            ))}
+          />
         </CardBody>
         <StatRow stats={stats.slice(0, 2)} />
       </SigCard>

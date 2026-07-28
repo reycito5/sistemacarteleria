@@ -28,7 +28,7 @@ export function MantenimientoView({
         </div>
       )}
       {content.supportContact && (
-        <p className="mt-1.5 text-[12.5px] text-sig-text-faint">
+        <p className="mt-2 text-[24px] text-sig-text-faint">
           Contacto técnico · {content.supportContact}
         </p>
       )}

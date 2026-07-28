@@ -24,12 +24,12 @@ const TONES: Record<AlertTone, { box: string; icon: LucideIcon; accent: string }
     warn: {
       box: "bg-warn-soft border-warn/25 text-warn",
       icon: AlertTriangle,
-      accent: "bg-inst-gold",
+      accent: "bg-brand-red",
     },
     danger: {
       box: "bg-danger-soft border-danger/25 text-danger",
       icon: OctagonAlert,
-      accent: "bg-inst-red",
+      accent: "bg-brand-red",
     },
   };
 

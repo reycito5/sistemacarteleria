@@ -8,7 +8,7 @@ const TONES: Record<BadgeTone, string> = {
   ok: "bg-ok-soft text-ok border-ok/20",
   warn: "bg-warn-soft text-warn border-warn/20",
   danger: "bg-danger-soft text-danger border-danger/20",
-  gold: "bg-inst-gold/12 text-warn border-inst-gold/35",
+  gold: "bg-brand-red/12 text-warn border-brand-red/35",
 };
 
 interface BadgeProps {

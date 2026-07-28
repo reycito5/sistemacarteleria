@@ -10,6 +10,7 @@ import {
   SigCard,
   type FieldEntry,
 } from "@/components/signage/primitives";
+import { T } from "@/components/signage/scale";
 
 /**
  * Vista 3 — Programa destacado.
@@ -55,12 +56,12 @@ export function ProgramaDestacadoView({
         {(content.version || content.parallel) && (
           <div className="mt-4 flex flex-wrap gap-2">
             {content.version && (
-              <span className="inline-flex items-center rounded-full bg-white px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[.6px] text-sig-ink">
+              <span className="inline-flex items-center rounded-full bg-white px-6 py-2.5 text-[22px] font-bold uppercase tracking-[.08em] text-sig-ink">
                 {content.version}
               </span>
             )}
             {content.parallel && (
-              <span className="inline-flex items-center rounded-full border border-white/55 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[.6px] text-white">
+              <span className="inline-flex items-center rounded-full border-2 border-white/60 px-6 py-2.5 text-[22px] font-bold uppercase tracking-[.08em] text-white">
                 {content.parallel}
               </span>
             )}
@@ -82,7 +83,10 @@ export function ProgramaDestacadoView({
         />
         <CardBody className="pt-3.5">
           {content.description && (
-            <p className="max-w-[96%] text-[14.5px] leading-[1.6] text-sig-text-soft">
+            <p
+              className="max-w-[96%] leading-[1.45] text-sig-text-soft"
+              style={{ fontSize: T.body }}
+            >
               {content.description}
             </p>
           )}
@@ -97,7 +101,9 @@ export function ProgramaDestacadoView({
             </div>
           )}
         </CardBody>
-        {content.qrCaption && <QrStrip label={content.qrCaption} />}
+        {content.qrCaption && (
+          <QrStrip label={content.qrCaption} url={content.qrUrl} />
+        )}
       </SigCard>
     </>
   );

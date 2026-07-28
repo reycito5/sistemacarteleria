@@ -61,7 +61,7 @@ export default async function EditarContenidoPage({
     <div className="space-y-6">
       <Link
         href="/admin/plantillas"
-        className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ui-muted transition hover:text-inst-blue-top"
+        className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-ui-muted transition hover:text-brand-ink"
       >
         <ArrowLeft size={15} aria-hidden />
         Volver a plantillas

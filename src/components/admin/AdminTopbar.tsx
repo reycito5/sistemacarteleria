@@ -28,14 +28,14 @@ export function AdminTopbar({ userEmail }: AdminTopbarProps) {
       <nav aria-label="Ruta actual" className="flex min-w-0 items-center gap-1.5">
         <Link
           href="/admin"
-          className="shrink-0 text-[13px] font-semibold text-ui-muted transition hover:text-inst-blue-top"
+          className="shrink-0 text-[13px] font-semibold text-ui-muted transition hover:text-brand-ink"
         >
           Panel
         </Link>
         {!isRoot && current && (
           <>
             <ChevronRight size={14} className="shrink-0 text-ui-faint" aria-hidden />
-            <span className="truncate text-[13px] font-bold text-inst-blue-top">
+            <span className="truncate text-[13px] font-bold text-brand-ink">
               {current.label}
             </span>
           </>
@@ -49,7 +49,7 @@ export function AdminTopbar({ userEmail }: AdminTopbarProps) {
           href="/player"
           target="_blank"
           title="Abrir el reproductor en una pestaña nueva"
-          className="hidden h-9 items-center gap-2 rounded-[10px] border border-ui-border-strong px-3 text-[13px] font-semibold text-inst-blue-top transition hover:border-inst-blue/45 hover:bg-info-soft sm:inline-flex"
+          className="hidden h-9 items-center gap-2 rounded-[10px] border border-ui-border-strong px-3 text-[13px] font-semibold text-brand-ink transition hover:border-brand-ink-soft/45 hover:bg-info-soft sm:inline-flex"
         >
           <MonitorPlay size={15} aria-hidden />
           Reproductor
@@ -58,7 +58,7 @@ export function AdminTopbar({ userEmail }: AdminTopbarProps) {
         <div className="flex items-center gap-2 border-l border-ui-border pl-2 sm:pl-3">
           <span
             title={userEmail ?? "Sesión no identificada"}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-info-soft text-[12px] font-black text-inst-blue-top"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-info-soft text-[12px] font-black text-brand-ink"
           >
             {initials}
           </span>
@@ -70,7 +70,7 @@ export function AdminTopbar({ userEmail }: AdminTopbarProps) {
               type="submit"
               title="Cerrar sesión"
               aria-label="Cerrar sesión"
-              className="grid h-9 w-9 place-items-center rounded-[10px] text-ui-muted transition hover:bg-danger-soft hover:text-inst-red"
+              className="grid h-9 w-9 place-items-center rounded-[10px] text-ui-muted transition hover:bg-danger-soft hover:text-brand-red"
             >
               <LogOut size={16} aria-hidden />
             </button>

@@ -39,7 +39,7 @@ export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
           Primero suba el video o la imagen en{" "}
           <Link
             href="/admin/biblioteca"
-            className="font-bold text-inst-red hover:underline"
+            className="font-bold text-brand-red hover:underline"
           >
             Biblioteca multimedia
           </Link>
@@ -88,7 +88,7 @@ export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
           <button
             type="button"
             onClick={() => onChange(undefined)}
-            className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-[10px] border border-ui-border-strong px-3 text-xs font-bold text-ui-muted transition hover:border-inst-red/40 hover:text-inst-red"
+            className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-[10px] border border-ui-border-strong px-3 text-xs font-bold text-ui-muted transition hover:border-brand-red/40 hover:text-brand-red"
           >
             <X size={13} aria-hidden />
             Quitar
@@ -113,11 +113,11 @@ export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
                   className={[
                     "group relative block w-full overflow-hidden rounded-[10px] border-2 text-left transition",
                     selected
-                      ? "border-inst-blue shadow-[var(--shadow-ui)]"
-                      : "border-ui-border hover:border-inst-blue/40",
+                      ? "border-brand-ink-soft shadow-[var(--shadow-ui)]"
+                      : "border-ui-border hover:border-brand-ink-soft/40",
                   ].join(" ")}
                 >
-                  <span className="block aspect-video bg-inst-blue-bottom">
+                  <span className="block aspect-video bg-brand-ink-deep">
                     {m.type === "image" ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -136,7 +136,7 @@ export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
                   </span>
 
                   {selected && (
-                    <span className="absolute right-1.5 top-1.5 grid h-5 w-5 place-items-center rounded-full bg-inst-blue text-inst-white">
+                    <span className="absolute right-1.5 top-1.5 grid h-5 w-5 place-items-center rounded-full bg-brand-ink-soft text-brand-white">
                       <Check size={12} strokeWidth={3} aria-hidden />
                     </span>
                   )}

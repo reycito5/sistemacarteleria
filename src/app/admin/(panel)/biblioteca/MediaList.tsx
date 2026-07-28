@@ -107,7 +107,7 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
               className={[
                 "rounded-[7px] px-3 py-1.5 text-xs font-bold transition",
                 filter === f.value
-                  ? "bg-ui-surface text-inst-blue-top shadow-[var(--shadow-ui-sm)]"
+                  ? "bg-ui-surface text-brand-ink shadow-[var(--shadow-ui-sm)]"
                   : "text-ui-muted hover:text-ui-ink",
               ].join(" ")}
             >
@@ -146,12 +146,12 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
             return (
               <li
                 key={a.id}
-                className="group overflow-hidden rounded-[14px] border border-ui-border bg-ui-surface transition hover:border-inst-blue/30 hover:shadow-[var(--shadow-ui)]"
+                className="group overflow-hidden rounded-[14px] border border-ui-border bg-ui-surface transition hover:border-brand-ink-soft/30 hover:shadow-[var(--shadow-ui)]"
               >
                 <button
                   type="button"
                   onClick={() => setPreview(a)}
-                  className="relative block aspect-video w-full bg-inst-blue-bottom"
+                  className="relative block aspect-video w-full bg-brand-ink-deep"
                   aria-label={`Previsualizar ${a.title}`}
                 >
                   {a.type === "image" ? (
@@ -172,7 +172,7 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
                   )}
 
                   <span className="absolute inset-0 grid place-items-center bg-black/25 opacity-0 transition group-hover:opacity-100">
-                    <span className="grid h-12 w-12 place-items-center rounded-full bg-white/95 text-inst-blue-bottom">
+                    <span className="grid h-12 w-12 place-items-center rounded-full bg-white/95 text-brand-ink-deep">
                       <Play size={20} className="ml-0.5" fill="currentColor" />
                     </span>
                   </span>
@@ -186,7 +186,7 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
 
                 <div className="p-4">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="min-w-0 flex-1 truncate text-sm font-bold text-inst-blue-top">
+                    <p className="min-w-0 flex-1 truncate text-sm font-bold text-brand-ink">
                       {a.title}
                     </p>
                     <Badge tone={STATUS_TONE[a.status] ?? "neutral"}>
@@ -236,7 +236,7 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
                       type="button"
                       onClick={() => setConfirmId(a.id)}
                       disabled={pending}
-                      className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-inst-red transition hover:underline disabled:opacity-50"
+                      className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-brand-red transition hover:underline disabled:opacity-50"
                     >
                       <Trash2 size={13} aria-hidden />
                       Eliminar
@@ -264,7 +264,7 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
           >
             <div className="flex items-center justify-between gap-3 border-b border-ui-border px-5 py-3.5">
               <div className="min-w-0">
-                <p className="truncate text-sm font-extrabold text-inst-blue-top">
+                <p className="truncate text-sm font-extrabold text-brand-ink">
                   {preview.title}
                 </p>
                 <p className="text-xs text-ui-muted">

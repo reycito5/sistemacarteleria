@@ -108,6 +108,25 @@ const NEWS_KIND_OPTIONS = [
   { value: "video", label: "Video" },
 ];
 
+/** Campos del código QR: texto de llamada y dirección que codifica. */
+function qrFields(): FormField[] {
+  return [
+    {
+      type: "text",
+      key: "qrCaption",
+      label: "Texto junto al código QR",
+      hint: "La llamada a la acción. Vacío: no se muestra la banda del QR.",
+    },
+    {
+      type: "text",
+      key: "qrUrl",
+      label: "Dirección del código QR",
+      hint: "A dónde lleva al escanearlo. Vacío: se muestra sólo el texto, sin código.",
+      placeholder: "https://posgrado.uabjb.edu.bo/inscripcion",
+    },
+  ];
+}
+
 /** Paso de portada común: el panel grande de video o imagen. */
 function coverStep(overrides?: Partial<FormStep>): FormStep {
   return {
@@ -120,7 +139,7 @@ function coverStep(overrides?: Partial<FormStep>): FormStep {
         type: "media",
         key: "media",
         label: "Video o imagen de portada",
-        hint: "Elíjalo de la biblioteca. Si es un video se reproduce solo, en bucle y sin sonido.",
+        hint: "Elíjalo de la biblioteca. Si es un video se reproduce solo y en bucle.",
       },
       {
         type: "text",
@@ -177,7 +196,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         description: "Lo que aparece al pie de la ficha.",
         fields: [
           { type: "text", key: "nextLabel", label: "Próximo contenido" },
-          { type: "text", key: "qrCaption", label: "Texto del código QR" },
+          ...qrFields(),
         ],
       },
     ],
@@ -288,7 +307,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         description: "Frase institucional y llamada del QR.",
         fields: [
           { type: "text", key: "quote", label: "Frase destacada" },
-          { type: "text", key: "qrCaption", label: "Texto del código QR" },
+          ...qrFields(),
         ],
       },
     ],
@@ -393,6 +412,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
           { type: "text", key: "mediaEyebrow", label: "Antetítulo del panel" },
           { type: "text", key: "mediaTitle", label: "Título del panel" },
           { type: "text", key: "mediaSub", label: "Bajada del panel" },
+          ...qrFields(),
         ],
       },
     ],
@@ -429,6 +449,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
               { key: "place", label: "Ubicación" },
             ],
           },
+          ...qrFields(),
         ],
       },
     ],
@@ -505,7 +526,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
               { key: "label", label: "Momento" },
             ],
           },
-          { type: "text", key: "qrCaption", label: "Texto del código QR" },
+          ...qrFields(),
         ],
       },
     ],
@@ -593,6 +614,13 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
           { type: "text", key: "qrCaption", label: "Antetítulo del panel" },
           { type: "text", key: "qrTitle", label: "Llamada a la acción" },
           { type: "text", key: "qrNote", label: "Nota (dirección web)" },
+          {
+            type: "text",
+            key: "qrUrl",
+            label: "Dirección del código QR",
+            hint: "A dónde lleva al escanearlo.",
+            placeholder: "https://posgrado.uabjb.edu.bo/inscripcion",
+          },
         ],
       },
     ],
@@ -649,6 +677,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         fields: [
           { type: "textarea", key: "quote", label: "Frase institucional" },
           { type: "textarea", key: "message", label: "Mensaje" },
+          ...qrFields(),
         ],
       },
     ],

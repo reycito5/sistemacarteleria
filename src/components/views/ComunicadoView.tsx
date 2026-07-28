@@ -6,6 +6,7 @@ import {
   SigBadge,
   SigCard,
 } from "@/components/signage/primitives";
+import { T } from "@/components/signage/scale";
 
 /**
  * Vista 5 — Comunicado importante.
@@ -20,24 +21,36 @@ export function ComunicadoView({ content }: { content: ComunicadoContent }) {
             <SigBadge kind="onlight-soon">{content.badge}</SigBadge>
           </div>
 
-          <h2 className="font-serif text-[38px] font-semibold leading-[1.22] text-sig-ink">
+          <h2
+            className="font-serif font-bold leading-[1.08] text-sig-ink"
+            style={{ fontSize: T.hero }}
+          >
             {content.title}
           </h2>
 
           {content.subtitle && (
-            <p className="mt-3 max-w-[640px] text-[17px] font-medium leading-[1.5] text-sig-ink-soft">
+            <p
+              className="mt-5 max-w-[900px] font-medium leading-[1.35] text-sig-ink-soft"
+              style={{ fontSize: T.bodyLg }}
+            >
               {content.subtitle}
             </p>
           )}
 
           {content.highlight && (
-            <p className="mt-4 font-serif text-[30px] font-bold text-sig-red">
+            <p
+              className="mt-6 font-serif font-bold leading-none text-sig-red"
+              style={{ fontSize: T.stat }}
+            >
               {content.highlight}
             </p>
           )}
 
           {content.body && (
-            <p className="mt-4 max-w-[640px] text-[16px] leading-[1.65] text-sig-text-soft">
+            <p
+              className="mt-6 max-w-[900px] leading-[1.45] text-sig-text-soft"
+              style={{ fontSize: T.body }}
+            >
               {content.body}
             </p>
           )}

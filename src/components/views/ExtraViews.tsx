@@ -20,6 +20,7 @@ import {
   SigCard,
   StatRow,
 } from "@/components/signage/primitives";
+import { T } from "@/components/signage/scale";
 
 /** Vista 7 — Bienvenida y orientación al visitante. */
 export function BienvenidaView({ content }: { content: BienvenidaContent }) {
@@ -42,7 +43,9 @@ export function BienvenidaView({ content }: { content: BienvenidaContent }) {
             }))}
           />
         </CardBody>
-        <QrStrip label="Mapa del edificio" />
+        {content.qrCaption && (
+          <QrStrip label={content.qrCaption} url={content.qrUrl} />
+        )}
       </SigCard>
     </>
   );
@@ -119,7 +122,9 @@ export function EventoVivoView({ content }: { content: EventoVivoContent }) {
             ))}
           </div>
         </CardBody>
-        {content.qrCaption && <QrStrip label={content.qrCaption} />}
+        {content.qrCaption && (
+          <QrStrip label={content.qrCaption} url={content.qrUrl} />
+        )}
       </SigCard>
     </>
   );
@@ -138,16 +143,22 @@ export function TestimonioView({ content }: { content: TestimonioContent }) {
       />
       <SigCard span={5} center>
         <CardBody className="px-[34px] py-[32px]">
-          <p className="font-serif text-[20px] font-semibold text-sig-ink">
+          <p
+            className="font-serif font-bold leading-tight text-sig-ink"
+            style={{ fontSize: T.cardTitle }}
+          >
             {content.name}
           </p>
           {content.program && (
-            <p className="mt-0.5 text-[12.5px] text-sig-text-soft">
+            <p className="mt-2 text-sig-text-soft" style={{ fontSize: T.meta }}>
               {content.program}
             </p>
           )}
           {content.result && (
-            <p className="mt-4.5 text-[14.5px] leading-[1.65] text-sig-text-soft">
+            <p
+              className="mt-6 leading-[1.45] text-sig-text-soft"
+              style={{ fontSize: T.body }}
+            >
               {content.result}
             </p>
           )}
@@ -178,12 +189,17 @@ export function MensajeView({ content }: { content: MensajeContent }) {
         <CardBody className="px-[40px] py-[38px]">
           {content.quote && <PullQuote size={23}>{content.quote}</PullQuote>}
           {content.message && (
-            <p className="mt-6 text-[15.5px] leading-[1.7] text-sig-text-soft">
+            <p
+              className="mt-8 leading-[1.45] text-sig-text-soft"
+              style={{ fontSize: T.body }}
+            >
               {content.message}
             </p>
           )}
         </CardBody>
-        <QrStrip label="Conoce el mensaje completo" />
+        {content.qrCaption && (
+          <QrStrip label={content.qrCaption} url={content.qrUrl} />
+        )}
       </SigCard>
     </>
   );

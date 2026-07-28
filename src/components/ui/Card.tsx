@@ -49,12 +49,12 @@ export function CardHeader({
     >
       <div className="flex min-w-0 items-start gap-3">
         {icon && (
-          <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-info-soft text-inst-blue-top">
+          <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-info-soft text-brand-ink">
             {icon}
           </span>
         )}
         <div className="min-w-0">
-          <h2 className="text-base font-extrabold leading-tight text-inst-blue-top">
+          <h2 className="text-base font-extrabold leading-tight text-brand-ink">
             {title}
           </h2>
           {description && (

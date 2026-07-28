@@ -35,14 +35,14 @@ export default function LoginPage() {
   return (
     <div className="grid min-h-dvh lg:grid-cols-[1.05fr_1fr]">
       {/* Columna institucional (se oculta en móvil para dejar sitio al formulario) */}
-      <aside className="ui-gradient-inst-mesh relative hidden flex-col justify-between p-10 text-inst-white lg:flex xl:p-14">
+      <aside className="ui-gradient-inst-mesh relative hidden flex-col justify-between p-10 text-brand-white lg:flex xl:p-14">
         <div>
           <div className="flex items-center gap-3">
-            <span className="grid h-12 w-12 place-items-center rounded-[12px] border border-inst-gold/50 bg-white/10 text-base font-black text-inst-gold">
+            <span className="grid h-12 w-12 place-items-center rounded-[12px] border border-brand-red/50 bg-white/10 text-base font-black text-brand-red">
               UB
             </span>
             <div>
-              <p className="text-[11px] font-bold tracking-[0.24em] text-inst-gold">
+              <p className="text-[11px] font-bold tracking-[0.24em] text-brand-red">
                 {INSTITUTION.systemName}
               </p>
               <p className="text-lg font-black leading-tight">
@@ -62,7 +62,7 @@ export default function LoginPage() {
         <ul className="mt-12 space-y-5">
           {HIGHLIGHTS.map(({ icon: Icon, title, text }) => (
             <li key={title} className="flex gap-4">
-              <span className="mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-[10px] border border-white/15 bg-white/10 text-inst-gold">
+              <span className="mt-0.5 grid h-10 w-10 shrink-0 place-items-center rounded-[10px] border border-white/15 bg-white/10 text-brand-red">
                 <Icon size={18} aria-hidden />
               </span>
               <div>
@@ -76,7 +76,7 @@ export default function LoginPage() {
         </ul>
 
         <p className="text-[11px] text-white/40">
-          {INSTITUTION.vicerrectorate} · Línea gráfica institucional V11.6
+          {INSTITUTION.vicerrectorate}
         </p>
       </aside>
 
@@ -85,7 +85,7 @@ export default function LoginPage() {
         <div className="mx-auto w-full max-w-[400px]">
           <Link
             href="/"
-            className="mb-8 inline-flex items-center gap-1.5 text-[13px] font-semibold text-ui-muted transition hover:text-inst-blue-top"
+            className="mb-8 inline-flex items-center gap-1.5 text-[13px] font-semibold text-ui-muted transition hover:text-brand-ink"
           >
             <ArrowLeft size={15} aria-hidden />
             Volver al portal
@@ -93,21 +93,21 @@ export default function LoginPage() {
 
           {/* Marca compacta, sólo en móvil (la columna azul está oculta). */}
           <div className="mb-7 flex items-center gap-3 lg:hidden">
-            <span className="grid h-11 w-11 place-items-center rounded-[12px] bg-inst-blue-bottom text-sm font-black text-inst-gold">
+            <span className="grid h-11 w-11 place-items-center rounded-[12px] bg-brand-ink-deep text-sm font-black text-brand-red">
               UB
             </span>
             <div>
-              <p className="text-[10px] font-bold tracking-[0.2em] text-inst-gold">
+              <p className="text-[10px] font-bold tracking-[0.2em] text-brand-red">
                 {INSTITUTION.systemName}
               </p>
-              <p className="text-[15px] font-black leading-tight text-inst-blue-top">
+              <p className="text-[15px] font-black leading-tight text-brand-ink">
                 {INSTITUTION.commercialName}
               </p>
             </div>
           </div>
 
           <div className="ui-card p-7 sm:p-8">
-            <h1 className="text-[26px] font-black leading-tight text-inst-blue-top">
+            <h1 className="text-[26px] font-black leading-tight text-brand-ink">
               Acceso al panel
             </h1>
             <p className="mt-1.5 text-sm text-ui-muted">

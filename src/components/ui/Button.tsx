@@ -16,19 +16,19 @@ const BASE =
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    "bg-inst-blue-bottom text-inst-white shadow-[var(--shadow-ui-sm)] " +
-    "hover:bg-inst-blue-top hover:shadow-[var(--shadow-ui)] active:translate-y-px",
+    "bg-brand-ink-deep text-brand-white shadow-[var(--shadow-ui-sm)] " +
+    "hover:bg-brand-ink hover:shadow-[var(--shadow-ui)] active:translate-y-px",
   secondary:
-    "bg-ui-surface text-inst-blue-top border border-ui-border-strong " +
-    "hover:border-inst-blue/45 hover:bg-info-soft active:translate-y-px",
+    "bg-ui-surface text-brand-ink border border-ui-border-strong " +
+    "hover:border-brand-ink-soft/45 hover:bg-info-soft active:translate-y-px",
   ghost:
     "bg-transparent text-ui-muted hover:bg-ui-canvas hover:text-ui-ink",
   danger:
-    "bg-inst-red text-inst-white shadow-[var(--shadow-ui-sm)] " +
+    "bg-brand-red text-brand-white shadow-[var(--shadow-ui-sm)] " +
     "hover:brightness-110 hover:shadow-[var(--shadow-ui)] active:translate-y-px",
   gold:
-    "bg-inst-gold text-inst-blue-bottom shadow-[var(--shadow-ui-sm)] " +
-    "hover:bg-inst-gold-strong active:translate-y-px",
+    "bg-brand-red text-brand-ink-deep shadow-[var(--shadow-ui-sm)] " +
+    "hover:bg-brand-red active:translate-y-px",
 };
 
 const SIZES: Record<ButtonSize, string> = {

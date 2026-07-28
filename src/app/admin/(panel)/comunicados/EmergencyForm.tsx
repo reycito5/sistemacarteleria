@@ -65,14 +65,14 @@ export function EmergencyForm({ active }: { active: ActiveEmergency | null }) {
     return (
       <Card className="border-danger/30">
         <div className="flex items-start gap-3">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-inst-red text-inst-white">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-brand-red text-brand-white">
             <Siren size={20} aria-hidden />
           </span>
           <div className="min-w-0">
             <Badge tone="danger" dot>
               Emitiendo ahora en las 4 pantallas
             </Badge>
-            <h2 className="mt-2 text-xl font-black leading-tight text-inst-blue-top">
+            <h2 className="mt-2 text-xl font-black leading-tight text-brand-ink">
               {active.title}
             </h2>
             <p className="mt-1 text-sm capitalize text-ui-muted">
@@ -177,7 +177,7 @@ export function EmergencyForm({ active }: { active: ActiveEmergency | null }) {
           type="checkbox"
           checked={confirm}
           onChange={(e) => setConfirm(e.target.checked)}
-          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-inst-red)]"
+          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--color-brand-red)]"
         />
         <span className="text-sm font-semibold leading-relaxed text-danger">
           Confirmo que deseo interrumpir la programación de las cuatro pantallas

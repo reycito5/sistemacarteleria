@@ -72,7 +72,7 @@ function Row({
       className={[
         "flex items-center gap-2 rounded-[10px] border bg-ui-raised px-2.5 py-2.5",
         isDragging
-          ? "z-10 border-inst-blue bg-ui-surface shadow-[var(--shadow-ui-lg)]"
+          ? "z-10 border-brand-ink-soft bg-ui-surface shadow-[var(--shadow-ui-lg)]"
           : "border-ui-border",
       ].join(" ")}
     >
@@ -88,7 +88,7 @@ function Row({
         <GripVertical size={15} aria-hidden />
       </button>
 
-      <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-inst-blue-bottom text-[11px] font-black text-inst-white">
+      <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-brand-ink-deep text-[11px] font-black text-brand-white">
         {index + 1}
       </span>
 
@@ -133,7 +133,7 @@ function Row({
           onClick={() => onRemove(item.id)}
           disabled={disabled}
           aria-label={`Quitar ${item.contentTitle}`}
-          className="grid h-7 w-7 place-items-center rounded-[7px] text-ui-muted transition hover:bg-danger-soft hover:text-inst-red disabled:opacity-40"
+          className="grid h-7 w-7 place-items-center rounded-[7px] text-ui-muted transition hover:bg-danger-soft hover:text-brand-red disabled:opacity-40"
         >
           <X size={14} />
         </button>

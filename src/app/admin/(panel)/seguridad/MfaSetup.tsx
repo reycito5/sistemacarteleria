@@ -147,7 +147,7 @@ export function MfaSetup() {
                   type="button"
                   onClick={() => unenroll(f.id)}
                   disabled={busy}
-                  className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-inst-red transition hover:bg-danger-soft disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-brand-red transition hover:bg-danger-soft disabled:opacity-50"
                 >
                   <Trash2 size={12} aria-hidden />
                   Retirar
@@ -168,7 +168,7 @@ export function MfaSetup() {
       ) : (
         <div className="space-y-6">
           <div>
-            <p className="text-sm font-bold text-inst-blue-top">
+            <p className="text-sm font-bold text-brand-ink">
               1 · Escanee el código con su aplicación de autenticación
             </p>
             {qr && (
@@ -190,7 +190,7 @@ export function MfaSetup() {
           </div>
 
           <div>
-            <p className="mb-3 text-sm font-bold text-inst-blue-top">
+            <p className="mb-3 text-sm font-bold text-brand-ink">
               2 · Escriba el código de 6 dígitos que muestra la aplicación
             </p>
             <div className="flex flex-wrap items-end gap-3">

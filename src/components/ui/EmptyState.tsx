@@ -27,11 +27,11 @@ export function EmptyState({
         .join(" ")}
     >
       {icon && (
-        <span className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-info-soft text-inst-blue-top">
+        <span className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-info-soft text-brand-ink">
           {icon}
         </span>
       )}
-      <p className="text-base font-extrabold text-inst-blue-top">{title}</p>
+      <p className="text-base font-extrabold text-brand-ink">{title}</p>
       {description && (
         <p className="mt-2 max-w-md text-sm leading-relaxed text-ui-muted">
           {description}

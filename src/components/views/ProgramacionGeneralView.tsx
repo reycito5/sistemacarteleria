@@ -51,7 +51,9 @@ export function ProgramacionGeneralView({
           </div>
         </CardBody>
         {content.nextLabel && <NextStrip label={content.nextLabel} />}
-        {content.qrCaption && <QrStrip label={content.qrCaption} />}
+        {content.qrCaption && (
+          <QrStrip label={content.qrCaption} url={content.qrUrl} />
+        )}
       </SigCard>
     </>
   );

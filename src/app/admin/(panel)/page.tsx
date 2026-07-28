@@ -176,7 +176,7 @@ export default async function AdminDashboard() {
             actions={
               <Link
                 href="/admin/pantallas"
-                className="inline-flex items-center gap-1 text-[13px] font-bold text-inst-red transition hover:gap-2"
+                className="inline-flex items-center gap-1 text-[13px] font-bold text-brand-red transition hover:gap-2"
               >
                 Ver detalle <ArrowRight size={14} aria-hidden />
               </Link>
@@ -204,7 +204,7 @@ export default async function AdminDashboard() {
                   className="rounded-[14px] border border-ui-border bg-ui-raised p-4"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-sm font-extrabold uppercase leading-tight text-inst-blue-top">
+                    <p className="text-sm font-extrabold uppercase leading-tight text-brand-ink">
                       {s.location || s.name}
                     </p>
                     <Badge tone={s.online ? "ok" : "danger"} dot>
@@ -229,7 +229,7 @@ export default async function AdminDashboard() {
                     {!s.online && (
                       <TriangleAlert
                         size={12}
-                        className="text-inst-red"
+                        className="text-brand-red"
                         aria-hidden
                       />
                     )}

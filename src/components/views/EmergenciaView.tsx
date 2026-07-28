@@ -10,7 +10,7 @@ import type { EmergenciaContent } from "@/lib/views/schemas";
 export function EmergenciaView({ content }: { content: EmergenciaContent }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-6 px-[120px] text-center">
-      <span className="bg-white px-[18px] py-[7px] text-[11px] font-bold uppercase tracking-[1.6px] text-sig-red-deep">
+      <span className="bg-white px-8 py-3 text-[26px] font-bold uppercase tracking-[.14em] text-sig-red-deep">
         Aviso de emergencia
       </span>
 
@@ -19,13 +19,13 @@ export function EmergenciaView({ content }: { content: EmergenciaContent }) {
       </h2>
 
       {content.message && (
-        <p className="max-w-[1200px] text-[26px] font-medium leading-[1.5] text-white/90">
+        <p className="max-w-[1500px] text-[42px] font-medium leading-[1.3] text-white/90">
           {content.message}
         </p>
       )}
 
       {content.instructions && (
-        <p className="mt-2 max-w-[1100px] border-t border-white/30 pt-6 text-[22px] font-semibold leading-[1.5] text-white">
+        <p className="mt-4 max-w-[1400px] border-t-2 border-white/35 pt-8 text-[36px] font-semibold leading-[1.35] text-white">
           {content.instructions}
         </p>
       )}

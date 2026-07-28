@@ -53,7 +53,8 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
       },
     ],
     nextLabel: "Agenda académica de la semana",
-    qrCaption: "Explorar oferta completa",
+    qrCaption: "Explora la oferta completa",
+    qrUrl: "https://ofertaposgrado.vercel.app/oferta",
   },
   {
     kind: "agenda",
@@ -110,6 +111,7 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
     enrollmentOpen: true,
     quote: "Excelencia académica · Compromiso · Gestión",
     qrCaption: "Ver ficha completa e inscribirse",
+    qrUrl: "https://ofertaposgrado.vercel.app/oferta",
   },
   {
     kind: "noticias",
@@ -210,6 +212,7 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
     qrCaption: "Inscripciones",
     qrTitle: "Inscríbete ahora",
     qrNote: "posgrado.uabjb.edu.bo",
+    qrUrl: "https://posgrado.uabjb.edu.bo/inscripcion",
   },
   {
     kind: "bienvenida",
@@ -259,6 +262,7 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
       { time: "10:30", label: "Deliberación y resultado" },
     ],
     qrCaption: "Seguir la transmisión",
+    qrUrl: "https://posgrado.uabjb.edu.bo/vivo",
   },
   {
     kind: "testimonio",

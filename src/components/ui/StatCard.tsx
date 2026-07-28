@@ -13,11 +13,11 @@ interface StatCardProps {
 
 const ACCENTS: Record<BadgeTone, string> = {
   neutral: "from-ui-border to-transparent",
-  info: "from-inst-blue/45 to-transparent",
+  info: "from-brand-ink-soft/45 to-transparent",
   ok: "from-ok/45 to-transparent",
-  warn: "from-inst-gold/60 to-transparent",
-  danger: "from-inst-red/45 to-transparent",
-  gold: "from-inst-gold/60 to-transparent",
+  warn: "from-brand-red/60 to-transparent",
+  danger: "from-brand-red/45 to-transparent",
+  gold: "from-brand-red/60 to-transparent",
 };
 
 export function StatCard({
@@ -40,7 +40,7 @@ export function StatCard({
         </p>
         {icon && <span className="shrink-0 text-ui-faint">{icon}</span>}
       </div>
-      <p className="ui-tnum mt-2 text-[32px] font-black leading-none text-inst-blue-top">
+      <p className="ui-tnum mt-2 text-[32px] font-black leading-none text-brand-ink">
         {value}
       </p>
       <div className="mt-2 flex items-center gap-2">

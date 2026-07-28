@@ -18,6 +18,10 @@ export const mediaRefSchema = z.object({
   /** Ruta y URL firmada de los subtítulos (VTT) */
   subtitlePath: z.string().optional(),
   subtitleSrc: z.string().optional(),
+  /**
+   * Silenciado. Por defecto sí: son televisores en zonas de paso. Ponerlo en
+   * `false` reproduce el audio del video.
+   */
   muted: z.boolean().default(true),
 });
 export type MediaRef = z.infer<typeof mediaRefSchema>;
@@ -97,6 +101,8 @@ export const programacionGeneralSchema = z.object({
   nextLabel: z.string().default(""),
   nextThumb: z.string().optional(),
   qrCaption: z.string().default("Explorar oferta completa"),
+  /** Dirección que codifica el QR. Vacío: no se dibuja el código. */
+  qrUrl: z.string().default(""),
   strapline: z.string().default(""),
 });
 
@@ -139,6 +145,8 @@ export const programaDestacadoSchema = z.object({
   specs: z.array(specSchema).max(8).default([]),
   quote: z.string().default(""),
   qrCaption: z.string().default("Ver ficha completa e inscribirse"),
+  /** Dirección que codifica el QR. Vacío: no se dibuja el código. */
+  qrUrl: z.string().default(""),
   strapline: z.string().default(""),
 });
 
@@ -177,6 +185,8 @@ export const comunicadoSchema = z.object({
   /** Filas de datos: fecha, horario, área responsable, contacto… */
   specs: z.array(specSchema).max(6).default([]),
   qrCaption: z.string().default(""),
+  /** Dirección que codifica el QR. Vacío: no se dibuja el código. */
+  qrUrl: z.string().default(""),
   imageSrc: z.string().optional(),
 });
 
@@ -190,6 +200,8 @@ export const bienvenidaSchema = z.object({
     .array(z.object({ label: z.string(), place: z.string().default("") }))
     .max(6)
     .default([]),
+  qrCaption: z.string().default("Mapa del edificio"),
+  qrUrl: z.string().default(""),
   strapline: z.string().default(""),
 });
 
@@ -224,6 +236,8 @@ export const eventoVivoSchema = z.object({
     .max(4)
     .default([]),
   qrCaption: z.string().default("SÍGUELO EN LÍNEA"),
+  /** Dirección que codifica el QR. Vacío: no se dibuja el código. */
+  qrUrl: z.string().default(""),
 });
 
 /** Vista 11 — Testimonios */
@@ -245,6 +259,8 @@ export const mensajeSchema = z.object({
   media: mediaRefSchema.optional(),
   message: z.string().default(""),
   quote: z.string().default(""),
+  qrCaption: z.string().default("Conoce el mensaje completo"),
+  qrUrl: z.string().default(""),
 });
 
 /** Vista 6 — Próximos inicios de gestión */
@@ -255,6 +271,8 @@ export const proximosIniciosSchema = z.object({
   programs: z.array(programEntrySchema).max(4).default([]),
   qrTitle: z.string().default("Inscríbete ahora"),
   qrCaption: z.string().default("Inscripciones"),
+  /** Dirección que codifica el QR. Vacío: no se dibuja el código. */
+  qrUrl: z.string().default(""),
   qrNote: z.string().default(""),
 });
 

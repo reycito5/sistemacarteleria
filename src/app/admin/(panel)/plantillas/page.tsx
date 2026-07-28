@@ -56,9 +56,9 @@ export default async function PlantillasPage() {
             <Link
               key={k.kind}
               href={`/admin/plantillas/nuevo?kind=${k.kind}`}
-              className="group flex items-center gap-2.5 rounded-[10px] border border-ui-border bg-ui-raised px-3.5 py-3 text-sm font-semibold text-inst-blue-top transition hover:border-inst-blue/40 hover:bg-ui-surface hover:shadow-[var(--shadow-ui-sm)]"
+              className="group flex items-center gap-2.5 rounded-[10px] border border-ui-border bg-ui-raised px-3.5 py-3 text-sm font-semibold text-brand-ink transition hover:border-brand-ink-soft/40 hover:bg-ui-surface hover:shadow-[var(--shadow-ui-sm)]"
             >
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-info-soft text-inst-blue-top transition group-hover:bg-inst-blue-bottom group-hover:text-inst-white">
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-info-soft text-brand-ink transition group-hover:bg-brand-ink-deep group-hover:text-brand-white">
                 <Plus size={14} aria-hidden />
               </span>
               <span className="min-w-0 truncate">{k.label}</span>
@@ -100,7 +100,7 @@ export default async function PlantillasPage() {
                   className="flex flex-wrap items-start gap-4 p-4 transition hover:bg-ui-raised"
                 >
                   <div className="min-w-[220px] flex-1">
-                    <p className="text-sm font-extrabold text-inst-blue-top">
+                    <p className="text-sm font-extrabold text-brand-ink">
                       {c.title}
                     </p>
                     <p className="mt-0.5 text-xs text-ui-muted">
@@ -114,7 +114,7 @@ export default async function PlantillasPage() {
                   <div className="flex items-center gap-1.5">
                     <Link
                       href={`/admin/plantillas/${c.id}`}
-                      className="inline-flex items-center gap-1.5 rounded-[8px] border border-ui-border-strong px-2.5 py-1 text-xs font-bold text-inst-blue-top transition hover:border-inst-blue/45 hover:bg-info-soft"
+                      className="inline-flex items-center gap-1.5 rounded-[8px] border border-ui-border-strong px-2.5 py-1 text-xs font-bold text-brand-ink transition hover:border-brand-ink-soft/45 hover:bg-info-soft"
                     >
                       <Pencil size={13} aria-hidden />
                       Editar

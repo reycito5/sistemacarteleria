@@ -114,7 +114,7 @@ export function ContentForm({
                   className={[
                     "flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold transition",
                     active
-                      ? "bg-inst-blue-bottom text-inst-white"
+                      ? "bg-brand-ink-deep text-brand-white"
                       : done
                         ? "bg-ok-soft text-ok hover:bg-ok/15"
                         : "border border-ui-border-strong text-ui-muted hover:text-ui-ink",
@@ -147,10 +147,10 @@ export function ContentForm({
         <Card>
           {isReview ? (
             <>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-inst-gold">
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
                 Paso {totalSteps} de {totalSteps}
               </p>
-              <h2 className="mt-1 text-lg font-extrabold text-inst-blue-top">
+              <h2 className="mt-1 text-lg font-extrabold text-brand-ink">
                 Revisar y guardar
               </h2>
               <p className="mt-1 text-sm leading-relaxed text-ui-muted">
@@ -204,10 +204,10 @@ export function ContentForm({
             </>
           ) : (
             <>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-inst-gold">
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
                 Paso {stepIndex + 1} de {totalSteps}
               </p>
-              <h2 className="mt-1 text-lg font-extrabold text-inst-blue-top">
+              <h2 className="mt-1 text-lg font-extrabold text-brand-ink">
                 {current.title}
               </h2>
               <p className="mt-1 text-sm leading-relaxed text-ui-muted">
@@ -276,11 +276,11 @@ export function ContentForm({
       <div className="lg:sticky lg:top-24 lg:self-start">
         <Card>
           <div className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-[10px] bg-info-soft text-inst-blue-top">
+            <span className="grid h-9 w-9 place-items-center rounded-[10px] bg-info-soft text-brand-ink">
               <Eye size={18} aria-hidden />
             </span>
             <div>
-              <h2 className="text-base font-extrabold text-inst-blue-top">
+              <h2 className="text-base font-extrabold text-brand-ink">
                 Vista previa en vivo
               </h2>
               <p className="text-xs text-ui-muted">

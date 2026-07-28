@@ -55,9 +55,9 @@ const FAQ = [
 export default function ContactoPage() {
   return (
     <>
-      <section className="ui-gradient-inst-mesh text-inst-white">
+      <section className="ui-gradient-inst-mesh text-brand-white">
         <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 sm:py-20">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-inst-gold">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red">
             {INSTITUTION.vicerrectorate}
           </p>
           <h1 className="mt-3 max-w-3xl font-serif text-[36px] font-semibold leading-[1.1] sm:text-[50px]">
@@ -87,16 +87,16 @@ export default function ContactoPage() {
                       href={href}
                       target="_blank"
                       rel="noreferrer"
-                      className="group flex items-center gap-4 rounded-[12px] border border-ui-border bg-ui-raised p-4 transition hover:border-inst-blue/35 hover:bg-ui-surface"
+                      className="group flex items-center gap-4 rounded-[12px] border border-ui-border bg-ui-raised p-4 transition hover:border-brand-ink-soft/35 hover:bg-ui-surface"
                     >
-                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-inst-blue-bottom text-inst-white">
+                      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-brand-ink-deep text-brand-white">
                         <Icon size={19} aria-hidden />
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block text-[11px] font-bold uppercase tracking-[0.12em] text-ui-muted">
                           {label}
                         </span>
-                        <span className="ui-tnum block text-lg font-black text-inst-blue-top">
+                        <span className="ui-tnum block text-lg font-black text-brand-ink">
                           {value}
                         </span>
                         <span className="block text-xs text-ui-muted">{note}</span>
@@ -104,7 +104,7 @@ export default function ContactoPage() {
                       <ExternalLink
                         size={16}
                         aria-hidden
-                        className="shrink-0 text-ui-faint transition group-hover:text-inst-red"
+                        className="shrink-0 text-ui-faint transition group-hover:text-brand-red"
                       />
                     </a>
                   </li>
@@ -122,11 +122,11 @@ export default function ContactoPage() {
                 <div className="flex gap-3">
                   <Building2
                     size={16}
-                    className="mt-0.5 shrink-0 text-inst-gold"
+                    className="mt-0.5 shrink-0 text-brand-red"
                     aria-hidden
                   />
                   <div>
-                    <dt className="font-bold text-inst-blue-top">Institución</dt>
+                    <dt className="font-bold text-brand-ink">Institución</dt>
                     <dd className="mt-0.5 leading-relaxed text-ui-muted">
                       {INSTITUTION.university}
                       <br />
@@ -137,11 +137,11 @@ export default function ContactoPage() {
                 <div className="flex gap-3">
                   <Clock
                     size={16}
-                    className="mt-0.5 shrink-0 text-inst-gold"
+                    className="mt-0.5 shrink-0 text-brand-red"
                     aria-hidden
                   />
                   <div>
-                    <dt className="font-bold text-inst-blue-top">
+                    <dt className="font-bold text-brand-ink">
                       Horario de atención
                     </dt>
                     <dd className="mt-0.5 text-ui-muted">
@@ -152,11 +152,11 @@ export default function ContactoPage() {
                 <div className="flex gap-3">
                   <Mail
                     size={16}
-                    className="mt-0.5 shrink-0 text-inst-gold"
+                    className="mt-0.5 shrink-0 text-brand-red"
                     aria-hidden
                   />
                   <div>
-                    <dt className="font-bold text-inst-blue-top">
+                    <dt className="font-bold text-brand-ink">
                       Atención presencial
                     </dt>
                     <dd className="mt-0.5 text-ui-muted">
@@ -181,7 +181,7 @@ export default function ContactoPage() {
                     key={item.q}
                     className="border-b border-ui-border pb-4 last:border-0 last:pb-0"
                   >
-                    <p className="text-sm font-bold text-inst-blue-top">
+                    <p className="text-sm font-bold text-brand-ink">
                       {item.q}
                     </p>
                     <p className="mt-1.5 text-sm leading-relaxed text-ui-muted">

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import type { InstitutionIdentity } from "@/lib/institution/identity";
+import { SocialIcon, hasSocialIcon } from "@/components/signage/SocialIcon";
+import { T } from "@/components/signage/scale";
 
 const DAYS = [
   "domingo",
@@ -48,11 +50,14 @@ function HeaderClock() {
     : "--:--";
 
   return (
-    <div className="ml-auto shrink-0 whitespace-nowrap pl-10 text-right">
-      <p className="text-[14px] font-semibold capitalize text-sig-text-soft">
+    <div className="ml-auto shrink-0 whitespace-nowrap pl-12 text-right">
+      <p
+        className="font-semibold capitalize text-sig-text-soft"
+        style={{ fontSize: T.meta }}
+      >
         {date}
       </p>
-      <p className="mt-0.5 font-mono text-[34px] font-bold tracking-[.5px] text-sig-ink">
+      <p className="mt-1 font-mono text-[76px] font-bold leading-none tracking-tight text-sig-ink">
         {time}
       </p>
     </div>
@@ -75,14 +80,14 @@ function LogoSlot({
       <img
         src={url}
         alt=""
-        className="h-[64px] w-auto max-w-[132px] shrink-0 object-contain"
+        className="h-[104px] w-auto max-w-[230px] shrink-0 object-contain"
       />
     );
   }
   return (
     <div
-      className={`grid h-[64px] w-[64px] shrink-0 place-items-center border border-white/55 font-serif text-[15px] font-bold text-white ${
-        round ? "rounded-full" : "rounded-[3px]"
+      className={`grid h-[104px] w-[104px] shrink-0 place-items-center border-2 border-white/55 font-serif text-[30px] font-bold text-white ${
+        round ? "rounded-full" : "rounded-[6px]"
       }`}
     >
       {fallback}
@@ -102,7 +107,7 @@ export function ScreenHeader({
   emergency?: boolean;
 }) {
   return (
-    <header className="relative h-[152px] shrink-0 overflow-hidden bg-sig-paper">
+    <header className="relative h-[206px] shrink-0 overflow-hidden bg-sig-paper">
       <div
         aria-hidden
         className={`absolute inset-0 w-[74%] ${
@@ -111,24 +116,24 @@ export function ScreenHeader({
         style={{
           clipPath: emergency
             ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
-            : "polygon(0 0, 100% 0, calc(100% - 90px) 100%, 0% 100%)",
+            : "polygon(0 0, 100% 0, calc(100% - 120px) 100%, 0% 100%)",
         }}
       >
         <span
-          className={`absolute inset-x-0 bottom-0 h-[5px] ${
+          className={`absolute inset-x-0 bottom-0 h-[8px] ${
             emergency ? "bg-white" : "bg-sig-red"
           }`}
         />
       </div>
 
-      <div className="relative z-[2] flex h-full items-center px-[46px]">
-        <div className="flex shrink-0 items-center gap-3.5">
+      <div className="relative z-[2] flex h-full items-center px-[52px]">
+        <div className="flex shrink-0 items-center gap-6">
           <LogoSlot url={identity.logoPrimaryUrl} fallback="UAB" />
-          <span aria-hidden className="h-[38px] w-px bg-white/25" />
+          <span aria-hidden className="h-[68px] w-px bg-white/30" />
           {identity.logoSecondaryUrl ? (
             <LogoSlot url={identity.logoSecondaryUrl} fallback="" round={false} />
           ) : (
-            <p className="font-serif text-[13px] font-semibold leading-[1.3] text-white/80">
+            <p className="font-serif text-[26px] font-bold leading-[1.2] text-white/85">
               Posgrado
               <br />
               UABJB
@@ -136,11 +141,14 @@ export function ScreenHeader({
           )}
         </div>
 
-        <div className="pl-[26px]">
-          <p className="text-[13.5px] font-medium tracking-[.2px] text-white/55">
+        <div className="min-w-0 pl-[34px]">
+          <p
+            className="truncate font-medium text-white/65"
+            style={{ fontSize: T.meta }}
+          >
             {identity.universityName}
           </p>
-          <p className="mt-0.5 font-serif text-[29px] font-semibold tracking-[.2px] text-white">
+          <p className="mt-1 font-serif text-[52px] font-bold leading-none text-white">
             {identity.vicerrectorateName}
           </p>
         </div>
@@ -154,11 +162,17 @@ export function ScreenHeader({
 /** Rótulo desplazable inferior con la frase institucional. */
 export function ScreenTicker({ identity }: { identity: InstitutionIdentity }) {
   return (
-    <div className="flex h-[64px] shrink-0 items-center gap-5 overflow-hidden bg-sig-ink px-[46px]">
-      <span className="shrink-0 bg-sig-red px-4 py-2 text-[11px] font-bold uppercase tracking-[1.4px] text-white">
+    <div className="flex h-[92px] shrink-0 items-center gap-7 overflow-hidden bg-sig-ink px-[52px]">
+      <span
+        className="shrink-0 bg-sig-red px-6 py-3 font-bold uppercase tracking-[.12em] text-white"
+        style={{ fontSize: T.eyebrow }}
+      >
         {identity.tickerLabel}
       </span>
-      <p className="whitespace-nowrap font-serif text-[16px] font-medium italic text-white/85">
+      <p
+        className="truncate font-serif font-medium italic text-white/90"
+        style={{ fontSize: T.bodyLg }}
+      >
         {identity.tickerText}
       </p>
     </div>
@@ -181,32 +195,34 @@ export function ScreenFooter({
 
   return (
     <footer
-      className={`flex h-[96px] shrink-0 items-center justify-between px-[46px] ${
+      className={`flex h-[132px] shrink-0 items-center justify-between gap-8 px-[52px] ${
         emergency
           ? "bg-sig-red-deep"
           : "border-t border-sig-rule bg-sig-paper"
       }`}
     >
       {columns.map((c) => (
-        <div key={c.label} className="flex items-center gap-3">
+        <div key={c.label} className="flex min-w-0 items-center gap-3.5">
           <span
             aria-hidden
-            className={`h-[5px] w-[5px] shrink-0 rounded-full ${
+            className={`h-[10px] w-[10px] shrink-0 rounded-full ${
               emergency ? "bg-white" : "bg-sig-red"
             }`}
           />
-          <div>
+          <div className="min-w-0">
             <p
-              className={`text-[9.5px] font-bold uppercase tracking-[1.1px] ${
-                emergency ? "text-white/55" : "text-sig-text-faint"
+              className={`font-bold uppercase tracking-[.12em] ${
+                emergency ? "text-white/60" : "text-sig-text-faint"
               }`}
+              style={{ fontSize: 19 }}
             >
               {c.label}
             </p>
             <p
-              className={`mt-px text-[13.5px] font-bold ${
+              className={`mt-0.5 truncate font-bold ${
                 emergency ? "text-white" : "text-sig-ink"
               }`}
+              style={{ fontSize: T.body }}
             >
               {c.value}
             </p>
@@ -214,15 +230,24 @@ export function ScreenFooter({
         </div>
       ))}
 
-      <div className="flex gap-[22px]">
-        {identity.social.map((s) => (
+      {/* Redes: icono cuando la marca se reconoce, texto si no. */}
+      <div className="flex shrink-0 items-center gap-6">
+        {identity.social.map((name) => (
           <span
-            key={s}
-            className={`text-[11px] font-bold uppercase tracking-[.5px] ${
-              emergency ? "text-white/75" : "text-sig-text-soft"
-            }`}
+            key={name}
+            className={emergency ? "text-white" : "text-sig-ink"}
+            title={name}
           >
-            {s}
+            {hasSocialIcon(name) ? (
+              <SocialIcon name={name} size={40} />
+            ) : (
+              <span
+                className="font-bold uppercase tracking-[.08em]"
+                style={{ fontSize: 20 }}
+              >
+                {name}
+              </span>
+            )}
           </span>
         ))}
       </div>

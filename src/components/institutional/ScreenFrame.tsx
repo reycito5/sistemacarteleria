@@ -72,7 +72,7 @@ export function ScreenFrame({
           className={`min-h-0 flex-1 ${
             bare
               ? "flex bg-sig-paper"
-              : "grid grid-cols-12 gap-6 bg-sig-paper px-[46px] pb-[30px] pt-[36px]"
+              : "grid grid-cols-12 gap-7 bg-sig-paper px-[52px] pb-[34px] pt-[40px]"
           } ${emergency ? "!bg-sig-red-deep" : ""}`}
         >
           {children}

@@ -35,8 +35,8 @@ function FilterRow({
             className={[
               "rounded-full px-3.5 py-1.5 text-[12px] font-bold transition",
               active
-                ? "bg-inst-blue-bottom text-inst-white"
-                : "border border-ui-border-strong text-ui-muted hover:border-inst-blue/40 hover:text-inst-blue-top",
+                ? "bg-brand-ink-deep text-brand-white"
+                : "border border-ui-border-strong text-ui-muted hover:border-brand-ink-soft/40 hover:text-brand-ink",
             ].join(" ")}
           >
             {o.value}
@@ -91,7 +91,7 @@ export function OfertaFilters({ programs }: { programs: PortalProgram[] }) {
     <div>
       {hasFilters && (
         <div className="mb-8 space-y-3 rounded-[16px] border border-ui-border bg-ui-surface p-5">
-          <p className="flex items-center gap-2 text-sm font-bold text-inst-blue-top">
+          <p className="flex items-center gap-2 text-sm font-bold text-brand-ink">
             <SlidersHorizontal size={15} aria-hidden />
             Filtrar la oferta
           </p>

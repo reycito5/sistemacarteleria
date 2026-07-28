@@ -69,9 +69,9 @@ const FACTS = [
 export default function PantallasPublicPage() {
   return (
     <>
-      <section className="ui-gradient-inst-mesh text-inst-white">
+      <section className="ui-gradient-inst-mesh text-brand-white">
         <div className="mx-auto max-w-[1180px] px-4 py-14 sm:px-6 sm:py-20">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-inst-gold">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red">
             Grupo {INSTITUTION.generalGroup}
           </p>
           <h1 className="mt-3 max-w-3xl text-[34px] font-black leading-[1.08] sm:text-[46px]">
@@ -86,7 +86,7 @@ export default function PantallasPublicPage() {
       </section>
 
       <section className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 sm:py-16">
-        <h2 className="text-2xl font-black text-inst-blue-top">
+        <h2 className="text-2xl font-black text-brand-ink">
           Ubicación de cada pantalla
         </h2>
 
@@ -94,14 +94,14 @@ export default function PantallasPublicPage() {
           {SCREENS.map((s) => (
             <li key={s.code} className="ui-card p-5">
               <div className="flex items-center justify-between">
-                <span className="grid h-10 w-10 place-items-center rounded-[10px] bg-info-soft text-inst-blue-top">
+                <span className="grid h-10 w-10 place-items-center rounded-[10px] bg-info-soft text-brand-ink">
                   <MonitorPlay size={18} aria-hidden />
                 </span>
                 <Badge tone="neutral" className="ui-tnum">
                   {s.code}
                 </Badge>
               </div>
-              <h3 className="mt-4 text-lg font-extrabold text-inst-blue-top">
+              <h3 className="mt-4 text-lg font-extrabold text-brand-ink">
                 {s.name}
               </h3>
               <p className="mt-1.5 flex items-start gap-1.5 text-xs leading-relaxed text-ui-muted">
@@ -118,18 +118,18 @@ export default function PantallasPublicPage() {
 
       <section className="border-y border-ui-border bg-ui-surface">
         <div className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 sm:py-16">
-          <h2 className="text-2xl font-black text-inst-blue-top">
+          <h2 className="text-2xl font-black text-brand-ink">
             Cómo se mantienen sincronizadas
           </h2>
 
           <div className="mt-8 grid gap-x-10 gap-y-8 sm:grid-cols-2">
             {FACTS.map(({ icon: Icon, title, text }) => (
               <div key={title} className="flex gap-4">
-                <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-info-soft text-inst-blue-top">
+                <span className="mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-[12px] bg-info-soft text-brand-ink">
                   <Icon size={19} aria-hidden />
                 </span>
                 <div>
-                  <h3 className="text-base font-extrabold text-inst-blue-top">
+                  <h3 className="text-base font-extrabold text-brand-ink">
                     {title}
                   </h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-ui-muted">
@@ -145,7 +145,7 @@ export default function PantallasPublicPage() {
       <section className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 sm:py-16">
         <div className="ui-card flex flex-wrap items-center justify-between gap-6 p-8">
           <div className="max-w-xl">
-            <h2 className="text-xl font-black text-inst-blue-top sm:text-2xl">
+            <h2 className="text-xl font-black text-brand-ink sm:text-2xl">
               ¿Está instalando un televisor nuevo?
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-ui-muted">

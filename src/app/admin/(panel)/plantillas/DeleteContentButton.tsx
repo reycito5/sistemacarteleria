@@ -32,7 +32,7 @@ export function DeleteContentButton({ id }: { id: string }) {
           type="button"
           onClick={remove}
           disabled={pending}
-          className="rounded-[8px] bg-inst-red px-2.5 py-1 text-xs font-bold text-inst-white transition hover:brightness-110 disabled:opacity-50"
+          className="rounded-[8px] bg-brand-red px-2.5 py-1 text-xs font-bold text-brand-white transition hover:brightness-110 disabled:opacity-50"
         >
           {pending ? "Eliminando…" : "Confirmar"}
         </button>
@@ -54,13 +54,13 @@ export function DeleteContentButton({ id }: { id: string }) {
         type="button"
         onClick={() => setConfirming(true)}
         disabled={pending}
-        className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-inst-red transition hover:bg-danger-soft disabled:opacity-50"
+        className="inline-flex items-center gap-1.5 rounded-[8px] px-2 py-1 text-xs font-bold text-brand-red transition hover:bg-danger-soft disabled:opacity-50"
       >
         <Trash2 size={13} aria-hidden />
         Eliminar
       </button>
       {error && (
-        <span role="alert" className="text-xs text-inst-red">
+        <span role="alert" className="text-xs text-brand-red">
           {error}
         </span>
       )}

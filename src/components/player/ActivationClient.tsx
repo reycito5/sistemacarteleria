@@ -103,43 +103,43 @@ export function ActivationClient() {
       <ScreenFrame bare>
         <div
           className="grid h-full place-items-center"
-          style={{ background: "var(--color-inst-blue-bottom)" }}
+          style={{ background: "var(--color-brand-ink-deep)" }}
         >
-          <div className="text-center text-inst-white">
-            <p className="text-[24px] font-semibold tracking-[0.3em] text-inst-gold">
+          <div className="text-center text-brand-white">
+            <p className="text-[24px] font-semibold tracking-[0.3em] text-brand-red">
               {INSTITUTION.systemName}
             </p>
             <h1 className="mt-3 text-[44px] font-black">Activación de pantalla</h1>
 
             {phase === "esperando" && code && (
               <>
-                <p className="mt-8 text-[24px] font-medium text-inst-white/80">
+                <p className="mt-8 text-[24px] font-medium text-brand-white/80">
                   Introduzca este código en el panel de administración:
                 </p>
-                <p className="mt-6 font-mono text-[120px] font-black leading-none tracking-[0.15em] text-inst-gold">
+                <p className="mt-6 font-mono text-[120px] font-black leading-none tracking-[0.15em] text-brand-red">
                   {code}
                 </p>
-                <p className="mt-6 text-[20px] text-inst-white/70">
+                <p className="mt-6 text-[20px] text-brand-white/70">
                   Esperando confirmación del administrador…
                 </p>
               </>
             )}
 
             {phase === "solicitando" && (
-              <p className="mt-10 text-[24px] text-inst-white/80">
+              <p className="mt-10 text-[24px] text-brand-white/80">
                 Solicitando código de activación…
               </p>
             )}
 
             {phase === "no_configurado" && (
-              <p className="mt-10 max-w-[70%] text-[22px] text-inst-white/80">
+              <p className="mt-10 max-w-[70%] text-[22px] text-brand-white/80">
                 El servidor aún no está configurado. Configure Supabase para activar
                 pantallas.
               </p>
             )}
 
             {phase === "error" && (
-              <p className="mt-10 text-[22px] text-inst-white/80">
+              <p className="mt-10 text-[22px] text-brand-white/80">
                 No se pudo solicitar el código. Reintentando…
               </p>
             )}

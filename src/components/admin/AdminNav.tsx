@@ -40,14 +40,14 @@ export function AdminNav() {
       href="/admin"
       className="flex items-center gap-3 px-5 py-5 transition hover:opacity-90"
     >
-      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] border border-inst-gold/45 bg-white/10 text-sm font-black text-inst-gold">
+      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] border border-brand-red/45 bg-white/10 text-sm font-black text-brand-red">
         UB
       </span>
       <span className="min-w-0">
-        <span className="block text-[10px] font-bold tracking-[0.22em] text-inst-gold">
+        <span className="block text-[10px] font-bold tracking-[0.22em] text-brand-red">
           {INSTITUTION.systemName}
         </span>
-        <span className="mt-0.5 block text-[14px] font-black leading-tight text-inst-white">
+        <span className="mt-0.5 block text-[14px] font-black leading-tight text-brand-white">
           {INSTITUTION.commercialName}
         </span>
       </span>
@@ -74,21 +74,21 @@ export function AdminNav() {
                       "group relative flex items-center gap-3 rounded-[10px] px-3 py-2.5",
                       "text-[13px] font-semibold transition",
                       active
-                        ? "bg-white/15 text-inst-white"
-                        : "text-white/70 hover:bg-white/10 hover:text-inst-white",
+                        ? "bg-white/15 text-brand-white"
+                        : "text-white/70 hover:bg-white/10 hover:text-brand-white",
                     ].join(" ")}
                   >
                     <span
                       aria-hidden
                       className={[
                         "absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full transition",
-                        active ? "bg-inst-gold" : "bg-transparent",
+                        active ? "bg-brand-red" : "bg-transparent",
                       ].join(" ")}
                     />
                     <AdminIcon
                       name={m.icon}
                       size={17}
-                      className={active ? "text-inst-gold" : "text-white/55"}
+                      className={active ? "text-brand-red" : "text-white/55"}
                     />
                     <span className="min-w-0 truncate">{m.label}</span>
                   </Link>
@@ -107,13 +107,13 @@ export function AdminNav() {
         href="/player"
         target="_blank"
         onClick={close}
-        className="flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 text-[13px] font-semibold text-white/70 transition hover:bg-white/10 hover:text-inst-white"
+        className="flex items-center gap-2.5 rounded-[10px] px-3 py-2.5 text-[13px] font-semibold text-white/70 transition hover:bg-white/10 hover:text-brand-white"
       >
         <ExternalLink size={16} className="text-white/55" aria-hidden />
         Ver el reproductor
       </Link>
       <p className="px-3 pt-2 text-[10px] leading-relaxed text-white/35">
-        Línea gráfica V11.6 · bloqueada
+        Línea gráfica institucional V12
       </p>
     </div>
   );
@@ -121,7 +121,7 @@ export function AdminNav() {
   const panel = (
     <>
       {brand}
-      <div className="inst-rule-gold" />
+      <div className="inst-rule" />
       {links}
       {bottom}
     </>
@@ -140,7 +140,7 @@ export function AdminNav() {
         onClick={() => setOpen(true)}
         aria-label="Abrir menú"
         aria-expanded={open}
-        className="fixed bottom-5 right-5 z-40 grid h-13 w-13 place-items-center rounded-full bg-inst-blue-bottom p-3.5 text-inst-white shadow-[var(--shadow-ui-lg)] transition hover:bg-inst-blue-top lg:hidden"
+        className="fixed bottom-5 right-5 z-40 grid h-13 w-13 place-items-center rounded-full bg-brand-ink-deep p-3.5 text-brand-white shadow-[var(--shadow-ui-lg)] transition hover:bg-brand-ink lg:hidden"
       >
         <Menu size={22} />
       </button>
@@ -174,7 +174,7 @@ export function AdminNav() {
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Cerrar menú"
-            className="absolute right-3 top-4 grid h-9 w-9 place-items-center rounded-[10px] border border-white/25 text-inst-white transition hover:bg-white/10"
+            className="absolute right-3 top-4 grid h-9 w-9 place-items-center rounded-[10px] border border-white/25 text-brand-white transition hover:bg-white/10"
           >
             <X size={17} />
           </button>

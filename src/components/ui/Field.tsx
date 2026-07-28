@@ -3,8 +3,8 @@ import type { ComponentProps, ReactNode } from "react";
 const CONTROL =
   "w-full rounded-[10px] border border-ui-border-strong bg-ui-surface px-3 " +
   "text-sm text-ui-ink placeholder:text-ui-faint outline-none transition " +
-  "hover:border-inst-blue/35 focus:border-inst-blue focus:ring-4 " +
-  "focus:ring-inst-blue/12 disabled:bg-ui-canvas disabled:text-ui-faint";
+  "hover:border-brand-ink-soft/35 focus:border-brand-ink-soft focus:ring-4 " +
+  "focus:ring-brand-ink-soft/12 disabled:bg-ui-canvas disabled:text-ui-faint";
 
 export const inputClasses = `${CONTROL} h-10`;
 export const textareaClasses = `${CONTROL} py-2.5 leading-relaxed`;
@@ -42,7 +42,7 @@ export function Field({
       >
         {label}
         {required && (
-          <span className="text-inst-red" aria-hidden>
+          <span className="text-brand-red" aria-hidden>
             *
           </span>
         )}
@@ -50,7 +50,7 @@ export function Field({
       {hint && <p className="mt-0.5 text-xs leading-relaxed text-ui-muted">{hint}</p>}
       <div className="mt-1.5">{children}</div>
       {error && (
-        <p role="alert" className="mt-1.5 text-xs font-semibold text-inst-red">
+        <p role="alert" className="mt-1.5 text-xs font-semibold text-brand-red">
           {error}
         </p>
       )}

@@ -54,19 +54,19 @@ export function WorkflowSteps({ className = "" }: { className?: string }) {
         <li key={step.n} className="relative">
           <Link
             href={step.href}
-            className="group flex h-full flex-col rounded-[14px] border border-ui-border bg-ui-raised p-4 transition hover:border-inst-blue/35 hover:bg-ui-surface hover:shadow-[var(--shadow-ui-sm)]"
+            className="group flex h-full flex-col rounded-[14px] border border-ui-border bg-ui-raised p-4 transition hover:border-brand-ink-soft/35 hover:bg-ui-surface hover:shadow-[var(--shadow-ui-sm)]"
           >
             <div className="flex items-center gap-2.5">
-              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-inst-blue-bottom text-[13px] font-black text-inst-white">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-brand-ink-deep text-[13px] font-black text-brand-white">
                 {step.n}
               </span>
               <AdminIcon
                 name={step.icon}
                 size={16}
-                className="text-inst-blue-top/45"
+                className="text-brand-ink/45"
               />
             </div>
-            <p className="mt-3 text-sm font-extrabold text-inst-blue-top">
+            <p className="mt-3 text-sm font-extrabold text-brand-ink">
               {step.title}
             </p>
             <p className="mt-1 text-xs leading-relaxed text-ui-muted">

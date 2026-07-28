@@ -6,6 +6,8 @@ import {
   ProgramMini,
   SigCard,
 } from "@/components/signage/primitives";
+import { QrCode } from "@/components/signage/QrCode";
+import { T } from "@/components/signage/scale";
 
 /**
  * Vista 6 — Próximos inicios de gestión.
@@ -37,16 +39,22 @@ export function ProximosIniciosView({
       <SigCard span={2} center>
         <CardBody className="items-center justify-center text-center">
           <Eyebrow className="mb-3.5">{content.qrCaption}</Eyebrow>
-          <div className="h-[120px] w-[120px] bg-white p-1.5">
-            <div className="grid h-full w-full place-items-center border-2 border-sig-ink font-mono text-[10px] font-bold text-sig-ink">
-              QR
+          {content.qrUrl && (
+            <div className="rounded-[4px] border-2 border-sig-rule bg-white p-2">
+              <QrCode value={content.qrUrl} size={168} />
             </div>
-          </div>
-          <p className="mt-4 font-serif text-[15px] font-semibold text-sig-ink">
+          )}
+          <p
+            className="mt-5 font-serif font-bold leading-tight text-sig-ink"
+            style={{ fontSize: T.itemTitle }}
+          >
             {content.qrTitle}
           </p>
           {content.qrNote && (
-            <p className="mt-1.5 text-[11.5px] text-sig-text-soft">
+            <p
+              className="mt-2 text-sig-text-soft"
+              style={{ fontSize: T.meta }}
+            >
               {content.qrNote}
             </p>
           )}

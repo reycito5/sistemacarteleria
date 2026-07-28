@@ -247,6 +247,38 @@ export const mensajeSchema = z.object({
   quote: z.string().default(""),
 });
 
+/** Vista 6 — Próximos inicios de gestión */
+export const proximosIniciosSchema = z.object({
+  kind: z.literal("proximos_inicios"),
+  sectionTitle: z.string().default("Próximos inicios de gestión"),
+  eyebrow: z.string().default("Calendario académico"),
+  programs: z.array(programEntrySchema).max(4).default([]),
+  qrTitle: z.string().default("Inscríbete ahora"),
+  qrCaption: z.string().default("Inscripciones"),
+  qrNote: z.string().default(""),
+});
+
+/** Vista 15 — Mantenimiento programado (técnica, pero con datos editables) */
+export const mantenimientoSchema = z.object({
+  kind: z.literal("mantenimiento"),
+  title: z.string().default("Mantenimiento programado"),
+  message: z
+    .string()
+    .default(
+      "El sistema de cartelería digital se actualizará en el horario indicado. La programación se reanudará automáticamente al finalizar.",
+    ),
+  startAt: z.string().default(""),
+  duration: z.string().default(""),
+  scope: z.string().default(""),
+  supportContact: z.string().default(""),
+});
+
+/** Vista 13 — Sin conexión (técnica) */
+export const sinConexionSchema = z.object({
+  kind: z.literal("sin_conexion"),
+  lastSync: z.string().default(""),
+});
+
 /** Vista 14 — Sincronización (técnica) */
 export const sincronizacionSchema = z.object({
   kind: z.literal("sincronizacion"),
@@ -274,12 +306,15 @@ export const viewContentSchema = z.discriminatedUnion("kind", [
   programaDestacadoSchema,
   noticiasSchema,
   comunicadoSchema,
+  proximosIniciosSchema,
   bienvenidaSchema,
   reconocimientosSchema,
   eventoVivoSchema,
   testimonioSchema,
   mensajeSchema,
   sincronizacionSchema,
+  sinConexionSchema,
+  mantenimientoSchema,
   emergenciaSchema,
 ]);
 
@@ -303,5 +338,8 @@ export type ReconocimientosContent = z.infer<typeof reconocimientosSchema>;
 export type EventoVivoContent = z.infer<typeof eventoVivoSchema>;
 export type TestimonioContent = z.infer<typeof testimonioSchema>;
 export type MensajeContent = z.infer<typeof mensajeSchema>;
+export type ProximosIniciosContent = z.infer<typeof proximosIniciosSchema>;
+export type MantenimientoContent = z.infer<typeof mantenimientoSchema>;
+export type SinConexionContent = z.infer<typeof sinConexionSchema>;
 export type SincronizacionContent = z.infer<typeof sincronizacionSchema>;
 export type EmergenciaContent = z.infer<typeof emergenciaSchema>;

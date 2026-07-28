@@ -1,4 +1,7 @@
-import type { SincronizacionContent } from "@/lib/views/schemas";
+import type {
+  SinConexionContent,
+  SincronizacionContent,
+} from "@/lib/views/schemas";
 import { SigBadge, TechScreen } from "@/components/signage/primitives";
 
 /**
@@ -27,8 +30,15 @@ export function SincronizacionView({
   );
 }
 
-/** Pantalla técnica de contingencia: la red se cayó, se emite desde la caché. */
-export function SinConexionView() {
+/**
+ * Vista 13 — Sin conexión.
+ * Contingencia: la red se cayó y se emite desde la caché local.
+ */
+export function SinConexionView({
+  content,
+}: {
+  content: SinConexionContent;
+}) {
   return (
     <TechScreen
       glyph="⚠"
@@ -37,7 +47,11 @@ export function SinConexionView() {
       sub="El contenido almacenado localmente continuará reproduciéndose con normalidad."
     >
       <div className="mt-1 flex flex-wrap justify-center gap-2.5">
-        <SigBadge kind="neutral">Reproduciendo desde la caché</SigBadge>
+        {content.lastSync && (
+          <SigBadge kind="neutral">
+            Última sincronización: {content.lastSync}
+          </SigBadge>
+        )}
         <SigBadge kind="onlight-open">Reintentando conexión</SigBadge>
       </div>
     </TechScreen>

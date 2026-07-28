@@ -27,8 +27,14 @@ const PURPOSE: Partial<Record<ViewContent["kind"], string>> = {
   evento_vivo: "Defensas y conferencias que se están celebrando en ese momento.",
   testimonio: "Historias de egresados, con video y frase destacada.",
   mensaje: "Palabra de una autoridad del Vicerrectorado.",
+  proximos_inicios:
+    "Rejilla de los programas que arrancan, con su fecha de inicio en grande.",
   sincronizacion:
     "Pantalla técnica: aparece sola mientras el equipo descarga la programación.",
+  sin_conexion:
+    "Pantalla técnica: se muestra sola si el equipo pierde la red.",
+  mantenimiento:
+    "Aviso de una parada técnica prevista, con su horario y alcance.",
   emergencia:
     "Aviso urgente. Se activa desde el panel e interrumpe todo lo demás.",
 };

@@ -14,7 +14,7 @@ import type { ViewContent } from "@/lib/views/schemas";
 
 export type EditableKind = Exclude<
   ViewContent["kind"],
-  "sincronizacion" | "emergencia"
+  "sincronizacion" | "sin_conexion" | "emergencia"
 >;
 
 export interface SimpleField {
@@ -540,6 +540,87 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
           { type: "text", key: "quote", label: "Frase destacada" },
           { type: "textarea", key: "result", label: "Resultado o contexto" },
           { type: "text", key: "strapline", label: "Frase institucional" },
+        ],
+      },
+    ],
+  },
+
+  proximos_inicios: {
+    kind: "proximos_inicios",
+    label: "Próximos inicios",
+    purpose:
+      "Rejilla con los próximos programas que arrancan, cada uno con su fecha y portada.",
+    titleKey: "sectionTitle",
+    steps: [
+      {
+        id: "encabezado",
+        title: "Encabezado",
+        description: "Título de la rejilla.",
+        fields: [
+          { type: "text", key: "eyebrow", label: "Antetítulo" },
+          { type: "text", key: "sectionTitle", label: "Título" },
+        ],
+      },
+      {
+        id: "programas",
+        title: "Programas",
+        description:
+          "Hasta cuatro. La fecha corta se pinta grande sobre la portada.",
+        fields: [
+          {
+            type: "list",
+            key: "programs",
+            label: "Programas",
+            max: 4,
+            itemFields: [
+              { key: "name", label: "Nombre del programa" },
+              { key: "type", label: "Nivel" },
+              { key: "modality", label: "Modalidad" },
+              { key: "duration", label: "Duración" },
+              { key: "credits", label: "Créditos" },
+              { key: "dateShort", label: "Inicio (corto: 17 AGO 2026)" },
+              { key: "status", label: "Estado", type: "select", options: STATUS_OPTIONS },
+              { key: "media", label: "Portada", type: "media" },
+            ],
+          },
+        ],
+      },
+      {
+        id: "qr",
+        title: "Panel de inscripción",
+        description: "La columna estrecha con el código QR.",
+        fields: [
+          { type: "text", key: "qrCaption", label: "Antetítulo del panel" },
+          { type: "text", key: "qrTitle", label: "Llamada a la acción" },
+          { type: "text", key: "qrNote", label: "Nota (dirección web)" },
+        ],
+      },
+    ],
+  },
+
+  mantenimiento: {
+    kind: "mantenimiento",
+    label: "Mantenimiento programado",
+    purpose:
+      "Avisa de una parada técnica prevista, indicando horario y alcance.",
+    titleKey: "title",
+    steps: [
+      {
+        id: "aviso",
+        title: "Aviso",
+        description: "Qué se va a hacer y cuándo.",
+        fields: [
+          { type: "text", key: "title", label: "Título" },
+          { type: "textarea", key: "message", label: "Mensaje" },
+          { type: "text", key: "startAt", label: "Inicio (22:00)" },
+          { type: "text", key: "duration", label: "Duración estimada" },
+          {
+            type: "text",
+            key: "scope",
+            label: "Alcance",
+            placeholder: "Pantalla: Hall Principal",
+          },
+          { type: "text", key: "supportContact", label: "Contacto técnico" },
         ],
       },
     ],

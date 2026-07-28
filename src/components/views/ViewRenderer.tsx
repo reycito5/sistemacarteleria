@@ -4,7 +4,12 @@ import { AgendaView } from "./AgendaView";
 import { ProgramaDestacadoView } from "./ProgramaDestacadoView";
 import { NoticiasView } from "./NoticiasView";
 import { ComunicadoView } from "./ComunicadoView";
-import { SincronizacionView } from "./SincronizacionView";
+import {
+  SincronizacionView,
+  SinConexionView,
+} from "./SincronizacionView";
+import { ProximosIniciosView } from "./ProximosIniciosView";
+import { MantenimientoView } from "./MantenimientoView";
 import { EmergenciaView } from "./EmergenciaView";
 import { BackupView } from "./BackupView";
 import {
@@ -31,6 +36,12 @@ export function ViewRenderer({ content }: { content: ViewContent }) {
       return <NoticiasView content={content} />;
     case "comunicado":
       return <ComunicadoView content={content} />;
+    case "proximos_inicios":
+      return <ProximosIniciosView content={content} />;
+    case "mantenimiento":
+      return <MantenimientoView content={content} />;
+    case "sin_conexion":
+      return <SinConexionView content={content} />;
     case "bienvenida":
       return <BienvenidaView content={content} />;
     case "reconocimientos":

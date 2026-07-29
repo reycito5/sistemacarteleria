@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Check, FileVideo, ImageIcon, LibraryBig, Search, X } from "lucide-react";
+import {
+  Check,
+  FileVideo,
+  ImageIcon,
+  LibraryBig,
+  Search,
+  Volume2,
+  VolumeX,
+  X,
+} from "lucide-react";
 import type { MediaOption } from "@/lib/data/admin";
 import { Input } from "@/components/ui/Field";
 
@@ -12,11 +21,13 @@ export interface SelectedMedia {
   src: string;
   subtitlePath?: string;
   muted: boolean;
+  /** `true` = este video se reproduce SIN sonido. Por defecto va con sonido. */
+  silent?: boolean;
 }
 
 interface MediaPickerProps {
   options: MediaOption[];
-  value?: { assetId?: string };
+  value?: { assetId?: string; silent?: boolean };
   onChange: (media: SelectedMedia | undefined) => void;
 }
 
@@ -53,18 +64,28 @@ export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
     m.title.toLowerCase().includes(query.trim().toLowerCase()),
   );
 
+  const buildMedia = (option: MediaOption, silent: boolean): SelectedMedia => ({
+    assetId: option.id,
+    path: option.path,
+    src: option.url,
+    subtitlePath: option.subtitlePath ?? undefined,
+    muted: true,
+    silent,
+  });
+
   const select = (option: MediaOption) => {
     if (value?.assetId === option.id) {
       onChange(undefined); // volver a pulsar lo deselecciona
       return;
     }
-    onChange({
-      assetId: option.id,
-      path: option.path,
-      src: option.url,
-      subtitlePath: option.subtitlePath ?? undefined,
-      muted: true,
-    });
+    onChange(buildMedia(option, false)); // por defecto: con sonido
+  };
+
+  const selectedOption = options.find((o) => o.id === value?.assetId);
+  const isVideo = selectedOption?.type === "video";
+  const silent = value?.silent === true;
+  const toggleSound = () => {
+    if (selectedOption) onChange(buildMedia(selectedOption, !silent));
   };
 
   return (
@@ -156,6 +177,39 @@ export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
             );
           })}
         </ul>
+      )}
+
+      {/* Sonido: sólo para videos. La cartelería reproduce con sonido por
+          defecto; aquí se puede silenciar un video concreto. */}
+      {isVideo && (
+        <div className="mt-3 flex items-center justify-between gap-3 rounded-[10px] border border-ui-border bg-ui-raised px-3 py-2.5">
+          <span className="flex items-center gap-2 text-xs font-semibold text-ui-ink">
+            {silent ? (
+              <VolumeX size={15} className="text-ui-faint" aria-hidden />
+            ) : (
+              <Volume2 size={15} className="text-brand-red" aria-hidden />
+            )}
+            {silent ? "Video silenciado" : "Reproducir con sonido"}
+          </span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={!silent}
+            aria-label="Reproducir el video con sonido"
+            onClick={toggleSound}
+            className={[
+              "relative h-6 w-11 shrink-0 rounded-full transition",
+              silent ? "bg-ui-border-strong" : "bg-brand-red",
+            ].join(" ")}
+          >
+            <span
+              className={[
+                "absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all",
+                silent ? "left-0.5" : "left-[22px]",
+              ].join(" ")}
+            />
+          </button>
+        </div>
       )}
     </div>
   );

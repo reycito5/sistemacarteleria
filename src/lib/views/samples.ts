@@ -313,6 +313,17 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
     instructions:
       "El personal de seguridad guiará el proceso. No use los ascensores.",
   },
+  {
+    kind: "galeria",
+    title: "Vida académica del Posgrado",
+    seconds: 7,
+    images: [
+      { caption: "Defensa de tesis — Auditorio de Posgrado" },
+      { caption: "Comunidad estudiantil en aula virtual" },
+      { caption: "Conferencia académica internacional" },
+      { caption: "Graduación de la promoción 2026" },
+    ],
+  },
 ];
 
 /**

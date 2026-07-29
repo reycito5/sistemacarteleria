@@ -318,8 +318,23 @@ export const emergenciaSchema = z.object({
   instructions: z.string().default(""),
 });
 
+/** Vista — Galería institucional (álbum curado con efectos cinematográficos). */
+export const galeriaImageSchema = z.object({
+  media: mediaRefSchema.optional(),
+  caption: z.string().default(""),
+});
+
+export const galeriaSchema = z.object({
+  kind: z.literal("galeria"),
+  title: z.string().default("Galería institucional"),
+  images: z.array(galeriaImageSchema).max(12).default([]),
+  /** Segundos por imagen. */
+  seconds: z.number().min(3).max(20).default(7),
+});
+
 export const viewContentSchema = z.discriminatedUnion("kind", [
   programacionGeneralSchema,
+  galeriaSchema,
   agendaSchema,
   programaDestacadoSchema,
   noticiasSchema,
@@ -358,6 +373,7 @@ export type TestimonioContent = z.infer<typeof testimonioSchema>;
 export type MensajeContent = z.infer<typeof mensajeSchema>;
 export type ProximosIniciosContent = z.infer<typeof proximosIniciosSchema>;
 export type MantenimientoContent = z.infer<typeof mantenimientoSchema>;
+export type GaleriaContent = z.infer<typeof galeriaSchema>;
 export type SinConexionContent = z.infer<typeof sinConexionSchema>;
 export type SincronizacionContent = z.infer<typeof sincronizacionSchema>;
 export type EmergenciaContent = z.infer<typeof emergenciaSchema>;

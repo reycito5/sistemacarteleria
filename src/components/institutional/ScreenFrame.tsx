@@ -6,7 +6,7 @@ import {
   DEFAULT_IDENTITY,
   type InstitutionIdentity,
 } from "@/lib/institution/identity";
-import { ScreenFooter, ScreenHeader, ScreenTicker } from "./ScreenChrome";
+import { ScreenHeader, ScreenTicker } from "./ScreenChrome";
 
 interface ScreenFrameProps {
   children: ReactNode;
@@ -69,17 +69,19 @@ export function ScreenFrame({
         <ScreenHeader identity={identity} emergency={emergency} />
 
         <main
-          className={`min-h-0 flex-1 ${
+          key={bare ? "bare" : "grid"}
+          className={`sig-enter min-h-0 flex-1 ${
             bare
               ? "flex bg-sig-paper"
-              : "grid grid-cols-12 gap-7 bg-sig-paper px-[52px] pb-[34px] pt-[40px]"
+              : "grid grid-cols-12 gap-7 bg-sig-paper px-[52px] pb-[40px] pt-[44px]"
           } ${emergency ? "!bg-sig-red-deep" : ""}`}
         >
           {children}
         </main>
 
+        {/* Un único rótulo inferior delgado: la información secundaria (contacto)
+            va compacta, sin el pie recargado que restaba prioridad al contenido. */}
         {!bare && !emergency && <ScreenTicker identity={identity} />}
-        <ScreenFooter identity={identity} emergency={emergency} />
       </div>
     </div>
   );

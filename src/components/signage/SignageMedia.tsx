@@ -78,17 +78,34 @@ export function SignageMedia({
   const showFallback = !src || broken;
 
   return (
-    <div className={`absolute inset-0 ${className}`}>
+    <div className={`absolute inset-0 overflow-hidden ${className}`}>
       {showFallback ? (
-        <div className="grid h-full w-full place-items-center bg-sig-ink-deep">
-          <span className="font-serif text-[26px] font-semibold tracking-wide text-white/35">
-            {fallbackLabel}
+        <div
+          className="relative grid h-full w-full place-items-center overflow-hidden"
+          style={{
+            background:
+              "radial-gradient(ellipse 90% 80% at 50% 30%, #1b2c78 0%, #0a1440 70%)",
+          }}
+        >
+          {/* Monograma institucional grande y tenue: el vacío se ve intencional. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute font-serif font-black leading-none text-white/[0.05]"
+            style={{ fontSize: 360 }}
+          >
+            UAB
           </span>
+          <span aria-hidden className="absolute bottom-0 left-0 h-[6px] w-full bg-sig-red/70" />
+          {fallbackLabel && (
+            <span className="relative font-serif text-[30px] font-semibold tracking-[0.2em] text-white/55">
+              {fallbackLabel}
+            </span>
+          )}
         </div>
       ) : video ? (
         <video
           ref={videoRef}
-          className="h-full w-full object-cover"
+          className="sig-breathe h-full w-full object-cover"
           src={src}
           poster={media?.poster}
           onError={() => setBroken(true)}
@@ -112,7 +129,7 @@ export function SignageMedia({
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          className="h-full w-full object-cover"
+          className="sig-breathe h-full w-full object-cover"
           src={src}
           onError={() => setBroken(true)}
           alt=""

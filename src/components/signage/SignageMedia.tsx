@@ -36,12 +36,17 @@ export function SignageMedia({
 }: SignageMediaProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [broken, setBroken] = useState(false);
+  // El sonido está pedido pero el navegador lo bloquea hasta un gesto: se
+  // muestra un aviso para tocar y activarlo (garantía en cualquier navegador).
+  const [soundBlocked, setSoundBlocked] = useState(false);
 
   const src = media?.src;
   const video = isVideoRef(media);
-  // El contenido puede pedir sonido (muted === false). Por defecto la cartelería
-  // va silenciada: son cuatro televisores en zonas de paso.
-  const wantsSound = media?.muted === false;
+  // La cartelería reproduce CON sonido por defecto. Un video sólo va en
+  // silencio si el contenido lo pide de forma explícita (`muted: true` marcado
+  // a mano en el editor). Nota: el valor histórico por defecto era `true`, así
+  // que aquí el sonido se considera deseado salvo que se marque `silent`.
+  const wantsSound = media?.silent !== true;
 
   useEffect(() => {
     if (!video) return;
@@ -84,7 +89,10 @@ export function SignageMedia({
 
     const onGesture = async () => {
       const ok = await tryUnmute();
-      if (ok) removeGestureListeners();
+      if (ok) {
+        setSoundBlocked(false);
+        removeGestureListeners();
+      }
     };
 
     const events = ["pointerdown", "touchstart", "keydown", "click"] as const;
@@ -98,8 +106,12 @@ export function SignageMedia({
       await startMuted();
       if (!wantsSound || cancelled) return;
       const unmuted = await tryUnmute();
-      if (!unmuted) {
-        // El navegador exige gesto: se activará al primer toque en la página.
+      if (unmuted) {
+        setSoundBlocked(false);
+      } else {
+        // El navegador exige gesto: se activará al primer toque en la página
+        // (o con el aviso «tocar para activar sonido»).
+        setSoundBlocked(true);
         events.forEach((ev) =>
           window.addEventListener(ev, onGesture as EventListener, {
             passive: true,
@@ -121,6 +133,16 @@ export function SignageMedia({
   }, [video, src, wantsSound]);
 
   const showFallback = !src || broken;
+
+  // Activación manual del sonido: cualquier navegador/celular puede activarlo
+  // tocando el aviso, aunque bloquee el sonido automático.
+  const enableSound = () => {
+    const el = videoRef.current;
+    if (!el) return;
+    el.muted = false;
+    el.volume = 1;
+    el.play().finally(() => setSoundBlocked(el.muted));
+  };
 
   return (
     <div className={`absolute inset-0 overflow-hidden ${className}`}>
@@ -179,6 +201,23 @@ export function SignageMedia({
           onError={() => setBroken(true)}
           alt=""
         />
+      )}
+
+      {/* Aviso para activar el sonido cuando el navegador lo bloquea sin gesto.
+          Se activa igualmente al primer toque en cualquier parte de la página;
+          este botón es la garantía visible en móvil y navegadores estrictos. */}
+      {video && !showFallback && soundBlocked && (
+        <button
+          type="button"
+          onClick={enableSound}
+          className="absolute bottom-4 right-4 z-[3] inline-flex items-center gap-2 rounded-full bg-sig-red px-4 py-2.5 font-bold text-white shadow-lg ring-1 ring-white/25 transition hover:brightness-110"
+          style={{ fontSize: 18 }}
+        >
+          <span aria-hidden style={{ fontSize: 20 }}>
+            🔊
+          </span>
+          Toca para activar sonido
+        </button>
       )}
 
       {/* Sin velos de color: la foto y el video se ven tal cual. Sólo se

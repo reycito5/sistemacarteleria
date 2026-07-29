@@ -19,10 +19,16 @@ export const mediaRefSchema = z.object({
   subtitlePath: z.string().optional(),
   subtitleSrc: z.string().optional(),
   /**
-   * Silenciado. Por defecto sí: son televisores en zonas de paso. Ponerlo en
-   * `false` reproduce el audio del video.
+   * Silenciado. Campo histórico: por defecto `true`. Se conserva por
+   * compatibilidad con el contenido ya guardado, pero la cartelería ahora
+   * reproduce con sonido salvo que se marque `silent`.
    */
   muted: z.boolean().default(true),
+  /**
+   * Silencio explícito del contenido. Si es `true`, este video se reproduce
+   * sin sonido aunque la cartelería vaya con audio por defecto.
+   */
+  silent: z.boolean().optional(),
 });
 export type MediaRef = z.infer<typeof mediaRefSchema>;
 

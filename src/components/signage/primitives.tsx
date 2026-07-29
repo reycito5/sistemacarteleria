@@ -160,21 +160,28 @@ export function PhotoPanel({
 
       {/* Bloque de texto: sólido, separado del medio (nunca superpuesto). */}
       {hasCaption && (
-        <div className="max-h-[42%] shrink-0 overflow-hidden bg-sig-ink px-[40px] py-[24px]">
-          {badge && <div className="mb-2.5">{badge}</div>}
-          {eyebrow && <Eyebrow tone="light">{eyebrow}</Eyebrow>}
+        <div className="max-h-[30%] shrink-0 overflow-hidden bg-sig-ink px-[38px] py-[18px]">
+          {badge && <div className="mb-2">{badge}</div>}
+          {eyebrow && (
+            <p
+              className="font-bold uppercase tracking-[.14em] text-white/55"
+              style={{ fontSize: 18 }}
+            >
+              {eyebrow}
+            </p>
+          )}
           {title && (
             <h4
-              className="mt-1.5 line-clamp-2 font-serif font-bold leading-[1.05] text-white"
-              style={{ fontSize: T.cardTitle }}
+              className="mt-1 line-clamp-2 font-serif font-bold leading-[1.06] text-white"
+              style={{ fontSize: 32 }}
             >
               {title}
             </h4>
           )}
           {sub && (
             <p
-              className="mt-2 line-clamp-2 max-w-[96%] font-medium leading-[1.35] text-white/75"
-              style={{ fontSize: T.meta }}
+              className="mt-1 line-clamp-1 max-w-[96%] font-medium text-white/65"
+              style={{ fontSize: 20 }}
             >
               {sub}
             </p>

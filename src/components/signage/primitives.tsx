@@ -160,8 +160,6 @@ export function PhotoPanel({
 
       {/* Bloque de texto: sólido, separado del medio (nunca superpuesto). */}
       {hasCaption && (
-        {/* Bloque compacto: el medio manda; el texto sólo acompaña (rótulo
-            fino), sin comerse el video. Título a 2 líneas, bajada a 2 líneas. */}
         <div className="max-h-[42%] shrink-0 overflow-hidden bg-sig-ink px-[40px] py-[24px]">
           {badge && <div className="mb-2.5">{badge}</div>}
           {eyebrow && <Eyebrow tone="light">{eyebrow}</Eyebrow>}

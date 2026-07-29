@@ -79,7 +79,7 @@ export function ProgramaDestacadoView({
 
           {content.description && (
             <p
-              className="max-w-[96%] leading-[1.45] text-sig-text-soft"
+              className="line-clamp-4 max-w-[96%] leading-[1.45] text-sig-text-soft"
               style={{ fontSize: T.body }}
             >
               {content.description}

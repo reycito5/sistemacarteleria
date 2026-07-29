@@ -682,6 +682,42 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
       },
     ],
   },
+
+  galeria: {
+    kind: "galeria",
+    label: "Galería institucional",
+    purpose:
+      "Álbum curado de imágenes a pantalla completa con efectos cinematográficos: zoom/paneo lento (Ken Burns) y fundidos cruzados entre una imagen y otra.",
+    titleKey: "title",
+    steps: [
+      {
+        id: "album",
+        title: "Álbum",
+        description: "El nombre del álbum, que aparece como rótulo discreto.",
+        fields: [
+          { type: "text", key: "title", label: "Título del álbum" },
+        ],
+      },
+      {
+        id: "imagenes",
+        title: "Imágenes",
+        description:
+          "Hasta doce imágenes. Se muestran una a una, con efecto cinematográfico. Cada una puede llevar un pie de foto opcional.",
+        fields: [
+          {
+            type: "list",
+            key: "images",
+            label: "Imágenes del álbum",
+            max: 12,
+            itemFields: [
+              { key: "media", label: "Imagen", type: "media" },
+              { key: "caption", label: "Pie de foto (opcional)" },
+            ],
+          },
+        ],
+      },
+    ],
+  },
 };
 
 export const EDITABLE_KINDS = Object.values(FORM_SCHEMAS);

@@ -9,6 +9,7 @@ import {
   SinConexionView,
 } from "./SincronizacionView";
 import { ProximosIniciosView } from "./ProximosIniciosView";
+import { GaleriaView } from "./GaleriaView";
 import { MantenimientoView } from "./MantenimientoView";
 import { EmergenciaView } from "./EmergenciaView";
 import { BackupView } from "./BackupView";
@@ -52,6 +53,8 @@ export function ViewRenderer({ content }: { content: ViewContent }) {
       return <TestimonioView content={content} />;
     case "mensaje":
       return <MensajeView content={content} />;
+    case "galeria":
+      return <GaleriaView content={content} />;
     case "sincronizacion":
       return <SincronizacionView content={content} />;
     case "emergencia":
@@ -75,5 +78,7 @@ export function screenModeFor(content: ViewContent): {
   emergency: boolean;
 } {
   const emergency = content.kind === "emergencia";
-  return { bare: emergency, emergency };
+  // La galería ocupa todo el centro (a sangre), sin la rejilla de 12 columnas.
+  const bare = emergency || content.kind === "galeria";
+  return { bare, emergency };
 }

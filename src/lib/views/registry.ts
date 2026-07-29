@@ -27,6 +27,7 @@ export const VIEW_REGISTRY: readonly ViewKindMeta[] = [
   { kind: "sincronizacion", viewNumber: 14, label: "Sincronización" },
   { kind: "mantenimiento", viewNumber: 15, label: "Mantenimiento" },
   { kind: "emergencia", viewNumber: 16, label: "Emergencia institucional" },
+  { kind: "galeria", viewNumber: 17, label: "Galería institucional" },
 ];
 
 export function viewNumberForKind(kind: ViewContent["kind"]): number | null {

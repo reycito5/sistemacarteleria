@@ -142,8 +142,18 @@ export function ScreenHeader({
           >
             {identity.universityName}
           </p>
-          <p className="mt-1 font-serif text-[52px] font-bold leading-none text-white">
+          <p className="mt-1 font-serif text-[50px] font-bold leading-none text-white">
             {identity.vicerrectorateName}
+          </p>
+          <p
+            className="mt-2.5 inline-flex items-center gap-2.5 font-semibold uppercase tracking-[0.1em] text-white/75"
+            style={{ fontSize: 20 }}
+          >
+            <span
+              aria-hidden
+              className="h-[9px] w-[9px] shrink-0 rounded-full bg-sig-red"
+            />
+            Acreditado internacionalmente · CIEES (México)
           </p>
         </div>
 
@@ -153,10 +163,15 @@ export function ScreenHeader({
   );
 }
 
-/** Rótulo desplazable inferior con la frase institucional. */
+/**
+ * Rótulo inferior único y delgado. Sustituye al pie recargado: lleva la frase
+ * institucional y, de forma compacta a la derecha, el contacto y las redes.
+ */
 export function ScreenTicker({ identity }: { identity: InstitutionIdentity }) {
   return (
-    <div className="flex h-[92px] shrink-0 items-center gap-7 overflow-hidden bg-sig-ink px-[52px]">
+    <div className="relative flex h-[100px] shrink-0 items-center gap-7 overflow-hidden bg-sig-ink px-[52px]">
+      <span aria-hidden className="absolute inset-x-0 top-0 h-[4px] bg-sig-red" />
+
       <span
         className="shrink-0 bg-sig-red px-6 py-3 font-bold uppercase tracking-[.12em] text-white"
         style={{ fontSize: T.eyebrow }}
@@ -164,11 +179,39 @@ export function ScreenTicker({ identity }: { identity: InstitutionIdentity }) {
         {identity.tickerLabel}
       </span>
       <p
-        className="truncate font-serif font-medium italic text-white/90"
+        className="min-w-0 flex-1 truncate font-serif font-medium italic text-white/90"
         style={{ fontSize: T.bodyLg }}
       >
         {identity.tickerText}
       </p>
+
+      {/* Contacto compacto + redes (lo esencial del antiguo pie). */}
+      <div className="flex shrink-0 items-center gap-6">
+        {identity.phones.length > 0 && (
+          <span
+            className="hidden items-center gap-2.5 font-bold text-white/85 xl:flex"
+            style={{ fontSize: 22 }}
+          >
+            <span
+              aria-hidden
+              className="grid h-8 w-8 place-items-center rounded-full border-2 border-sig-red text-sig-red"
+              style={{ fontSize: 16 }}
+            >
+              ☎
+            </span>
+            {identity.phones.join(" · ")}
+          </span>
+        )}
+        {identity.social.length > 0 && (
+          <span className="flex items-center gap-4 text-white/90">
+            {identity.social.slice(0, 4).map((name) =>
+              hasSocialIcon(name) ? (
+                <SocialIcon key={name} name={name} size={30} />
+              ) : null,
+            )}
+          </span>
+        )}
+      </div>
     </div>
   );
 }

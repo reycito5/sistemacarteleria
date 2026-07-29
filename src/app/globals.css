@@ -241,3 +241,96 @@ body {
     animation: none;
   }
 }
+
+/* ============================================================================
+ * Galería cinematográfica (efecto Ken Burns): zoom/paneo lento sobre la imagen
+ * activa. Se aplica una de estas variantes para dar variedad entre diapositivas.
+ * ==========================================================================*/
+@keyframes sig-kb-1 {
+  from {
+    transform: scale(1.02) translate(0, 0);
+  }
+  to {
+    transform: scale(1.16) translate(-2.5%, -2%);
+  }
+}
+@keyframes sig-kb-2 {
+  from {
+    transform: scale(1.16) translate(2.5%, 1.5%);
+  }
+  to {
+    transform: scale(1.02) translate(0, 0);
+  }
+}
+@keyframes sig-kb-3 {
+  from {
+    transform: scale(1.04) translate(2%, -1.5%);
+  }
+  to {
+    transform: scale(1.18) translate(-1.5%, 2%);
+  }
+}
+@keyframes sig-kb-4 {
+  from {
+    transform: scale(1.14) translate(-2%, 2%);
+  }
+  to {
+    transform: scale(1.03) translate(1.5%, -1.5%);
+  }
+}
+.sig-kb-1 {
+  animation: sig-kb-1 var(--kb-dur, 14s) ease-in-out infinite alternate;
+}
+.sig-kb-2 {
+  animation: sig-kb-2 var(--kb-dur, 14s) ease-in-out infinite alternate;
+}
+.sig-kb-3 {
+  animation: sig-kb-3 var(--kb-dur, 14s) ease-in-out infinite alternate;
+}
+.sig-kb-4 {
+  animation: sig-kb-4 var(--kb-dur, 14s) ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sig-kb-1,
+  .sig-kb-2,
+  .sig-kb-3,
+  .sig-kb-4 {
+    animation: none;
+  }
+}
+
+/* Entrada del contenido de cada pantalla: da vida al cambio de plantilla. */
+@keyframes sig-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.sig-enter {
+  animation: sig-enter 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Zoom lento continuo para dar vida a fotos y videos dentro de los paneles. */
+@keyframes sig-breathe {
+  from {
+    transform: scale(1.015);
+  }
+  to {
+    transform: scale(1.09);
+  }
+}
+.sig-breathe {
+  animation: sig-breathe 18s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sig-enter,
+  .sig-breathe {
+    animation: none;
+  }
+}

@@ -121,17 +121,22 @@ export function ScreenHeader({
       />
 
       <div className="relative z-[2] flex w-full items-center">
-        <div className="flex shrink-0 items-center gap-6">
-          <LogoSlot url={identity.logoPrimaryUrl} fallback="UAB" />
-          <span aria-hidden className="h-[68px] w-px bg-white/25" />
+        {/* Sólo la marca del Posgrado (no el logo de la universidad). Si se ha
+            subido el logo del Posgrado se usa; si no, un sello tipográfico. */}
+        <div className="flex shrink-0 items-center">
           {identity.logoSecondaryUrl ? (
-            <LogoSlot url={identity.logoSecondaryUrl} fallback="" round={false} />
+            <LogoSlot url={identity.logoSecondaryUrl} fallback="P" round={false} />
           ) : (
-            <p className="font-serif text-[26px] font-bold leading-[1.2] text-white/85">
-              Posgrado
-              <br />
-              UABJB
-            </p>
+            <div className="flex h-[104px] items-center gap-4 rounded-[10px] border border-white/20 bg-white/[0.06] px-6">
+              <span className="grid h-[60px] w-[60px] shrink-0 place-items-center rounded-full bg-sig-red font-serif text-[30px] font-bold text-white">
+                P
+              </span>
+              <p className="font-serif text-[27px] font-bold leading-[1.05] tracking-tight text-white">
+                Posgrado
+                <br />
+                <span className="text-white/70">UABJB</span>
+              </p>
+            </div>
           )}
         </div>
 
@@ -178,12 +183,23 @@ export function ScreenTicker({ identity }: { identity: InstitutionIdentity }) {
       >
         {identity.tickerLabel}
       </span>
-      <p
-        className="min-w-0 flex-1 truncate font-serif font-medium italic text-white/90"
-        style={{ fontSize: T.bodyLg }}
-      >
-        {identity.tickerText}
-      </p>
+      {/* Marquesina: la frase se desplaza en bucle, nunca se corta. */}
+      <div className="sig-marquee-mask min-w-0 flex-1 overflow-hidden">
+        <div className="sig-marquee">
+          {[0, 1].map((k) => (
+            <span
+              key={k}
+              className="font-serif font-medium text-white/90"
+              style={{ fontSize: T.bodyLg }}
+            >
+              {identity.tickerText}
+              <span aria-hidden className="mx-8 text-sig-red">
+                ●
+              </span>
+            </span>
+          ))}
+        </div>
+      </div>
 
       {/* Contacto compacto + redes (lo esencial del antiguo pie). */}
       <div className="flex shrink-0 items-center gap-6">

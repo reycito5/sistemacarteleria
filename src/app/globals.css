@@ -65,10 +65,10 @@
   --color-info-soft: #eceffa;
 
   /* --- Tipografía --------------------------------------------------------- */
-  --font-sans: var(--font-inst-sans), "Archivo", "Helvetica Neue", Arial,
+  --font-sans: var(--font-inst-sans), "Manrope", "Helvetica Neue", Arial,
     sans-serif;
-  /* Serif editorial: titulares de pantalla y del portal. */
-  --font-serif: var(--font-inst-serif), "Fraunces", Georgia, serif;
+  /* Display de titulares (ocupa el hueco «serif» del sistema de tokens). */
+  --font-serif: var(--font-inst-serif), "Space Grotesk", "Segoe UI", sans-serif;
   /* Monoespaciada: relojes, fechas, códigos de campo. */
   --font-mono: var(--font-inst-mono), "IBM Plex Mono", ui-monospace, monospace;
 
@@ -104,12 +104,14 @@ body {
 }
 
 /*
- * Serif editorial con sizing óptico automático: en titulares grandes Fraunces
- * gana contraste y remates de revista; en cuerpos pequeños se mantiene legible.
- * Un pelín de tracking negativo en los grandes evita el aire «suelto» genérico.
+ * Titulares con Space Grotesk: un pelín de tracking negativo los cierra y les
+ * da ese aire compacto y moderno «de pantalla», sin el aire suelto genérico.
+ * En @layer base para que cualquier utilidad `tracking-*` explícita gane.
  */
-.font-serif {
-  font-optical-sizing: auto;
+@layer base {
+  .font-serif {
+    letter-spacing: -0.015em;
+  }
 }
 
 /* Anillo de foco accesible y uniforme en toda la aplicación de gestión. */
@@ -309,6 +311,48 @@ body {
   }
 }
 
+/* Marquesina del rótulo inferior: la frase institucional se desplaza en bucle
+ * suave para que nunca se corte, por larga que sea. Se duplica el contenido y
+ * el track se mueve -50% para un bucle sin salto. */
+@keyframes sig-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.sig-marquee {
+  display: inline-flex;
+  flex-shrink: 0;
+  min-width: 100%;
+  white-space: nowrap;
+  will-change: transform;
+  animation: sig-marquee 30s linear infinite;
+}
+.sig-marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 4%,
+    #000 96%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 4%,
+    #000 96%,
+    transparent
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sig-marquee {
+    animation: none;
+  }
+}
+
 /* Entrada del contenido de cada pantalla: da vida al cambio de plantilla. */
 @keyframes sig-enter {
   from {
@@ -324,22 +368,8 @@ body {
   animation: sig-enter 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
-/* Zoom lento continuo para dar vida a fotos y videos dentro de los paneles. */
-@keyframes sig-breathe {
-  from {
-    transform: scale(1.015);
-  }
-  to {
-    transform: scale(1.09);
-  }
-}
-.sig-breathe {
-  animation: sig-breathe 18s ease-in-out infinite alternate;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .sig-enter,
-  .sig-breathe {
+  .sig-enter {
     animation: none;
   }
 }

@@ -1,29 +1,28 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Fraunces, IBM_Plex_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { INSTITUTION } from "@/lib/design/tokens";
 
 /**
- * Grotesca editorial de interfaz y cuerpos. Archivo tiene un carácter más
- * institucional y con más personalidad que las grotescas neutras por defecto:
- * aporta el aire de identidad universitaria que se busca en la cartelería.
+ * Grotesca de cuerpo e interfaz. Manrope es limpia, cálida y muy legible en
+ * pantalla, con formas geométricas modernas: nada de la neutralidad genérica
+ * de las grotescas por defecto.
  */
-const archivo = Archivo({
+const manrope = Manrope({
   variable: "--font-inst-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
 /**
- * Serif editorial de la línea gráfica institucional: titulares de las
- * pantallas, nombres de programa y encabezados del portal. Con sizing óptico
- * automático (eje opsz) gana contraste y aire de revista en los grandes.
+ * Display de titulares: Space Grotesk. Geométrica, con carácter y un aire muy
+ * «de pantalla» — ideal para los titulares de la cartelería y del portal.
  */
-const fraunces = Fraunces({
+const spaceGrotesk = Space_Grotesk({
   variable: "--font-inst-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -56,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${archivo.variable} ${fraunces.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${manrope.variable} ${spaceGrotesk.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-dvh">{children}</body>
     </html>

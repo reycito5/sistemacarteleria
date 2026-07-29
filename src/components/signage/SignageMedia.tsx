@@ -48,31 +48,76 @@ export function SignageMedia({
     const el = videoRef.current;
     if (!el) return;
 
-    // Arranca SIEMPRE en silencio: así el autoplay nunca lo bloquea el
-    // navegador (el video jamás se queda congelado). Si el contenido pide
-    // sonido, se intenta activar tras arrancar; si el navegador lo rechaza
-    // —autoplay con audio sin gesto del usuario— se vuelve a silenciar, de
-    // modo que el video sigue reproduciéndose igualmente.
-    const attempt = async () => {
+    let cancelled = false;
+
+    // 1) Arranca SIEMPRE reproduciéndose: primero en silencio, porque así el
+    //    navegador nunca bloquea el autoplay (el video jamás se queda
+    //    congelado). Si el contenido no pide sonido, aquí termina.
+    // 2) Si el contenido pide sonido, se intenta quitar el silencio de
+    //    inmediato. En un kiosco (Chrome con --autoplay-policy=
+    //    no-user-gesture-required) o en escritorio con permiso, suena ya.
+    // 3) Si el navegador lo rechaza —política de móviles: sonido sólo tras un
+    //    gesto—, se queda a la espera del PRIMER toque/click/tecla en la
+    //    página y en ese instante activa el sonido. Un solo gesto basta para
+    //    todos los videos que vengan después.
+    const tryUnmute = async () => {
+      if (cancelled || !wantsSound) return false;
+      el.muted = false;
+      el.volume = 1;
+      try {
+        await el.play();
+        return !el.muted;
+      } catch {
+        el.muted = true;
+        return false;
+      }
+    };
+
+    const startMuted = async () => {
       el.muted = true;
       try {
         await el.play();
       } catch {
-        return;
-      }
-      if (wantsSound) {
-        el.muted = false;
-        try {
-          await el.play();
-        } catch {
-          el.muted = true;
-        }
+        /* se reintenta abajo */
       }
     };
 
-    attempt();
-    const id = setTimeout(attempt, 400);
-    return () => clearTimeout(id);
+    const onGesture = async () => {
+      const ok = await tryUnmute();
+      if (ok) removeGestureListeners();
+    };
+
+    const events = ["pointerdown", "touchstart", "keydown", "click"] as const;
+    function removeGestureListeners() {
+      events.forEach((ev) =>
+        window.removeEventListener(ev, onGesture as EventListener),
+      );
+    }
+
+    (async () => {
+      await startMuted();
+      if (!wantsSound || cancelled) return;
+      const unmuted = await tryUnmute();
+      if (!unmuted) {
+        // El navegador exige gesto: se activará al primer toque en la página.
+        events.forEach((ev) =>
+          window.addEventListener(ev, onGesture as EventListener, {
+            passive: true,
+          }),
+        );
+      }
+    })();
+
+    // Reintento del propio autoplay por si el primer play() se perdió.
+    const id = setTimeout(() => {
+      if (!cancelled) el.play().catch(() => {});
+    }, 400);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(id);
+      removeGestureListeners();
+    };
   }, [video, src, wantsSound]);
 
   const showFallback = !src || broken;
@@ -105,7 +150,7 @@ export function SignageMedia({
       ) : video ? (
         <video
           ref={videoRef}
-          className="sig-breathe h-full w-full object-cover"
+          className="h-full w-full object-cover"
           src={src}
           poster={media?.poster}
           onError={() => setBroken(true)}
@@ -129,7 +174,7 @@ export function SignageMedia({
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          className="sig-breathe h-full w-full object-cover"
+          className="h-full w-full object-cover"
           src={src}
           onError={() => setBroken(true)}
           alt=""

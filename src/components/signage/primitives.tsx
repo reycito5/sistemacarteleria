@@ -160,28 +160,28 @@ export function PhotoPanel({
 
       {/* Bloque de texto: sólido, separado del medio (nunca superpuesto). */}
       {hasCaption && (
-        <div className="max-h-[30%] shrink-0 overflow-hidden bg-sig-ink px-[38px] py-[18px]">
-          {badge && <div className="mb-2">{badge}</div>}
+        <div className="max-h-[26%] shrink-0 overflow-hidden bg-sig-ink px-[34px] py-[16px]">
+          {badge && <div className="mb-1.5">{badge}</div>}
           {eyebrow && (
             <p
-              className="font-bold uppercase tracking-[.14em] text-white/55"
-              style={{ fontSize: 18 }}
+              className="font-semibold uppercase tracking-[.16em] text-sig-red"
+              style={{ fontSize: 15 }}
             >
               {eyebrow}
             </p>
           )}
           {title && (
             <h4
-              className="mt-1 line-clamp-2 font-serif font-bold leading-[1.06] text-white"
-              style={{ fontSize: 32 }}
+              className="mt-0.5 line-clamp-2 font-serif font-semibold leading-[1.08] text-white"
+              style={{ fontSize: 26 }}
             >
               {title}
             </h4>
           )}
           {sub && (
             <p
-              className="mt-1 line-clamp-1 max-w-[96%] font-medium text-white/65"
-              style={{ fontSize: 20 }}
+              className="mt-1 line-clamp-1 max-w-[96%] font-medium text-white/60"
+              style={{ fontSize: 18 }}
             >
               {sub}
             </p>
@@ -280,23 +280,26 @@ export function FieldGrid({
       {fields.map((f, i) => (
         <div
           key={`${f.label}-${i}`}
-          className="flex min-w-0 flex-col gap-2 bg-sig-card px-[24px] pb-[24px] pt-[20px]"
+          className="flex min-w-0 flex-col gap-[7px] bg-sig-card px-[22px] pb-[17px] pt-[16px]"
         >
-          <span
-            className="font-mono font-bold tracking-[.12em] text-sig-red"
-            style={{ fontSize: 18 }}
-          >
-            {String(i + 1).padStart(2, "0")}
+          {/* Número y etiqueta en una sola línea: gana altura y se lee como ficha. */}
+          <span className="flex min-w-0 items-baseline gap-2">
+            <span
+              className="shrink-0 font-mono font-bold tracking-[.1em] text-sig-red"
+              style={{ fontSize: 15 }}
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span
+              className="truncate font-semibold uppercase tracking-[.1em] text-sig-text-faint"
+              style={{ fontSize: 16 }}
+            >
+              {f.label}
+            </span>
           </span>
           <span
-            className="font-bold uppercase tracking-[.08em] text-sig-text-faint"
-            style={{ fontSize: 19 }}
-          >
-            {f.label}
-          </span>
-          <span
-            className="break-words font-serif font-bold leading-[1.25] text-sig-ink"
-            style={{ fontSize: T.meta }}
+            className="line-clamp-2 break-words font-serif font-bold leading-[1.18] text-sig-ink"
+            style={{ fontSize: 23 }}
           >
             {f.value}
           </span>
@@ -320,22 +323,22 @@ export function QrStrip({
   url?: string;
 }) {
   return (
-    <div className="mt-auto flex items-center gap-6 bg-sig-ink px-[38px] py-[26px]">
+    <div className="mt-auto flex items-center gap-6 bg-sig-ink px-[38px] py-[22px]">
       {url && (
         <div className="shrink-0 rounded-[4px] bg-white p-2.5">
-          <QrCode value={url} size={124} />
+          <QrCode value={url} size={108} />
         </div>
       )}
       <div className="min-w-0">
         <p
-          className="font-bold uppercase tracking-[.14em] text-white/60"
-          style={{ fontSize: 19 }}
+          className="font-semibold uppercase tracking-[.16em] text-white/55"
+          style={{ fontSize: 17 }}
         >
           Escanea el código
         </p>
         <p
-          className="mt-1 font-serif font-bold leading-tight text-white"
-          style={{ fontSize: T.itemTitle }}
+          className="mt-1 line-clamp-2 font-serif font-bold leading-[1.15] text-white"
+          style={{ fontSize: 30 }}
         >
           {label}
         </p>
@@ -410,13 +413,13 @@ export function InfoList({ rows }: { rows: FieldEntry[] }) {
           className="flex items-baseline justify-between gap-6 border-b border-sig-rule py-[20px] last:border-b-0"
         >
           <span
-            className="font-semibold text-sig-text-soft"
+            className="shrink-0 font-semibold text-sig-text-soft"
             style={{ fontSize: T.meta }}
           >
             {r.label}
           </span>
           <span
-            className="text-right font-bold text-sig-ink"
+            className="line-clamp-2 text-right font-bold text-sig-ink"
             style={{ fontSize: T.body }}
           >
             {r.value}
@@ -448,14 +451,14 @@ export function AgendaRow({
       </span>
       <div className="min-w-0 flex-1">
         <p
-          className="font-serif font-bold leading-[1.2] text-sig-ink"
+          className="line-clamp-2 font-serif font-bold leading-[1.18] text-sig-ink"
           style={{ fontSize: T.itemTitle }}
         >
           {title}
         </p>
         {meta && (
           <p
-            className="mt-1.5 text-sig-text-soft"
+            className="mt-1.5 line-clamp-1 text-sig-text-soft"
             style={{ fontSize: T.meta }}
           >
             {meta}
@@ -494,13 +497,13 @@ export function LogroList({ items }: { items: string[] }) {
       {items.map((text, i) => (
         <li
           key={i}
-          className="flex items-start gap-4 leading-[1.45] text-sig-text-soft"
+          className="flex items-start gap-4 leading-[1.4] text-sig-text-soft"
           style={{ fontSize: T.body }}
         >
           <span className="shrink-0 pt-1 font-mono text-[22px] font-bold text-sig-red">
             {String(i + 1).padStart(2, "0")}
           </span>
-          <span>{text}</span>
+          <span className="line-clamp-2">{text}</span>
         </li>
       ))}
     </ul>
@@ -525,40 +528,43 @@ export interface ProgramLike {
 export function ProgramTicket({ program }: { program: ProgramLike }) {
   const open = program.status !== "soon";
   return (
-    <div className="flex items-center gap-6 border-b border-sig-rule py-[22px] last:border-b-0">
-      <div className="relative w-[104px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep [aspect-ratio:4/5]">
+    <div className="flex items-center gap-5 border-b border-sig-rule py-[18px] last:border-b-0">
+      <div className="relative w-[92px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep [aspect-ratio:4/5]">
         <SignageMedia media={program.media} fallbackLabel="" />
       </div>
       <div className="min-w-0 flex-1">
         {program.type && (
           <p
-            className="font-bold uppercase tracking-[.1em] text-sig-red"
-            style={{ fontSize: 20 }}
+            className="truncate font-semibold uppercase tracking-[.1em] text-sig-red"
+            style={{ fontSize: 18 }}
           >
             {program.type}
             {program.version ? ` · ${program.version}` : ""}
           </p>
         )}
         <p
-          className="mt-1 line-clamp-2 font-serif font-bold leading-[1.2] text-sig-ink"
-          style={{ fontSize: T.itemTitle }}
+          className="mt-1 line-clamp-2 font-serif font-bold leading-[1.15] text-sig-ink"
+          style={{ fontSize: 30 }}
         >
           {program.name}
         </p>
-        <p className="mt-2 text-sig-text-soft" style={{ fontSize: T.meta }}>
+        <p
+          className="mt-1.5 line-clamp-1 text-sig-text-soft"
+          style={{ fontSize: 21 }}
+        >
           {[program.modality, program.duration, program.credits]
             .filter(Boolean)
             .join(" · ")}
         </p>
       </div>
-      <div className="w-[230px] shrink-0 text-right">
+      <div className="w-[212px] shrink-0 text-right">
         <SigBadge kind={open ? "onlight-open" : "onlight-soon"}>
           {open ? "Inscripción abierta" : "Próximamente"}
         </SigBadge>
         {program.dateShort && (
           <p
-            className="mt-3 whitespace-nowrap font-mono font-bold text-sig-ink"
-            style={{ fontSize: T.meta }}
+            className="mt-2.5 whitespace-nowrap font-mono font-bold text-sig-ink"
+            style={{ fontSize: 21 }}
           >
             {program.dateShort}
           </p>
@@ -604,12 +610,15 @@ export function ProgramMini({ program }: { program: ProgramLike }) {
           </p>
         )}
         <p
-          className="font-serif font-bold leading-[1.2] text-sig-ink"
-          style={{ fontSize: 30 }}
+          className="line-clamp-3 font-serif font-bold leading-[1.15] text-sig-ink"
+          style={{ fontSize: 29 }}
         >
           {program.name}
         </p>
-        <p className="text-sig-text-soft" style={{ fontSize: 22 }}>
+        <p
+          className="line-clamp-2 text-sig-text-soft"
+          style={{ fontSize: 21 }}
+        >
           {[program.modality, program.duration, program.credits]
             .filter(Boolean)
             .join(" · ")}

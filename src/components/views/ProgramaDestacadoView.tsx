@@ -4,13 +4,11 @@ import {
   CardHead,
   FieldGrid,
   PhotoPanel,
-  PullQuote,
   QrStrip,
   SigBadge,
   SigCard,
   type FieldEntry,
 } from "@/components/signage/primitives";
-import { T } from "@/components/signage/scale";
 
 /**
  * Vista 3 — Programa destacado.
@@ -79,22 +77,16 @@ export function ProgramaDestacadoView({
 
           {content.description && (
             <p
-              className="line-clamp-4 max-w-[96%] leading-[1.45] text-sig-text-soft"
-              style={{ fontSize: T.body }}
+              className="line-clamp-2 max-w-[97%] leading-[1.4] text-sig-text-soft"
+              style={{ fontSize: 25 }}
             >
               {content.description}
             </p>
           )}
 
-          <div className="mt-4.5">
+          <div className="mt-4">
             <FieldGrid fields={fields.slice(0, 8)} columns={4} />
           </div>
-
-          {content.quote && (
-            <div className="mt-5">
-              <PullQuote size={16.5}>{content.quote}</PullQuote>
-            </div>
-          )}
         </CardBody>
         {content.qrCaption && (
           <QrStrip label={content.qrCaption} url={content.qrUrl} />

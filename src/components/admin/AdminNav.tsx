@@ -41,7 +41,7 @@ export function AdminNav() {
       className="flex items-center gap-3 px-5 py-5 transition hover:opacity-90"
     >
       <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] border border-brand-red/45 bg-white/10 text-sm font-black text-brand-red">
-        UB
+        UAB
       </span>
       <span className="min-w-0">
         <span className="block text-[10px] font-bold tracking-[0.22em] text-brand-red">

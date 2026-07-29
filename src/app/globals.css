@@ -65,7 +65,7 @@
   --color-info-soft: #eceffa;
 
   /* --- Tipografía --------------------------------------------------------- */
-  --font-sans: var(--font-inst-sans), "Inter", "Helvetica Neue", Arial,
+  --font-sans: var(--font-inst-sans), "Archivo", "Helvetica Neue", Arial,
     sans-serif;
   /* Serif editorial: titulares de pantalla y del portal. */
   --font-serif: var(--font-inst-serif), "Fraunces", Georgia, serif;
@@ -101,6 +101,15 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/*
+ * Serif editorial con sizing óptico automático: en titulares grandes Fraunces
+ * gana contraste y remates de revista; en cuerpos pequeños se mantiene legible.
+ * Un pelín de tracking negativo en los grandes evita el aire «suelto» genérico.
+ */
+.font-serif {
+  font-optical-sizing: auto;
 }
 
 /* Anillo de foco accesible y uniforme en toda la aplicación de gestión. */

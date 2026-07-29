@@ -84,9 +84,11 @@ export function ReconocimientosView({
           {rest.length > 0 && (
             <div className="mt-5">
               <LogroList
-                items={rest.map((r) =>
-                  [r.name, r.role, r.detail].filter(Boolean).join(" — "),
-                )}
+                items={rest
+                  .slice(0, 4)
+                  .map((r) =>
+                    [r.name, r.role, r.detail].filter(Boolean).join(" — "),
+                  )}
               />
             </div>
           )}
@@ -156,7 +158,7 @@ export function TestimonioView({ content }: { content: TestimonioContent }) {
           )}
           {content.result && (
             <p
-              className="mt-6 leading-[1.45] text-sig-text-soft"
+              className="mt-6 line-clamp-4 leading-[1.45] text-sig-text-soft"
               style={{ fontSize: T.body }}
             >
               {content.result}
@@ -187,10 +189,14 @@ export function MensajeView({ content }: { content: MensajeContent }) {
       />
       <SigCard span={6} center>
         <CardBody className="px-[40px] py-[38px]">
-          {content.quote && <PullQuote size={23}>{content.quote}</PullQuote>}
+          {content.quote && (
+            <div className="line-clamp-5">
+              <PullQuote size={23}>{content.quote}</PullQuote>
+            </div>
+          )}
           {content.message && (
             <p
-              className="mt-8 leading-[1.45] text-sig-text-soft"
+              className="mt-7 line-clamp-4 leading-[1.45] text-sig-text-soft"
               style={{ fontSize: T.body }}
             >
               {content.message}

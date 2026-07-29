@@ -200,7 +200,7 @@ export default function PortalHome() {
               Señalización digital · Vicerrectorado de Posgrado
             </span>
 
-            <h1 className="mt-6 text-[40px] font-black leading-[1.02] tracking-[-0.01em] sm:text-[58px]">
+            <h1 className="mt-6 font-serif text-[42px] font-semibold leading-[1.0] tracking-[-0.015em] sm:text-[60px]">
               Una sola programación,
               <br />
               <span className="text-brand-red">en las cuatro pantallas</span>
@@ -283,7 +283,7 @@ export default function PortalHome() {
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-red">
             Cómo funciona
           </p>
-          <h2 className="mt-2 text-[30px] font-black leading-tight text-brand-ink sm:text-[38px]">
+          <h2 className="mt-2 font-serif text-[31px] font-semibold leading-[1.08] tracking-[-0.01em] text-brand-ink sm:text-[40px]">
             Del archivo al televisor, en cuatro pasos
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-ui-muted">
@@ -333,7 +333,7 @@ export default function PortalHome() {
       {/* Capacidades */}
       <section className="border-y border-ui-border bg-ui-surface">
         <div className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 sm:py-20">
-          <h2 className="max-w-2xl text-[30px] font-black leading-tight text-brand-ink sm:text-[38px]">
+          <h2 className="max-w-2xl font-serif text-[31px] font-semibold leading-[1.08] tracking-[-0.01em] text-brand-ink sm:text-[40px]">
             Pensado para funcionar solo, todo el día
           </h2>
 
@@ -361,7 +361,7 @@ export default function PortalHome() {
       <section className="mx-auto max-w-[1180px] px-4 py-16 sm:px-6 sm:py-20">
         <div className="ui-card flex flex-wrap items-center justify-between gap-6 p-8 sm:p-10">
           <div className="max-w-xl">
-            <h2 className="text-2xl font-black text-brand-ink sm:text-[28px]">
+            <h2 className="font-serif text-[26px] font-semibold tracking-[-0.01em] text-brand-ink sm:text-[30px]">
               ¿Administra la cartelería del Posgrado?
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-ui-muted">

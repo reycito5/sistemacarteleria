@@ -50,9 +50,12 @@ export function ProgramacionGeneralView({
             ))}
           </div>
         </CardBody>
-        {content.nextLabel && <NextStrip label={content.nextLabel} />}
-        {content.qrCaption && (
+        {/* Una sola banda inferior: el QR manda; si no hay, se muestra el
+            «A continuación». Evita apilar dos franjas y tapar los listados. */}
+        {content.qrCaption ? (
           <QrStrip label={content.qrCaption} url={content.qrUrl} />
+        ) : (
+          content.nextLabel && <NextStrip label={content.nextLabel} />
         )}
       </SigCard>
     </>

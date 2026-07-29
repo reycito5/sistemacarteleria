@@ -15,22 +15,22 @@ import { T } from "@/components/signage/scale";
 export function ComunicadoView({ content }: { content: ComunicadoContent }) {
   return (
     <>
-      <SigCard span={8} center>
-        <CardBody className="px-[42px] py-[36px]">
+      <SigCard span={8}>
+        <CardBody className="justify-center px-[46px] py-[38px]">
           <div className="mb-4">
             <SigBadge kind="onlight-soon">{content.badge}</SigBadge>
           </div>
 
           <h2
-            className="font-serif font-bold leading-[1.08] text-sig-ink"
-            style={{ fontSize: T.hero }}
+            className="line-clamp-3 font-serif font-bold leading-[1.06] text-sig-ink"
+            style={{ fontSize: 68 }}
           >
             {content.title}
           </h2>
 
           {content.subtitle && (
             <p
-              className="mt-5 max-w-[900px] font-medium leading-[1.35] text-sig-ink-soft"
+              className="mt-4 line-clamp-2 max-w-[920px] font-medium leading-[1.3] text-sig-ink-soft"
               style={{ fontSize: T.bodyLg }}
             >
               {content.subtitle}
@@ -39,8 +39,8 @@ export function ComunicadoView({ content }: { content: ComunicadoContent }) {
 
           {content.highlight && (
             <p
-              className="mt-6 font-serif font-bold leading-none text-sig-red"
-              style={{ fontSize: T.stat }}
+              className="mt-5 line-clamp-1 font-serif font-bold leading-none text-sig-red"
+              style={{ fontSize: 60 }}
             >
               {content.highlight}
             </p>
@@ -48,7 +48,7 @@ export function ComunicadoView({ content }: { content: ComunicadoContent }) {
 
           {content.body && (
             <p
-              className="mt-6 max-w-[900px] leading-[1.45] text-sig-text-soft"
+              className="mt-5 line-clamp-3 max-w-[920px] leading-[1.4] text-sig-text-soft"
               style={{ fontSize: T.body }}
             >
               {content.body}
@@ -56,9 +56,9 @@ export function ComunicadoView({ content }: { content: ComunicadoContent }) {
           )}
 
           {content.specs.length > 0 && (
-            <div className="mt-6">
+            <div className="mt-5">
               <InfoList
-                rows={content.specs.map((s) => ({
+                rows={content.specs.slice(0, 4).map((s) => ({
                   label: s.label,
                   value: s.value,
                 }))}

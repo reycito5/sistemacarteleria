@@ -35,7 +35,7 @@ export function AgendaView({ content }: { content: AgendaContent }) {
         <CardHead eyebrow={content.badge} title={content.sectionTitle} />
         <CardBody>
           <div className="flex flex-1 flex-col overflow-hidden">
-            {content.items.map((item, i) => {
+            {content.items.slice(0, 5).map((item, i) => {
               const badge = STATUS_BADGE[item.status];
               return (
                 <AgendaRow

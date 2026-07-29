@@ -38,7 +38,7 @@ export function PortalHeader({ logoUrl = null }: { logoUrl?: string | null }) {
               />
             ) : (
               <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-brand-ink-deep text-sm font-black text-brand-red">
-                UB
+                UAB
               </span>
             )}
             <span className="min-w-0">

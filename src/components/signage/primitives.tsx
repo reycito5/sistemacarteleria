@@ -141,8 +141,6 @@ export function PhotoPanel({
   title,
   sub,
   badge,
-  flag = true,
-  showMediaKind = true,
   children,
 }: PhotoPanelProps) {
   // Regla de arquitectura: el texto NUNCA va encima del medio. El medio ocupa
@@ -155,27 +153,9 @@ export function PhotoPanel({
       className="flex flex-col overflow-hidden rounded-[2px] bg-sig-ink-deep"
       style={{ gridColumn: `span ${span}` }}
     >
-      {/* Área del medio: foto o video, limpia, sin texto encima. */}
+      {/* Área del medio: foto o video, TOTALMENTE limpia, sin NADA encima. */}
       <div className="relative min-h-0 flex-1 overflow-hidden">
         <SignageMedia media={media} overlayText={false} />
-
-        {flag && (
-          <span
-            aria-hidden
-            className="absolute right-0 top-0 z-[3] h-[150px] w-[150px] bg-sig-red"
-            style={{ clipPath: "polygon(100% 0, 100% 100%, 0 0)" }}
-          />
-        )}
-
-        {showMediaKind && isVideoRef(media) && (
-          <span
-            className="absolute left-[36px] top-[34px] z-[3] inline-flex items-center gap-2.5 rounded-[3px] bg-black/60 px-4 py-2 font-bold uppercase tracking-[.08em] text-white backdrop-blur-sm"
-            style={{ fontSize: T.eyebrow }}
-          >
-            <span aria-hidden>▶</span>
-            Video
-          </span>
-        )}
       </div>
 
       {/* Bloque de texto: sólido, separado del medio (nunca superpuesto). */}

@@ -1,0 +1,336 @@
+@import "tailwindcss";
+
+/*
+ * ============================================================================
+ * SISTEMA DE DISEÑO — SICD UABJB POSGRADO
+ * ----------------------------------------------------------------------------
+ * Dos capas bien separadas:
+ *
+ *  1. LÍNEA GRÁFICA INSTITUCIONAL (--color-inst-*): la que se ve en el
+ *     televisor. Azul, rojo, blanco y dorado. Bloqueada: no se edita desde el
+ *     panel ni desde las plantillas.
+ *
+ *  2. INTERFAZ DE GESTIÓN (--color-ui-*): el panel y el portal web. Usa los
+ *     mismos colores institucionales, pero con superficies, sombras y estados
+ *     propios de una aplicación web.
+ * ============================================================================
+ */
+
+@theme {
+  /* --- Línea gráfica institucional V12 ------------------------------------
+   * Una sola paleta para todo el sistema: azul tinta, rojo institucional y
+   * papel cálido. `--color-sig-*` gobierna las pantallas del televisor;
+   * `--color-brand-*` reutiliza los mismos colores en el panel y el portal.
+   */
+  --color-sig-ink: #121f5c;
+  --color-sig-ink-deep: #0a1440;
+  --color-sig-ink-soft: #1b2c78;
+  --color-sig-red: #d4181f;
+  --color-sig-red-deep: #9c0f14;
+  --color-sig-paper: #fbfaf7;
+  --color-sig-paper-2: #f3f1ea;
+  --color-sig-card: #ffffff;
+  --color-sig-rule: #e4e1d6;
+  --color-sig-text: #191b22;
+  --color-sig-text-soft: #5b5d6b;
+  --color-sig-text-faint: #8b8d9b;
+
+  /* --- Marca en la interfaz de gestión ------------------------------------ */
+  --color-brand-ink: #121f5c;
+  --color-brand-ink-deep: #0a1440;
+  --color-brand-ink-soft: #1b2c78;
+  --color-brand-red: #d4181f;
+  --color-brand-red-soft: #fbe5e6;
+  --color-brand-white: #ffffff;
+
+  /* --- Superficies de la interfaz de gestión ------------------------------ */
+  --color-ui-canvas: #f5f6fa;
+  --color-ui-surface: #ffffff;
+  --color-ui-raised: #fbfcfe;
+  --color-ui-border: #e2e5ee;
+  --color-ui-border-strong: #cdd2e0;
+  --color-ui-ink: #141a2b;
+  --color-ui-ink-soft: #3d4459;
+  --color-ui-muted: #626a80;
+  --color-ui-faint: #8b93a8;
+
+  /* --- Estados semánticos ------------------------------------------------- */
+  --color-ok: #0f7b3d;
+  --color-ok-soft: #e6f4ec;
+  --color-warn: #9a5b00;
+  --color-warn-soft: #fdf3e2;
+  --color-danger: #d4181f;
+  --color-danger-soft: #fdecec;
+  --color-info: #121f5c;
+  --color-info-soft: #eceffa;
+
+  /* --- Tipografía --------------------------------------------------------- */
+  --font-sans: var(--font-inst-sans), "Inter", "Helvetica Neue", Arial,
+    sans-serif;
+  /* Serif editorial: titulares de pantalla y del portal. */
+  --font-serif: var(--font-inst-serif), "Fraunces", Georgia, serif;
+  /* Monoespaciada: relojes, fechas, códigos de campo. */
+  --font-mono: var(--font-inst-mono), "IBM Plex Mono", ui-monospace, monospace;
+
+  /* --- Radios ------------------------------------------------------------- */
+  --radius-ui: 10px;
+  --radius-ui-lg: 16px;
+
+  /* --- Sombras ------------------------------------------------------------ */
+  --shadow-ui-sm: 0 1px 2px rgb(20 26 43 / 0.06),
+    0 1px 3px rgb(20 26 43 / 0.04);
+  --shadow-ui: 0 2px 4px rgb(20 26 43 / 0.05), 0 8px 20px rgb(20 26 43 / 0.06);
+  --shadow-ui-lg: 0 4px 8px rgb(20 26 43 / 0.06),
+    0 20px 40px rgb(20 26 43 / 0.10);
+}
+
+:root {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #141a2b;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Anillo de foco accesible y uniforme en toda la aplicación de gestión. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-brand-ink-soft);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Filete rojo institucional */
+.inst-rule {
+  height: 3px;
+  background: var(--color-brand-red);
+}
+
+/*
+ * Contenedor de reproductor a pantalla completa (modo kiosco).
+ * El lienzo institucional trabaja siempre sobre 1920x1080 (16:9) y se escala
+ * proporcionalmente al televisor real.
+ */
+.kiosk-root {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+/* ============================================================================
+ * Utilidades compartidas de la interfaz de gestión
+ * ==========================================================================*/
+
+/* Degradado institucional para cabeceras y barras destacadas. */
+.ui-gradient-inst {
+  background: linear-gradient(
+    135deg,
+    var(--color-brand-ink-deep) 0%,
+    var(--color-brand-ink) 60%,
+    var(--color-brand-ink-soft) 100%
+  );
+}
+
+/* Trama diagonal sutil sobre el degradado institucional. */
+.ui-gradient-inst-mesh {
+  background:
+    radial-gradient(
+      ellipse 80% 60% at 85% 0%,
+      rgb(27 44 120 / 0.55),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 0% 100%,
+      rgb(212 24 31 / 0.22),
+      transparent 65%
+    ),
+    linear-gradient(
+      135deg,
+      var(--color-brand-ink-deep) 0%,
+      var(--color-brand-ink) 100%
+    );
+}
+
+/* Tarjeta base del panel. */
+.ui-card {
+  background: var(--color-ui-surface);
+  border: 1px solid var(--color-ui-border);
+  border-radius: var(--radius-ui-lg);
+  box-shadow: var(--shadow-ui-sm);
+}
+
+/* Números tabulares para relojes, contadores y métricas. */
+.ui-tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Barra de desplazamiento discreta dentro de paneles. */
+.ui-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ui-border-strong) transparent;
+}
+
+/* ============================================================================
+ * Animaciones
+ * ==========================================================================*/
+
+@keyframes ui-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes ui-pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes ui-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+.ui-animate-in {
+  animation: ui-fade-up 0.28s ease-out both;
+}
+
+.ui-pulse {
+  animation: ui-pulse-soft 2s ease-in-out infinite;
+}
+
+.ui-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-ui-border) 25%,
+    var(--color-ui-raised) 50%,
+    var(--color-ui-border) 75%
+  );
+  background-size: 200% 100%;
+  animation: ui-shimmer 1.4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-animate-in,
+  .ui-pulse,
+  .ui-skeleton {
+    animation: none;
+  }
+}
+
+/* ============================================================================
+ * Galería cinematográfica (efecto Ken Burns): zoom/paneo lento sobre la imagen
+ * activa. Se aplica una de estas variantes para dar variedad entre diapositivas.
+ * ==========================================================================*/
+@keyframes sig-kb-1 {
+  from {
+    transform: scale(1.02) translate(0, 0);
+  }
+  to {
+    transform: scale(1.16) translate(-2.5%, -2%);
+  }
+}
+@keyframes sig-kb-2 {
+  from {
+    transform: scale(1.16) translate(2.5%, 1.5%);
+  }
+  to {
+    transform: scale(1.02) translate(0, 0);
+  }
+}
+@keyframes sig-kb-3 {
+  from {
+    transform: scale(1.04) translate(2%, -1.5%);
+  }
+  to {
+    transform: scale(1.18) translate(-1.5%, 2%);
+  }
+}
+@keyframes sig-kb-4 {
+  from {
+    transform: scale(1.14) translate(-2%, 2%);
+  }
+  to {
+    transform: scale(1.03) translate(1.5%, -1.5%);
+  }
+}
+.sig-kb-1 {
+  animation: sig-kb-1 var(--kb-dur, 14s) ease-in-out infinite alternate;
+}
+.sig-kb-2 {
+  animation: sig-kb-2 var(--kb-dur, 14s) ease-in-out infinite alternate;
+}
+.sig-kb-3 {
+  animation: sig-kb-3 var(--kb-dur, 14s) ease-in-out infinite alternate;
+}
+.sig-kb-4 {
+  animation: sig-kb-4 var(--kb-dur, 14s) ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sig-kb-1,
+  .sig-kb-2,
+  .sig-kb-3,
+  .sig-kb-4 {
+    animation: none;
+  }
+}
+
+/* Entrada del contenido de cada pantalla: da vida al cambio de plantilla. */
+@keyframes sig-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.sig-enter {
+  animation: sig-enter 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Zoom lento continuo para dar vida a fotos y videos dentro de los paneles. */
+@keyframes sig-breathe {
+  from {
+    transform: scale(1.015);
+  }
+  to {
+    transform: scale(1.09);
+  }
+}
+.sig-breathe {
+  animation: sig-breathe 18s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sig-enter,
+  .sig-breathe {
+    animation: none;
+  }
+}

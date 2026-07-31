@@ -104,6 +104,9 @@ function HeroScreenMock() {
           <p className="font-serif text-[12px] font-bold text-white">
             Vicerrectorado de Posgrado
           </p>
+          <p className="mt-0.5 truncate text-[5px] font-bold uppercase tracking-[0.08em] text-brand-red">
+            Acreditado internacionalmente · CIEES – México
+          </p>
         </div>
         <p className="ui-tnum ml-auto font-mono text-[15px] font-bold leading-none text-white">
           16:09
@@ -180,7 +183,7 @@ export default function PortalHome() {
   return (
     <>
       {/* Portada */}
-      <section className="ui-gradient-inst-mesh relative overflow-hidden text-brand-white">
+      <section className="ui-gradient-inst-mesh relative flex min-h-[calc(100svh-85px)] overflow-hidden text-brand-white">
         {/* Rejilla técnica sutil de fondo (aire de sala de control). */}
         <div
           aria-hidden
@@ -192,7 +195,7 @@ export default function PortalHome() {
           }}
         />
 
-        <div className="relative mx-auto grid max-w-[1180px] items-center gap-14 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1.05fr_0.95fr] lg:py-24">
+        <div className="relative mx-auto grid w-full max-w-[1180px] items-center gap-8 px-4 py-9 sm:px-6 sm:py-11 lg:grid-cols-[0.92fr_1.08fr] lg:gap-12 lg:py-10">
           {/* Columna de texto */}
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white/80 backdrop-blur-sm">
@@ -200,7 +203,7 @@ export default function PortalHome() {
               Señalización digital · Vicerrectorado de Posgrado
             </span>
 
-            <h1 className="mt-6 font-serif text-[42px] font-semibold leading-[1.0] tracking-[-0.015em] sm:text-[60px]">
+            <h1 className="mt-5 max-w-[610px] font-serif text-[clamp(40px,4.2vw,58px)] font-extrabold leading-[0.99] tracking-[-0.045em]">
               Una sola programación,
               <br />
               <span className="text-brand-red">en las cuatro pantallas</span>
@@ -208,14 +211,14 @@ export default function PortalHome() {
               del Posgrado.
             </h1>
 
-            <p className="mt-6 max-w-xl text-[16px] leading-relaxed text-white/70">
+            <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-white/72 sm:text-[16px]">
               La cartelería digital del Vicerrectorado: agenda, programas y
               comunicados en los televisores de Recepción, Pasillo, Auditorio y
               Administración, sincronizados al segundo y gestionados desde un
               único panel.
             </p>
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-7 flex flex-wrap items-center gap-3">
               <ButtonLink href="/admin/login" size="lg">
                 Acceder al panel
                 <ArrowRight size={17} aria-hidden />
@@ -233,7 +236,7 @@ export default function PortalHome() {
               href={OFERTA_PORTAL_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-1.5 text-[13px] font-semibold text-white/60 underline-offset-4 transition hover:text-white hover:underline"
+              className="mt-5 inline-flex items-center gap-1.5 text-[13px] font-semibold text-white/60 underline-offset-4 transition hover:text-white hover:underline"
             >
               ¿Buscas la oferta académica? Visita el portal de Posgrado
               <ArrowUpRight size={15} aria-hidden />
@@ -241,7 +244,7 @@ export default function PortalHome() {
           </div>
 
           {/* Maqueta de televisor con una plantilla real de señalización */}
-          <div className="relative mx-auto w-full max-w-[540px]">
+          <div className="relative mx-auto w-full max-w-[570px]">
             <div className="absolute -right-4 -top-4 z-20 inline-flex items-center gap-2 rounded-full bg-brand-red px-3.5 py-1.5 text-[11px] font-black uppercase tracking-[0.14em] text-white shadow-lg">
               <span className="ui-pulse h-2 w-2 rounded-full bg-white" />
               En vivo
@@ -258,7 +261,7 @@ export default function PortalHome() {
             <div aria-hidden className="mx-auto h-1.5 w-40 rounded-full bg-black/40" />
 
             {/* Pastillas de las cuatro pantallas */}
-            <div className="mt-7 grid grid-cols-4 gap-2">
+            <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
               {SCREENS.map((s) => (
                 <div
                   key={s.code}

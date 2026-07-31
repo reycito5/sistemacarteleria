@@ -23,7 +23,7 @@ export function ComunicadoView({ content }: { content: ComunicadoContent }) {
 
           <h2
             className="line-clamp-3 font-serif font-bold leading-[1.06] text-sig-ink"
-            style={{ fontSize: 68 }}
+            style={{ fontSize: 60 }}
           >
             {content.title}
           </h2>
@@ -40,7 +40,7 @@ export function ComunicadoView({ content }: { content: ComunicadoContent }) {
           {content.highlight && (
             <p
               className="mt-5 line-clamp-1 font-serif font-bold leading-none text-sig-red"
-              style={{ fontSize: 60 }}
+              style={{ fontSize: 52 }}
             >
               {content.highlight}
             </p>

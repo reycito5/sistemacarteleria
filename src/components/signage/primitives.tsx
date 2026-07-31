@@ -227,13 +227,22 @@ export function CardHead({
   title: ReactNode;
   right?: ReactNode;
 }) {
+  const titleSize =
+    typeof title === "string" && title.length > 72
+      ? 31
+      : typeof title === "string" && title.length > 42
+        ? 34
+        : T.cardTitle;
+
   return (
-    <div className="flex items-start justify-between gap-6 px-[38px] pb-2 pt-[34px]">
-      <div className="min-w-0">
+    <div className="flex shrink-0 items-start justify-between gap-6 px-[38px] pb-2 pt-[30px]">
+      <div className="min-w-0 flex-1">
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-        <SerifTitle className="mt-2.5">{title}</SerifTitle>
+        <SerifTitle size={titleSize} className="mt-2 line-clamp-3">
+          {title}
+        </SerifTitle>
       </div>
-      {right}
+      {right && <div className="max-w-[240px] shrink-0">{right}</div>}
     </div>
   );
 }
@@ -650,7 +659,7 @@ export function NewsRow({
 }) {
   const video = isVideo ?? isVideoRef(media);
   return (
-    <div className="flex gap-6 border-b border-sig-rule py-6 last:border-b-0">
+    <div className="flex min-h-0 flex-1 gap-6 overflow-hidden border-b border-sig-rule py-5 last:border-b-0">
       <div className="relative h-[124px] w-[124px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep">
         <SignageMedia media={media} fallbackLabel="" />
         {video && (
@@ -666,7 +675,7 @@ export function NewsRow({
           </>
         )}
       </div>
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1 overflow-hidden">
         <p
           className="font-bold uppercase tracking-[.1em] text-sig-red"
           style={{ fontSize: 19 }}
@@ -674,13 +683,13 @@ export function NewsRow({
           {video ? "Video" : "Noticia"}
         </p>
         <p
-          className="mt-1.5 font-serif font-bold leading-[1.2] text-sig-ink"
+          className="mt-1.5 line-clamp-5 break-words font-serif font-bold leading-[1.18] text-sig-ink"
           style={{ fontSize: T.itemTitle }}
         >
           {title}
         </p>
         {meta && (
-          <p className="mt-2 text-sig-text-soft" style={{ fontSize: T.meta }}>
+          <p className="mt-2 line-clamp-2 text-sig-text-soft" style={{ fontSize: T.meta }}>
             {meta}
           </p>
         )}

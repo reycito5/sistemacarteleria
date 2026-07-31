@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Manrope, Space_Grotesk } from "next/font/google";
+import { IBM_Plex_Mono, Manrope } from "next/font/google";
 import "./globals.css";
 import { INSTITUTION } from "@/lib/design/tokens";
 
@@ -12,17 +12,6 @@ const manrope = Manrope({
   variable: "--font-inst-sans",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
-
-/**
- * Display de titulares: Space Grotesk. Geométrica, con carácter y un aire muy
- * «de pantalla» — ideal para los titulares de la cartelería y del portal.
- */
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-inst-serif",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -55,7 +44,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${manrope.variable} ${spaceGrotesk.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${manrope.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-dvh">{children}</body>
     </html>

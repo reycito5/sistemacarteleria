@@ -291,8 +291,6 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
           { type: "text", key: "credits", label: "Créditos" },
           { type: "text", key: "hours", label: "Horas académicas" },
           { type: "text", key: "phones", label: "Teléfonos" },
-          { type: "text", key: "audience", label: "Dirigido a" },
-          { type: "text", key: "address", label: "Dirección" },
           {
             type: "boolean",
             key: "enrollmentOpen",
@@ -319,15 +317,12 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
     purpose: "Titular institucional, lista de noticias o videos, y métricas.",
     titleKey: "title",
     steps: [
-      coverStep(),
       {
         id: "entradas",
-        title: "Noticias",
+        title: "Secuencia de noticias",
         description:
-          "Hasta doce entradas. Se reproducen una por una con su propio medio.",
+          "Hasta doce entradas. Cada noticia lleva su propio texto y medio; termina una y recién entonces entra la siguiente.",
         fields: [
-          { type: "text", key: "badge", label: "Antetítulo de la ficha" },
-          { type: "text", key: "title", label: "Título de la ficha" },
           {
             type: "list",
             key: "entries",

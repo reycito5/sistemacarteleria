@@ -1,6 +1,12 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { signMediaPaths } from "@/lib/media/storage";
+import {
+  categoryFromStoragePath,
+  normalizeMediaCategory,
+  type MediaCategory,
+} from "@/lib/media/categories";
+import { collectStoredMediaRefs } from "@/lib/media/walkMedia";
 import type {
   ContentItemRow,
   MediaAssetRow,
@@ -19,6 +25,26 @@ export interface MediaAssetSummary {
   height: number | null;
   durationSeconds: number | null;
   fileSize: number | null;
+  category: MediaCategory;
+}
+
+async function categoriesByCurrentUse(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+): Promise<Map<string, MediaCategory>> {
+  const { data } = await supabase.from("content_items").select("content_data");
+  const categories = new Map<string, MediaCategory>();
+  for (const row of data ?? []) {
+    const content = row.content_data as Record<string, unknown>;
+    const category = normalizeMediaCategory(
+      typeof content.kind === "string" ? content.kind : undefined,
+    );
+    for (const media of collectStoredMediaRefs(content)) {
+      if (media.assetId && !categories.has(media.assetId)) {
+        categories.set(media.assetId, category);
+      }
+    }
+  }
+  return categories;
 }
 
 /** Biblioteca multimedia, más reciente primero. */
@@ -27,11 +53,12 @@ export async function listMediaAssets(): Promise<MediaAssetSummary[]> {
   const { data } = await supabase
     .from("media_assets")
     .select(
-      "id, title, type, status, storage_path, thumbnail_path, width, height, duration_seconds, file_size",
+      "id, title, description, type, status, storage_path, thumbnail_path, width, height, duration_seconds, file_size",
     )
     .order("created_at", { ascending: false });
 
   const rows = data ?? [];
+  const usedCategories = await categoriesByCurrentUse(supabase);
   const paths = rows.flatMap((a) =>
     [a.storage_path, a.thumbnail_path].filter((p): p is string => Boolean(p)),
   );
@@ -48,6 +75,12 @@ export async function listMediaAssets(): Promise<MediaAssetSummary[]> {
     height: a.height,
     durationSeconds: a.duration_seconds,
     fileSize: a.file_size,
+    category: (() => {
+      const stored = a.description.startsWith("library-category:")
+        ? normalizeMediaCategory(a.description.slice("library-category:".length))
+        : categoryFromStoragePath(a.storage_path);
+      return stored === "general" ? usedCategories.get(a.id) ?? stored : stored;
+    })(),
   }));
 }
 
@@ -137,15 +170,17 @@ export interface MediaOption {
   /** URL firmada para la vista previa del panel. */
   url: string;
   type: MediaAssetRow["type"];
+  category: MediaCategory;
 }
 
 export async function listMediaOptions(): Promise<MediaOption[]> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("media_assets")
-    .select("id, title, type, storage_path, subtitle_path")
+    .select("id, title, description, type, storage_path, subtitle_path")
     .order("created_at", { ascending: false });
   const rows = data ?? [];
+  const usedCategories = await categoriesByCurrentUse(supabase);
   const signed = await signMediaPaths(
     supabase,
     rows.map((a) => a.storage_path),
@@ -157,6 +192,12 @@ export async function listMediaOptions(): Promise<MediaOption[]> {
     path: a.storage_path,
     subtitlePath: a.subtitle_path,
     url: signed.get(a.storage_path) ?? "",
+    category: (() => {
+      const stored = a.description.startsWith("library-category:")
+        ? normalizeMediaCategory(a.description.slice("library-category:".length))
+        : categoryFromStoragePath(a.storage_path);
+      return stored === "general" ? usedCategories.get(a.id) ?? stored : stored;
+    })(),
   }));
 }
 

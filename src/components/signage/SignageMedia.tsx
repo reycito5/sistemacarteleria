@@ -2,6 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { MediaRef } from "@/lib/views/schemas";
+import {
+  claimExclusivePlayback,
+  registerMediaElement,
+  releaseMediaElement,
+} from "@/lib/player/mediaCoordinator";
 import { isVideoRef } from "./mediaKind";
 
 // Persiste durante toda la sesión del reproductor. Tras el primer gesto
@@ -25,6 +30,7 @@ interface SignageMediaProps {
   loop?: boolean;
   onEnded?: () => void;
   onPlaybackError?: () => void;
+  fit?: "cover" | "contain";
 }
 
 /**
@@ -48,6 +54,7 @@ export function SignageMedia({
   loop = true,
   onEnded,
   onPlaybackError,
+  fit = "cover",
 }: SignageMediaProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [brokenSrc, setBrokenSrc] = useState<string | undefined>();
@@ -68,10 +75,11 @@ export function SignageMedia({
     const el = videoRef.current;
     if (!el) return;
 
+    const unregister = registerMediaElement(el);
+
     if (!active) {
-      el.pause();
-      el.muted = true;
-      return;
+      releaseMediaElement(el);
+      return unregister;
     }
 
     let cancelled = false;
@@ -87,7 +95,8 @@ export function SignageMedia({
     //    página y en ese instante activa el sonido. Un solo gesto basta para
     //    todos los videos que vengan después.
     const tryUnmute = async () => {
-      if (cancelled || !wantsSound) return false;
+      if (cancelled || !wantsSound || document.hidden) return false;
+      claimExclusivePlayback(el, true);
       el.muted = false;
       el.volume = 1;
       try {
@@ -101,6 +110,8 @@ export function SignageMedia({
     };
 
     const startMuted = async () => {
+      if (document.hidden) return;
+      claimExclusivePlayback(el, false);
       el.muted = true;
       try {
         await el.play();
@@ -134,7 +145,7 @@ export function SignageMedia({
       }
 
       await startMuted();
-      if (!wantsSound || cancelled) return;
+      if (!wantsSound || cancelled || document.hidden) return;
       const unmuted = await tryUnmute();
       if (unmuted) {
         setSoundBlocked(false);
@@ -169,8 +180,7 @@ export function SignageMedia({
       clearTimeout(id);
       removeGestureListeners();
       document.removeEventListener("visibilitychange", onVisibilityChange);
-      el.pause();
-      el.muted = true;
+      unregister();
     };
   }, [active, video, src, wantsSound]);
 
@@ -222,8 +232,9 @@ export function SignageMedia({
         </div>
       ) : video ? (
         <video
+          key={src}
           ref={videoRef}
-          className="h-full w-full object-cover"
+          className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"}`}
           src={src}
           poster={media?.poster}
           onError={() => {
@@ -231,6 +242,9 @@ export function SignageMedia({
             onPlaybackError?.();
           }}
           onEnded={onEnded}
+          onPlay={(event) =>
+            claimExclusivePlayback(event.currentTarget, !event.currentTarget.muted)
+          }
           autoPlay={active}
           muted
           loop={loop}
@@ -251,7 +265,7 @@ export function SignageMedia({
       ) : (
         // eslint-disable-next-line @next/next/no-img-element
         <img
-          className="h-full w-full object-cover"
+          className={`h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"}`}
           src={src}
           onError={() => setBrokenSrc(src)}
           alt=""

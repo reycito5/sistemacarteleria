@@ -3,7 +3,11 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getContext, writeAudit, type ActionResult } from "./helpers";
-import { is16by9 } from "@/lib/media/validation";
+import { hasRecommendedAspect } from "@/lib/media/validation";
+import {
+  MEDIA_CATEGORIES,
+  type MediaCategory,
+} from "@/lib/media/categories";
 
 const registerSchema = z.object({
   title: z.string().min(2, "El título es obligatorio"),
@@ -16,6 +20,7 @@ const registerSchema = z.object({
   durationSeconds: z.number().positive().nullish(),
   thumbnailPath: z.string().nullish(),
   subtitlePath: z.string().nullish(),
+  category: z.enum(MEDIA_CATEGORIES.map((item) => item.id) as [string, ...string[]]),
 });
 
 export type RegisterMediaInput = z.infer<typeof registerSchema>;
@@ -44,7 +49,14 @@ export async function registerMediaAsset(
   const { supabase, userId } = ctx.data;
 
   const dimsOk =
-    d.width && d.height ? is16by9(d.width, d.height) : d.mediaType === "video";
+    d.width && d.height
+      ? hasRecommendedAspect(
+          d.width,
+          d.height,
+          d.mediaType,
+          d.category as MediaCategory,
+        )
+      : d.mediaType === "video";
 
   const { data, error } = await supabase
     .from("media_assets")
@@ -61,6 +73,7 @@ export async function registerMediaAsset(
       duration_seconds: d.durationSeconds ?? null,
       status: dimsOk ? "validado" : "pendiente",
       created_by: userId,
+      description: `library-category:${d.category}`,
     })
     .select("id")
     .single();
@@ -82,12 +95,15 @@ export async function deleteMediaAsset(id: string): Promise<ActionResult> {
 
   const { data: asset } = await supabase
     .from("media_assets")
-    .select("storage_path")
+    .select("storage_path, thumbnail_path, subtitle_path")
     .eq("id", id)
     .maybeSingle();
 
   if (asset?.storage_path) {
-    await supabase.storage.from("media").remove([asset.storage_path]);
+    const paths = [asset.storage_path, asset.thumbnail_path, asset.subtitle_path].filter(
+      (path): path is string => Boolean(path),
+    );
+    await supabase.storage.from("media").remove(paths);
   }
 
   const { error } = await supabase.from("media_assets").delete().eq("id", id);

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { MediaRef } from "@/lib/views/schemas";
 import { SignageMedia } from "./SignageMedia";
+import { AutoFitText } from "./AutoFitText";
 import { isVideoRef } from "./mediaKind";
 import { QrCode } from "./QrCode";
 import { T } from "./scale";
@@ -133,6 +134,8 @@ interface PhotoPanelProps {
   mediaLoop?: boolean;
   onMediaEnded?: () => void;
   onMediaError?: () => void;
+  /** Conserva afiches verticales 4:5 completos dentro de un marco editorial. */
+  posterFrame?: boolean;
 }
 
 /**
@@ -151,6 +154,7 @@ export function PhotoPanel({
   mediaLoop = true,
   onMediaEnded,
   onMediaError,
+  posterFrame = false,
 }: PhotoPanelProps) {
   // Regla de arquitectura: el texto NUNCA va encima del medio. El medio ocupa
   // su propia área limpia (arriba) y, si hay rótulo, éste va en un bloque
@@ -163,7 +167,11 @@ export function PhotoPanel({
       style={{ gridColumn: `span ${span}` }}
     >
       {/* Área del medio: foto o video, TOTALMENTE limpia, sin NADA encima. */}
-      <div className="relative min-h-0 flex-1 overflow-hidden">
+      <div
+        className={`relative min-h-0 flex-1 overflow-hidden ${
+          posterFrame ? "bg-[#eef0f5] p-[26px]" : ""
+        }`}
+      >
         <SignageMedia
           media={media}
           overlayText={false}
@@ -171,6 +179,12 @@ export function PhotoPanel({
           loop={mediaLoop}
           onEnded={onMediaEnded}
           onPlaybackError={onMediaError}
+          fit={posterFrame ? "contain" : "cover"}
+          className={
+            posterFrame
+              ? "!inset-[26px] rounded-[8px] bg-white shadow-[0_18px_45px_rgba(7,19,66,.18)] ring-2 ring-white"
+              : ""
+          }
         />
       </div>
 
@@ -187,20 +201,25 @@ export function PhotoPanel({
             </p>
           )}
           {title && (
-            <h4
-              className="mt-0.5 line-clamp-2 font-serif font-semibold leading-[1.08] text-white"
-              style={{ fontSize: 26 }}
+            <AutoFitText
+              as="h4"
+              className="mt-0.5 font-serif font-semibold leading-[1.08] text-white"
+              maxSize={26}
+              minSize={17}
+              maxHeight={58}
             >
               {title}
-            </h4>
+            </AutoFitText>
           )}
           {sub && (
-            <p
-              className="mt-1 line-clamp-1 max-w-[96%] font-medium text-white/60"
-              style={{ fontSize: 18 }}
+            <AutoFitText
+              className="mt-1 max-w-[96%] font-medium leading-[1.2] text-white/65"
+              maxSize={18}
+              minSize={13}
+              maxHeight={44}
             >
               {sub}
-            </p>
+            </AutoFitText>
           )}
           {children}
         </div>
@@ -254,9 +273,21 @@ export function CardHead({
     <div className="flex shrink-0 items-start justify-between gap-6 px-[38px] pb-2 pt-[30px]">
       <div className="min-w-0 flex-1">
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-        <SerifTitle size={titleSize} className="mt-2 line-clamp-3">
-          {title}
-        </SerifTitle>
+        {typeof title === "string" ? (
+          <AutoFitText
+            as="h3"
+            className="mt-2 font-serif font-bold leading-[1.08] text-sig-ink"
+            maxSize={titleSize}
+            minSize={22}
+            maxHeight={112}
+          >
+            {title}
+          </AutoFitText>
+        ) : (
+          <SerifTitle size={titleSize} className="mt-2">
+            {title}
+          </SerifTitle>
+        )}
       </div>
       {right && <div className="max-w-[240px] shrink-0">{right}</div>}
     </div>
@@ -322,12 +353,15 @@ export function FieldGrid({
               {f.label}
             </span>
           </span>
-          <span
-            className="line-clamp-2 break-words font-serif font-bold leading-[1.18] text-sig-ink"
-            style={{ fontSize: 23 }}
+          <AutoFitText
+            as="span"
+            className="break-words font-serif font-bold leading-[1.18] text-sig-ink"
+            maxSize={23}
+            minSize={15}
+            maxHeight={58}
           >
             {f.value}
-          </span>
+          </AutoFitText>
         </div>
       ))}
       {Array.from({ length: remainder }).map((_, i) => (
@@ -443,12 +477,15 @@ export function InfoList({ rows }: { rows: FieldEntry[] }) {
           >
             {r.label}
           </span>
-          <span
-            className="line-clamp-2 text-right font-bold text-sig-ink"
-            style={{ fontSize: T.body }}
+          <AutoFitText
+            as="span"
+            className="text-right font-bold leading-[1.2] text-sig-ink"
+            maxSize={T.body}
+            minSize={15}
+            maxHeight={58}
           >
             {r.value}
-          </span>
+          </AutoFitText>
         </div>
       ))}
     </div>
@@ -475,19 +512,23 @@ export function AgendaRow({
         {time}
       </span>
       <div className="min-w-0 flex-1">
-        <p
-          className="line-clamp-2 font-serif font-bold leading-[1.18] text-sig-ink"
-          style={{ fontSize: T.itemTitle }}
+        <AutoFitText
+          className="font-serif font-bold leading-[1.18] text-sig-ink"
+          maxSize={T.itemTitle}
+          minSize={18}
+          maxHeight={68}
         >
           {title}
-        </p>
+        </AutoFitText>
         {meta && (
-          <p
-            className="mt-1.5 line-clamp-1 text-sig-text-soft"
-            style={{ fontSize: T.meta }}
+          <AutoFitText
+            className="mt-1.5 leading-[1.2] text-sig-text-soft"
+            maxSize={T.meta}
+            minSize={14}
+            maxHeight={42}
           >
             {meta}
-          </p>
+          </AutoFitText>
         )}
       </div>
       {badge}
@@ -554,8 +595,8 @@ export function ProgramTicket({ program }: { program: ProgramLike }) {
   const open = program.status !== "soon";
   return (
     <div className="flex items-center gap-5 border-b border-sig-rule py-[18px] last:border-b-0">
-      <div className="relative w-[92px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep [aspect-ratio:4/5]">
-        <SignageMedia media={program.media} fallbackLabel="" active={false} />
+      <div className="relative w-[92px] shrink-0 overflow-hidden rounded-[5px] border border-sig-rule bg-white p-1 [aspect-ratio:4/5]">
+        <SignageMedia media={program.media} fallbackLabel="" active={false} fit="contain" className="!inset-1" />
       </div>
       <div className="min-w-0 flex-1">
         {program.type && (
@@ -567,12 +608,14 @@ export function ProgramTicket({ program }: { program: ProgramLike }) {
             {program.version ? ` · ${program.version}` : ""}
           </p>
         )}
-        <p
-          className="mt-1 line-clamp-2 font-serif font-bold leading-[1.15] text-sig-ink"
-          style={{ fontSize: 30 }}
+        <AutoFitText
+          className="mt-1 font-serif font-bold leading-[1.15] text-sig-ink"
+          maxSize={30}
+          minSize={19}
+          maxHeight={72}
         >
           {program.name}
-        </p>
+        </AutoFitText>
         <p
           className="mt-1.5 line-clamp-1 text-sig-text-soft"
           style={{ fontSize: 21 }}
@@ -605,8 +648,8 @@ export function ProgramMini({ program }: { program: ProgramLike }) {
   const open = program.status !== "soon";
   return (
     <div className="flex min-w-0 flex-1 flex-col">
-      <div className="relative max-h-[300px] shrink-0 overflow-hidden [aspect-ratio:4/5]">
-        <SignageMedia media={program.media} fallbackLabel="" active={false} />
+      <div className="relative max-h-[300px] shrink-0 overflow-hidden border-b border-sig-rule bg-white p-3 [aspect-ratio:4/5]">
+        <SignageMedia media={program.media} fallbackLabel="" active={false} fit="contain" className="!inset-3" />
         <span
           aria-hidden
           className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/85 to-transparent"
@@ -634,12 +677,14 @@ export function ProgramMini({ program }: { program: ProgramLike }) {
             {program.type}
           </p>
         )}
-        <p
-          className="line-clamp-3 font-serif font-bold leading-[1.15] text-sig-ink"
-          style={{ fontSize: 29 }}
+        <AutoFitText
+          className="font-serif font-bold leading-[1.15] text-sig-ink"
+          maxSize={29}
+          minSize={17}
+          maxHeight={102}
         >
           {program.name}
-        </p>
+        </AutoFitText>
         <p
           className="line-clamp-2 text-sig-text-soft"
           style={{ fontSize: 21 }}

@@ -34,13 +34,13 @@ export function PortalHeader({ logoUrl = null }: { logoUrl?: string | null }) {
               </span>
             )}
             <span className="min-w-0 leading-none">
-              <span className="block truncate text-[10px] font-bold leading-[1.2] tracking-[-0.01em] text-brand-ink sm:text-[11px]">
+              <span className="block truncate text-[12px] font-extrabold leading-[1.1] tracking-[-0.02em] text-brand-ink sm:text-[14px]">
                 {INSTITUTION.university}
               </span>
-              <span className="mt-1 block truncate text-[10px] font-bold leading-[1.2] tracking-[-0.01em] text-brand-ink sm:text-[11px]">
+              <span className="mt-1 block truncate text-[10px] font-bold leading-[1.15] tracking-[-0.01em] text-brand-ink/85 sm:text-[12px]">
                 {INSTITUTION.vicerrectorate}
               </span>
-              <span className="mt-1 block truncate text-[10px] font-bold leading-[1.2] tracking-[-0.01em] text-brand-red sm:text-[11px]">
+              <span className="mt-1 block truncate text-[8px] font-semibold uppercase leading-[1.15] tracking-[.04em] text-brand-red sm:text-[9px]">
                 Acreditado internacionalmente · CIEES – México
               </span>
             </span>

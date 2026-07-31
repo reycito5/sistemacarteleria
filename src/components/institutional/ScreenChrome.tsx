@@ -136,25 +136,21 @@ export function ScreenHeader({
 
         <div className="min-w-0 pl-[30px]">
           <p
-            className="truncate font-sans font-bold leading-[1.18] tracking-[-0.015em] text-white"
-            style={{ fontSize: 22 }}
+            className="truncate font-sans font-extrabold leading-[1.08] tracking-[-0.025em] text-white"
+            style={{ fontSize: 30 }}
           >
             {identity.universityName}
           </p>
           <p
-            className="mt-1 truncate font-sans font-bold leading-[1.18] tracking-[-0.015em] text-white"
-            style={{ fontSize: 22 }}
+            className="mt-1 truncate font-sans font-bold leading-[1.12] tracking-[-0.015em] text-white/90"
+            style={{ fontSize: 24 }}
           >
             {identity.vicerrectorateName}
           </p>
           <p
-            className="mt-1 flex min-w-0 items-center gap-2.5 truncate font-sans font-bold leading-[1.18] tracking-[-0.015em] text-white"
-            style={{ fontSize: 22 }}
+            className="mt-1.5 truncate font-sans font-semibold uppercase leading-[1.15] tracking-[.055em] text-[#b8c3e8]"
+            style={{ fontSize: 17 }}
           >
-            <span
-              aria-hidden
-              className="h-[9px] w-[9px] shrink-0 rounded-full bg-sig-red"
-            />
             Acreditado internacionalmente · CIEES – México
           </p>
         </div>

@@ -106,8 +106,6 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
     credits: "20 créditos",
     hours: "800 horas académicas",
     phones: "72811478 · 71125341",
-    audience: "Todos los profesionales",
-    address: "Oficinas del Vicerrectorado de Posgrado",
     enrollmentOpen: true,
     quote: "Excelencia académica · Compromiso · Gestión",
     qrCaption: "Ver ficha completa e inscribirse",

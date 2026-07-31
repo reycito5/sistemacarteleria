@@ -221,6 +221,7 @@ export function ContentForm({
                     field={f}
                     values={values}
                     mediaOptions={mediaOptions}
+                    contentKind={kind}
                     onChange={setField}
                   />
                 ))}

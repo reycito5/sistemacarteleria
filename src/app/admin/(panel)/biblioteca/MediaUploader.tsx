@@ -22,12 +22,16 @@ import { registerMediaAsset } from "@/lib/actions/media";
 import {
   MEDIA_LIMITS,
   buildStoragePath,
-  is16by9,
+  hasRecommendedAspect,
   validateFile,
 } from "@/lib/media/validation";
+import {
+  MEDIA_CATEGORIES,
+  type MediaCategory,
+} from "@/lib/media/categories";
 import type { MediaType } from "@/lib/supabase/database.types";
 import { Button } from "@/components/ui/Button";
-import { Field, Input } from "@/components/ui/Field";
+import { Field, Input, Select } from "@/components/ui/Field";
 import { Alert } from "@/components/ui/Alert";
 import { Badge } from "@/components/ui/Badge";
 
@@ -42,6 +46,23 @@ interface Picked {
   mediaType: MediaType;
   previewUrl: string;
   dims: Dimensions | null;
+}
+
+function aspectWarning(
+  picked: Picked | null,
+  category: MediaCategory,
+): string | null {
+  if (!picked?.dims) return null;
+  const { width, height } = picked.dims;
+  if (hasRecommendedAspect(width, height, picked.mediaType, category)) return null;
+  const recommendation =
+    picked.mediaType === "image" && category === "programa_destacado"
+      ? "1080×1350 (4:5), como los afiches institucionales"
+      : "1920×1080 (16:9)";
+  return (
+    `La resolución ${width}×${height} no coincide con ${recommendation}. ` +
+    "Se puede subir y se mostrará completa dentro de su marco, sin recortarse."
+  );
 }
 
 const ACCEPT = [...MEDIA_LIMITS.video.mimes, ...MEDIA_LIMITS.image.mimes].join(
@@ -131,12 +152,12 @@ export function MediaUploader() {
   const [picked, setPicked] = useState<Picked | null>(null);
   const [subtitleName, setSubtitleName] = useState<string | null>(null);
   const [title, setTitle] = useState("");
+  const [category, setCategory] = useState<MediaCategory>("general");
   const [dragging, setDragging] = useState(false);
   const [progress, setProgress] = useState<number | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [warning, setWarning] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   const busy = progress !== null || pending;
@@ -155,7 +176,6 @@ export function MediaUploader() {
     setTitle("");
     setProgress(null);
     setStatus(null);
-    setWarning(null);
     if (inputRef.current) inputRef.current.value = "";
     if (subInputRef.current) subInputRef.current.value = "";
   }, []);
@@ -164,7 +184,6 @@ export function MediaUploader() {
   const acceptFile = useCallback(async (file: File) => {
     setError(null);
     setSuccess(null);
-    setWarning(null);
 
     const check = validateFile({
       name: file.name,
@@ -181,14 +200,6 @@ export function MediaUploader() {
       dims = await readDimensions(file, check.mediaType);
     } catch {
       dims = null; // se registrará como pendiente de revisión
-    }
-
-    if (dims && !is16by9(dims.width, dims.height)) {
-      setWarning(
-        `La resolución ${dims.width}×${dims.height} no es 16:9. Se puede subir, ` +
-          "pero quedará marcada como pendiente de revisión: en el televisor " +
-          "aparecerán franjas o se recortará. Lo recomendado es 1920×1080.",
-      );
     }
 
     setPicked({
@@ -227,7 +238,7 @@ export function MediaUploader() {
       return;
     }
 
-    const path = buildStoragePath(mediaType, file.name);
+    const path = buildStoragePath(mediaType, file.name, category);
     setStatus("Subiendo archivo…");
     setProgress(0);
 
@@ -261,9 +272,7 @@ export function MediaUploader() {
         return;
       }
       setStatus("Subiendo subtítulos…");
-      const sp = `subtitle/${path
-        .replace(/^video\//, "")
-        .replace(/\.\w+$/, "")}.vtt`;
+      const sp = `${path.replace(`/${mediaType}/`, "/subtitles/").replace(/\.\w+$/, "")}.vtt`;
       const { error: subErr } = await supabase.storage
         .from("media")
         .upload(sp, subFile, { contentType: "text/vtt", upsert: false });
@@ -290,6 +299,7 @@ export function MediaUploader() {
         height: dims?.height ?? null,
         durationSeconds: dims?.durationSeconds ?? null,
         subtitlePath,
+        category,
       });
       if (!res.ok) {
         setError(res.error);
@@ -307,6 +317,7 @@ export function MediaUploader() {
   };
 
   const duration = humanDuration(picked?.dims?.durationSeconds);
+  const warning = aspectWarning(picked, category);
 
   return (
     <div className="ui-card p-5 sm:p-6">
@@ -320,7 +331,7 @@ export function MediaUploader() {
           </h2>
           <p className="mt-1 text-sm leading-relaxed text-ui-muted">
             Videos MP4 (H.264) hasta 500 MB e imágenes JPG, PNG o WebP hasta
-            15 MB. Resolución recomendada: <strong>1920×1080 (16:9)</strong>.
+            15 MB. Pantallas: <strong>16:9</strong>. Afiches de programas: <strong>4:5</strong>.
           </p>
         </div>
       </div>
@@ -431,6 +442,24 @@ export function MediaUploader() {
       {/* Metadatos */}
       {picked && (
         <div className="mt-5 space-y-4">
+          <Field
+            label="Espacio de la biblioteca"
+            htmlFor="media-category"
+            hint="El archivo aparecerá primero dentro de esta plantilla; siempre podrá consultarlo desde Todos."
+          >
+            <Select
+              id="media-category"
+              value={category}
+              onChange={(event) => setCategory(event.target.value as MediaCategory)}
+              disabled={busy}
+            >
+              {MEDIA_CATEGORIES.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.label}
+                </option>
+              ))}
+            </Select>
+          </Field>
           <Field
             label="Título en la biblioteca"
             htmlFor="media-title"

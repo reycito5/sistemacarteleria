@@ -79,8 +79,8 @@ export function NoticiasView({ content }: { content: NoticiasContent }) {
 
           <SigCard span={5}>
             <CardHead
-              eyebrow={content.badge}
-              title={content.title}
+              eyebrow="Noticias del Posgrado"
+              title={entry.kind === "video" ? "Video institucional" : "Actualidad institucional"}
               right={
                 <SigBadge kind={entry.kind === "video" ? "onlight-live" : "onlight"}>
                   {entry.kind === "video" ? "Video" : "Noticia"}
@@ -90,15 +90,15 @@ export function NoticiasView({ content }: { content: NoticiasContent }) {
             <CardBody className="justify-center">
               <Eyebrow>{entry.kind === "video" ? "Ahora en pantalla" : "Actualidad"}</Eyebrow>
               <h2
-                className="mt-4 line-clamp-6 break-words font-serif font-bold leading-[1.12] text-sig-ink"
-                style={{ fontSize: entry.title.length > 105 ? 35 : entry.title.length > 65 ? 41 : 48 }}
+                className="mt-4 break-words font-serif font-bold leading-[1.12] text-sig-ink"
+                style={{ fontSize: entry.title.length > 150 ? 28 : entry.title.length > 105 ? 34 : entry.title.length > 65 ? 40 : 48 }}
               >
                 {entry.title}
               </h2>
               {entry.meta && (
                 <p
-                  className="mt-6 line-clamp-5 break-words leading-[1.4] text-sig-text-soft"
-                  style={{ fontSize: T.body }}
+                  className="mt-6 break-words leading-[1.38] text-sig-text-soft"
+                  style={{ fontSize: entry.meta.length > 220 ? 18 : entry.meta.length > 130 ? 21 : T.body }}
                 >
                   {entry.meta}
                 </p>

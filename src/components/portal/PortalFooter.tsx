@@ -22,13 +22,13 @@ export function PortalFooter() {
                 UAB
               </span>
               <div>
-                <p className="text-[11px] font-bold leading-[1.25] text-white">
+                <p className="text-[13px] font-extrabold leading-[1.15] text-white">
                   {INSTITUTION.university}
                 </p>
-                <p className="mt-0.5 text-[11px] font-bold leading-[1.25] text-white">
+                <p className="mt-1 text-[11px] font-bold leading-[1.2] text-white/85">
                   {INSTITUTION.vicerrectorate}
                 </p>
-                <p className="mt-0.5 text-[11px] font-bold leading-[1.25] text-brand-red">
+                <p className="mt-1 text-[9px] font-semibold uppercase leading-[1.2] tracking-[.04em] text-brand-red">
                   Acreditado internacionalmente · CIEES – México
                 </p>
               </div>

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import type { MediaOption } from "@/lib/data/admin";
 import { Input } from "@/components/ui/Field";
+import { categoryLabel, normalizeMediaCategory } from "@/lib/media/categories";
 
 export interface SelectedMedia {
   assetId: string;
@@ -29,6 +30,7 @@ interface MediaPickerProps {
   options: MediaOption[];
   value?: { assetId?: string; silent?: boolean };
   onChange: (media: SelectedMedia | undefined) => void;
+  expectedCategory?: string;
 }
 
 /**
@@ -36,8 +38,14 @@ interface MediaPickerProps {
  * muestra las miniaturas reales de la biblioteca. Así se ve qué se está
  * eligiendo antes de asignarlo a la pantalla.
  */
-export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
+export function MediaPicker({
+  options,
+  value,
+  onChange,
+  expectedCategory,
+}: MediaPickerProps) {
   const [query, setQuery] = useState("");
+  const [showAll, setShowAll] = useState(false);
 
   if (options.length === 0) {
     return (
@@ -60,7 +68,10 @@ export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
     );
   }
 
-  const visible = options.filter((m) =>
+  const normalizedExpected = normalizeMediaCategory(expectedCategory);
+  const relevant = options.filter((option) => option.category === normalizedExpected);
+  const scoped = showAll || relevant.length === 0 ? options : relevant;
+  const visible = scoped.filter((m) =>
     m.title.toLowerCase().includes(query.trim().toLowerCase()),
   );
 
@@ -117,6 +128,23 @@ export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
         )}
       </div>
 
+      {relevant.length > 0 && (
+        <div className="mb-3 flex items-center justify-between gap-3 rounded-[10px] bg-info-soft px-3 py-2 text-xs">
+          <span className="font-semibold text-brand-ink">
+            {showAll
+              ? `Mostrando toda la biblioteca (${options.length})`
+              : `${categoryLabel(normalizedExpected)} (${relevant.length})`}
+          </span>
+          <button
+            type="button"
+            onClick={() => setShowAll((current) => !current)}
+            className="font-bold text-brand-red hover:underline"
+          >
+            {showAll ? "Ver recomendados" : "Ver todos"}
+          </button>
+        </div>
+      )}
+
       {visible.length === 0 ? (
         <p className="py-4 text-center text-xs text-ui-muted">
           Ningún archivo coincide con «{query}».
@@ -171,6 +199,9 @@ export function MediaPicker({ options, value, onChange }: MediaPickerProps) {
                     <span className="min-w-0 flex-1 truncate text-[11px] font-semibold text-ui-ink">
                       {m.title}
                     </span>
+                  </span>
+                  <span className="block truncate border-t border-ui-border bg-ui-raised px-2 py-1 text-[9px] font-semibold text-ui-muted">
+                    {categoryLabel(m.category)}
                   </span>
                 </button>
               </li>

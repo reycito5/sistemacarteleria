@@ -167,7 +167,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         id: "listado",
         title: "Listado de programas",
         description:
-          "Hasta cuatro programas. Cada uno puede llevar su propia miniatura.",
+          "Hasta doce programas; se paginan automáticamente en pantalla.",
         fields: [
           { type: "text", key: "cardEyebrow", label: "Antetítulo de la ficha" },
           { type: "text", key: "sectionTitle", label: "Título de la ficha" },
@@ -175,7 +175,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
             type: "list",
             key: "programs",
             label: "Programas",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "name", label: "Nombre del programa" },
               { key: "type", label: "Nivel (Maestría, Diplomado…)" },
@@ -213,7 +213,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
       {
         id: "actividades",
         title: "Actividades",
-        description: "Hasta cinco actividades ordenadas por hora.",
+        description: "Hasta doce actividades ordenadas por hora.",
         fields: [
           { type: "text", key: "badge", label: "Antetítulo de la ficha" },
           { type: "text", key: "sectionTitle", label: "Título de la ficha" },
@@ -221,7 +221,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
             type: "list",
             key: "items",
             label: "Actividades",
-            max: 5,
+            max: 12,
             itemFields: [
               { key: "time", label: "Hora (08:30)" },
               { key: "title", label: "Actividad" },
@@ -324,7 +324,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         id: "entradas",
         title: "Noticias",
         description:
-          "Hasta cuatro entradas. Cada una puede ser una noticia o un video con su portada.",
+          "Hasta doce entradas. Se reproducen una por una con su propio medio.",
         fields: [
           { type: "text", key: "badge", label: "Antetítulo de la ficha" },
           { type: "text", key: "title", label: "Título de la ficha" },
@@ -332,7 +332,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
             type: "list",
             key: "entries",
             label: "Entradas",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "title", label: "Titular" },
               { key: "meta", label: "Detalle" },
@@ -437,13 +437,13 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
       {
         id: "ubicaciones",
         title: "Ubicaciones",
-        description: "Hasta seis dependencias con su piso o sala.",
+        description: "Hasta doce dependencias con su piso o sala.",
         fields: [
           {
             type: "list",
             key: "locations",
             label: "Dependencias",
-            max: 6,
+            max: 12,
             itemFields: [
               { key: "label", label: "Dependencia" },
               { key: "place", label: "Ubicación" },
@@ -481,7 +481,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
             type: "list",
             key: "items",
             label: "Reconocimientos",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "name", label: "Nombre o logro" },
               { key: "role", label: "Cargo o distinción" },
@@ -520,7 +520,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
             type: "list",
             key: "schedule",
             label: "Momentos",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "time", label: "Hora" },
               { key: "label", label: "Momento" },
@@ -586,13 +586,13 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         id: "programas",
         title: "Programas",
         description:
-          "Hasta cuatro. La fecha corta se pinta grande sobre la portada.",
+          "Hasta doce. Se muestran cuatro por página con movimiento automático.",
         fields: [
           {
             type: "list",
             key: "programs",
             label: "Programas",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "name", label: "Nombre del programa" },
               { key: "type", label: "Nivel" },
@@ -677,6 +677,39 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         fields: [
           { type: "textarea", key: "quote", label: "Frase institucional" },
           { type: "textarea", key: "message", label: "Mensaje" },
+          ...qrFields(),
+        ],
+      },
+    ],
+  },
+
+  homenaje: {
+    kind: "homenaje",
+    label: "Fecha especial u homenaje",
+    purpose:
+      "Saludos por fechas festivas, homenajes y mensajes especiales con video de una autoridad.",
+    titleKey: "title",
+    steps: [
+      {
+        id: "ocasion",
+        title: "Fecha y mensaje",
+        description: "La ocasión y el texto principal que se leerá en pantalla.",
+        fields: [
+          { type: "text", key: "occasion", label: "Fecha u ocasión" },
+          { type: "text", key: "badge", label: "Distintivo" },
+          { type: "text", key: "title", label: "Título del homenaje" },
+          { type: "textarea", key: "quote", label: "Frase destacada" },
+          { type: "textarea", key: "message", label: "Mensaje completo" },
+        ],
+      },
+      {
+        id: "autoridad",
+        title: "Video y firma",
+        description: "Video o imagen de la autoridad que brinda el mensaje.",
+        fields: [
+          { type: "media", key: "media", label: "Video o imagen del homenaje" },
+          { type: "text", key: "name", label: "Nombre de la autoridad" },
+          { type: "text", key: "authority", label: "Cargo" },
           ...qrFields(),
         ],
       },

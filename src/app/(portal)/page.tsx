@@ -98,13 +98,13 @@ function HeroScreenMock() {
           <span className="h-5 w-px bg-white/25" />
         </div>
         <div className="min-w-0 leading-tight">
-          <p className="truncate text-[6px] font-medium uppercase tracking-wide text-white/55">
+          <p className="truncate text-[7px] font-bold text-white">
             Universidad Autónoma del Beni
           </p>
-          <p className="font-serif text-[12px] font-bold text-white">
+          <p className="mt-0.5 truncate text-[7px] font-bold text-white">
             Vicerrectorado de Posgrado
           </p>
-          <p className="mt-0.5 truncate text-[5px] font-bold uppercase tracking-[0.08em] text-brand-red">
+          <p className="mt-0.5 truncate text-[7px] font-bold text-brand-red">
             Acreditado internacionalmente · CIEES – México
           </p>
         </div>

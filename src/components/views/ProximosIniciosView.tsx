@@ -8,6 +8,7 @@ import {
 } from "@/components/signage/primitives";
 import { QrCode } from "@/components/signage/QrCode";
 import { T } from "@/components/signage/scale";
+import { VerticalPager } from "@/components/signage/VerticalPager";
 
 /**
  * Vista 6 — Próximos inicios de gestión.
@@ -24,15 +25,20 @@ export function ProximosIniciosView({
     <>
       <SigCard span={10}>
         <CardHead eyebrow={content.eyebrow} title={content.sectionTitle} />
-        <CardBody className="flex-row gap-0 px-0 pb-0 pt-3.5">
-          {content.programs.slice(0, 4).map((p, i) => (
-            <div
-              key={`${p.name}-${i}`}
-              className={`flex flex-1 ${i > 0 ? "border-l border-sig-rule" : ""}`}
-            >
-              <ProgramMini program={p} />
-            </div>
-          ))}
+        <CardBody className="px-0 pb-0 pt-3.5">
+          <VerticalPager
+            pageSize={4}
+            className="px-0"
+            pageClassName="flex-row"
+            items={content.programs.map((p, i) => (
+              <div
+                key={`${p.name}-${i}`}
+                className="flex min-w-0 flex-1 border-l border-sig-rule first:border-l-0"
+              >
+                <ProgramMini program={p} />
+              </div>
+            ))}
+          />
         </CardBody>
       </SigCard>
 

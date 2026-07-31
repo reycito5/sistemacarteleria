@@ -190,7 +190,9 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
   return (
     <div className="kiosk-root">
       <ScreenFrame identity={identity} {...mode}>
-        <ViewRenderer content={item.content} />
+        {/* Una pieza nueva desmonta por completo la anterior: ningún video
+            oculto puede continuar reproduciéndose o conservando audio. */}
+        <ViewRenderer key={item.id} content={item.content} />
       </ScreenFrame>
       {!online && (
         <div className="pointer-events-none absolute right-3 top-3 rounded bg-black/60 px-3 py-1 text-xs font-bold text-white">

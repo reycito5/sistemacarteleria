@@ -4,6 +4,11 @@ import { useEffect, useRef, useState } from "react";
 import type { MediaRef } from "@/lib/views/schemas";
 import { isVideoRef } from "./mediaKind";
 
+// Persiste durante toda la sesión del reproductor. Tras el primer gesto
+// aceptado, los siguientes videos pueden intentar arrancar con sonido sin
+// volver a pedir interacción.
+let soundUnlocked = false;
+
 interface SignageMediaProps {
   media?: MediaRef;
   className?: string;
@@ -14,6 +19,12 @@ interface SignageMediaProps {
    * lea. Sin texto encima, el medio se muestra sin ningún velo.
    */
   overlayText?: boolean;
+  /** Sólo el medio visible puede reproducirse. Las miniaturas usan `false`. */
+  active?: boolean;
+  /** Los videos editoriales avanzan al terminar; los fondos pueden repetir. */
+  loop?: boolean;
+  onEnded?: () => void;
+  onPlaybackError?: () => void;
 }
 
 /**
@@ -33,9 +44,13 @@ export function SignageMedia({
   className = "",
   fallbackLabel = "UABJB · POSGRADO",
   overlayText = false,
+  active = true,
+  loop = true,
+  onEnded,
+  onPlaybackError,
 }: SignageMediaProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [broken, setBroken] = useState(false);
+  const [brokenSrc, setBrokenSrc] = useState<string | undefined>();
   // El sonido está pedido pero el navegador lo bloquea hasta un gesto: se
   // muestra un aviso para tocar y activarlo (garantía en cualquier navegador).
   const [soundBlocked, setSoundBlocked] = useState(false);
@@ -52,6 +67,12 @@ export function SignageMedia({
     if (!video) return;
     const el = videoRef.current;
     if (!el) return;
+
+    if (!active) {
+      el.pause();
+      el.muted = true;
+      return;
+    }
 
     let cancelled = false;
 
@@ -71,6 +92,7 @@ export function SignageMedia({
       el.volume = 1;
       try {
         await el.play();
+        soundUnlocked = true;
         return !el.muted;
       } catch {
         el.muted = true;
@@ -103,6 +125,14 @@ export function SignageMedia({
     }
 
     (async () => {
+      if (soundUnlocked && wantsSound) {
+        const resumedWithSound = await tryUnmute();
+        if (resumedWithSound || cancelled) {
+          setSoundBlocked(false);
+          return;
+        }
+      }
+
       await startMuted();
       if (!wantsSound || cancelled) return;
       const unmuted = await tryUnmute();
@@ -124,15 +154,27 @@ export function SignageMedia({
     const id = setTimeout(() => {
       if (!cancelled) el.play().catch(() => {});
     }, 400);
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        el.pause();
+        el.muted = true;
+      } else {
+        startMuted().then(() => tryUnmute());
+      }
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     return () => {
       cancelled = true;
       clearTimeout(id);
       removeGestureListeners();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      el.pause();
+      el.muted = true;
     };
-  }, [video, src, wantsSound]);
+  }, [active, video, src, wantsSound]);
 
-  const showFallback = !src || broken;
+  const showFallback = !src || brokenSrc === src;
 
   // Activación manual del sonido: cualquier navegador/celular puede activarlo
   // tocando el aviso, aunque bloquee el sonido automático.
@@ -141,7 +183,16 @@ export function SignageMedia({
     if (!el) return;
     el.muted = false;
     el.volume = 1;
-    el.play().finally(() => setSoundBlocked(el.muted));
+    el.play().then(
+      () => {
+        soundUnlocked = !el.muted;
+        setSoundBlocked(el.muted);
+      },
+      () => {
+        el.muted = true;
+        setSoundBlocked(true);
+      },
+    );
   };
 
   return (
@@ -175,10 +226,14 @@ export function SignageMedia({
           className="h-full w-full object-cover"
           src={src}
           poster={media?.poster}
-          onError={() => setBroken(true)}
-          autoPlay
+          onError={() => {
+            setBrokenSrc(src);
+            onPlaybackError?.();
+          }}
+          onEnded={onEnded}
+          autoPlay={active}
           muted
-          loop
+          loop={loop}
           playsInline
           preload="auto"
           crossOrigin="anonymous"
@@ -198,7 +253,7 @@ export function SignageMedia({
         <img
           className="h-full w-full object-cover"
           src={src}
-          onError={() => setBroken(true)}
+          onError={() => setBrokenSrc(src)}
           alt=""
         />
       )}

@@ -9,6 +9,7 @@ import {
   SigCard,
   type ProgramLike,
 } from "@/components/signage/primitives";
+import { VerticalPager } from "@/components/signage/VerticalPager";
 
 /**
  * Vista 1 — Programación general y oferta académica.
@@ -44,11 +45,12 @@ export function ProgramacionGeneralView({
       <SigCard span={5}>
         <CardHead eyebrow={content.cardEyebrow} title={content.sectionTitle} />
         <CardBody>
-          <div className="flex flex-1 flex-col overflow-hidden">
-            {programs.slice(0, 3).map((p, i) => (
+          <VerticalPager
+            pageSize={3}
+            items={programs.map((p, i) => (
               <ProgramTicket key={`${p.name}-${i}`} program={p} />
             ))}
-          </div>
+          />
         </CardBody>
         {/* Una sola banda inferior: el QR manda; si no hay, se muestra el
             «A continuación». Evita apilar dos franjas y tapar los listados. */}

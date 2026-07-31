@@ -136,17 +136,20 @@ export function ScreenHeader({
 
         <div className="min-w-0 pl-[30px]">
           <p
-            className="truncate font-semibold text-white/68"
+            className="truncate font-sans font-bold leading-[1.18] tracking-[-0.015em] text-white"
             style={{ fontSize: 22 }}
           >
             {identity.universityName}
           </p>
-          <p className="mt-1 font-serif text-[42px] font-extrabold leading-[1.05] tracking-[-0.035em] text-white">
+          <p
+            className="mt-1 truncate font-sans font-bold leading-[1.18] tracking-[-0.015em] text-white"
+            style={{ fontSize: 22 }}
+          >
             {identity.vicerrectorateName}
           </p>
           <p
-            className="mt-2 inline-flex items-center gap-2.5 font-bold uppercase tracking-[0.11em] text-white/72"
-            style={{ fontSize: 18 }}
+            className="mt-1 flex min-w-0 items-center gap-2.5 truncate font-sans font-bold leading-[1.18] tracking-[-0.015em] text-white"
+            style={{ fontSize: 22 }}
           >
             <span
               aria-hidden
@@ -177,21 +180,15 @@ export function ScreenTicker({ identity }: { identity: InstitutionIdentity }) {
       >
         {identity.tickerLabel}
       </span>
-      {/* Marquesina: la frase se desplaza en bucle, nunca se corta. */}
+      {/* Una sola instancia en movimiento: nunca aparecen dos frases simultáneas. */}
       <div className="sig-marquee-mask min-w-0 flex-1 overflow-hidden">
         <div className="sig-marquee">
-          {[0, 1].map((k) => (
-            <span
-              key={k}
-              className="font-serif font-medium text-white/90"
-              style={{ fontSize: 27 }}
-            >
-              {identity.tickerText}
-              <span aria-hidden className="mx-8 text-sig-red">
-                ●
-              </span>
-            </span>
-          ))}
+          <span
+            className="font-sans font-medium text-white/90"
+            style={{ fontSize: 27 }}
+          >
+            {identity.tickerText}
+          </span>
         </div>
       </div>
 

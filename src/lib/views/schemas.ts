@@ -101,9 +101,9 @@ export const programacionGeneralSchema = z.object({
   subheadline: z.string().default(""),
   media: mediaRefSchema.optional(),
   /** Fichas completas (con su propio medio). Es la vía recomendada. */
-  programs: z.array(programEntrySchema).max(4).default([]),
+  programs: z.array(programEntrySchema).max(12).default([]),
   /** Formato antiguo y simple; se usa si `programs` está vacío. */
-  offers: z.array(offerItemSchema).max(4).default([]),
+  offers: z.array(offerItemSchema).max(12).default([]),
   nextLabel: z.string().default(""),
   nextThumb: z.string().optional(),
   qrCaption: z.string().default("Explorar oferta completa"),
@@ -121,7 +121,7 @@ export const agendaSchema = z.object({
   headlineEyebrow: z.string().default("Semana académica"),
   subheadline: z.string().default(""),
   media: mediaRefSchema.optional(),
-  items: z.array(agendaItemSchema).max(5).default([]),
+  items: z.array(agendaItemSchema).max(12).default([]),
   nextLabel: z.string().default(""),
   strapline: z.string().default(""),
 });
@@ -166,9 +166,9 @@ export const noticiasSchema = z.object({
   subheadline: z.string().default(""),
   media: mediaRefSchema.optional(),
   /** Entradas con portada propia; admiten artículo o video. */
-  entries: z.array(newsEntrySchema).max(4).default([]),
+  entries: z.array(newsEntrySchema).max(12).default([]),
   /** Formato antiguo; se usa si `entries` está vacío. */
-  items: z.array(newsItemSchema).max(4).default([]),
+  items: z.array(newsItemSchema).max(12).default([]),
   stats: z.array(statSchema).max(2).default([]),
   bigStat: z.string().default(""),
   bigStatLabel: z.string().default(""),
@@ -204,7 +204,7 @@ export const bienvenidaSchema = z.object({
   media: mediaRefSchema.optional(),
   locations: z
     .array(z.object({ label: z.string(), place: z.string().default("") }))
-    .max(6)
+    .max(12)
     .default([]),
   qrCaption: z.string().default("Mapa del edificio"),
   qrUrl: z.string().default(""),
@@ -225,7 +225,7 @@ export const reconocimientosSchema = z.object({
         detail: z.string().default(""),
       }),
     )
-    .max(4)
+    .max(12)
     .default([]),
   strapline: z.string().default(""),
 });
@@ -239,7 +239,7 @@ export const eventoVivoSchema = z.object({
   media: mediaRefSchema.optional(),
   schedule: z
     .array(z.object({ time: z.string().default(""), label: z.string() }))
-    .max(4)
+    .max(12)
     .default([]),
   qrCaption: z.string().default("SÍGUELO EN LÍNEA"),
   /** Dirección que codifica el QR. Vacío: no se dibuja el código. */
@@ -269,12 +269,27 @@ export const mensajeSchema = z.object({
   qrUrl: z.string().default(""),
 });
 
+/** Vista 18 — Fechas especiales, homenajes y saludos institucionales. */
+export const homenajeSchema = z.object({
+  kind: z.literal("homenaje"),
+  occasion: z.string().default("Fecha especial"),
+  title: z.string().min(1),
+  message: z.string().default(""),
+  authority: z.string().default("Vicerrectorado de Posgrado"),
+  name: z.string().default(""),
+  media: mediaRefSchema.optional(),
+  badge: z.string().default("Homenaje institucional"),
+  quote: z.string().default(""),
+  qrCaption: z.string().default(""),
+  qrUrl: z.string().default(""),
+});
+
 /** Vista 6 — Próximos inicios de gestión */
 export const proximosIniciosSchema = z.object({
   kind: z.literal("proximos_inicios"),
   sectionTitle: z.string().default("Próximos inicios de gestión"),
   eyebrow: z.string().default("Calendario académico"),
-  programs: z.array(programEntrySchema).max(4).default([]),
+  programs: z.array(programEntrySchema).max(12).default([]),
   qrTitle: z.string().default("Inscríbete ahora"),
   qrCaption: z.string().default("Inscripciones"),
   /** Dirección que codifica el QR. Vacío: no se dibuja el código. */
@@ -351,6 +366,7 @@ export const viewContentSchema = z.discriminatedUnion("kind", [
   eventoVivoSchema,
   testimonioSchema,
   mensajeSchema,
+  homenajeSchema,
   sincronizacionSchema,
   sinConexionSchema,
   mantenimientoSchema,
@@ -377,6 +393,7 @@ export type ReconocimientosContent = z.infer<typeof reconocimientosSchema>;
 export type EventoVivoContent = z.infer<typeof eventoVivoSchema>;
 export type TestimonioContent = z.infer<typeof testimonioSchema>;
 export type MensajeContent = z.infer<typeof mensajeSchema>;
+export type HomenajeContent = z.infer<typeof homenajeSchema>;
 export type ProximosIniciosContent = z.infer<typeof proximosIniciosSchema>;
 export type MantenimientoContent = z.infer<typeof mantenimientoSchema>;
 export type GaleriaContent = z.infer<typeof galeriaSchema>;

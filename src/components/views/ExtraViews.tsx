@@ -21,6 +21,7 @@ import {
   StatRow,
 } from "@/components/signage/primitives";
 import { T } from "@/components/signage/scale";
+import { VerticalPager } from "@/components/signage/VerticalPager";
 
 /** Vista 7 — Bienvenida y orientación al visitante. */
 export function BienvenidaView({ content }: { content: BienvenidaContent }) {
@@ -36,11 +37,14 @@ export function BienvenidaView({ content }: { content: BienvenidaContent }) {
       <SigCard span={5}>
         <CardHead eyebrow="Ubicaciones" title="Orientación al visitante" />
         <CardBody>
-          <InfoList
-            rows={content.locations.map((l) => ({
-              label: l.label,
-              value: l.place,
-            }))}
+          <VerticalPager
+            pageSize={5}
+            items={content.locations.map((location, index) => (
+              <InfoList
+                key={`${location.label}-${index}`}
+                rows={[{ label: location.label, value: location.place }]}
+              />
+            ))}
           />
         </CardBody>
         {content.qrCaption && (
@@ -83,12 +87,18 @@ export function ReconocimientosView({
           )}
           {rest.length > 0 && (
             <div className="mt-5">
-              <LogroList
-                items={rest
-                  .slice(0, 4)
-                  .map((r) =>
-                    [r.name, r.role, r.detail].filter(Boolean).join(" — "),
-                  )}
+              <VerticalPager
+                pageSize={4}
+                items={rest.map((recognition, index) => (
+                  <LogroList
+                    key={`${recognition.name}-${index}`}
+                    items={[
+                      [recognition.name, recognition.role, recognition.detail]
+                        .filter(Boolean)
+                        .join(" — "),
+                    ]}
+                  />
+                ))}
               />
             </div>
           )}
@@ -118,11 +128,12 @@ export function EventoVivoView({ content }: { content: EventoVivoContent }) {
       <SigCard span={4}>
         <CardHead eyebrow="Programación" title="Desarrollo del acto" />
         <CardBody>
-          <div className="flex flex-col">
-            {content.schedule.map((s, i) => (
+          <VerticalPager
+            pageSize={4}
+            items={content.schedule.map((s, i) => (
               <AgendaRow key={i} time={s.time} title={s.label} />
             ))}
-          </div>
+          />
         </CardBody>
         {content.qrCaption && (
           <QrStrip label={content.qrCaption} url={content.qrUrl} />

@@ -13,6 +13,7 @@ import { GaleriaView } from "./GaleriaView";
 import { MantenimientoView } from "./MantenimientoView";
 import { EmergenciaView } from "./EmergenciaView";
 import { BackupView } from "./BackupView";
+import { HomenajeView } from "./HomenajeView";
 import {
   BienvenidaView,
   ReconocimientosView,
@@ -53,6 +54,8 @@ export function ViewRenderer({ content }: { content: ViewContent }) {
       return <TestimonioView content={content} />;
     case "mensaje":
       return <MensajeView content={content} />;
+    case "homenaje":
+      return <HomenajeView content={content} />;
     case "galeria":
       return <GaleriaView content={content} />;
     case "sincronizacion":

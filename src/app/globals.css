@@ -317,19 +317,20 @@ body {
  * el track se mueve -50% para un bucle sin salto. */
 @keyframes sig-marquee {
   from {
-    transform: translateX(0);
+    transform: translateX(100%);
   }
   to {
-    transform: translateX(-50%);
+    transform: translateX(-100%);
   }
 }
 .sig-marquee {
-  display: inline-flex;
-  flex-shrink: 0;
+  display: flex;
+  width: max-content;
   min-width: 100%;
+  justify-content: center;
   white-space: nowrap;
   will-change: transform;
-  animation: sig-marquee 30s linear infinite;
+  animation: sig-marquee 24s linear infinite;
 }
 .sig-marquee-mask {
   -webkit-mask-image: linear-gradient(
@@ -351,6 +352,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .sig-marquee {
     animation: none;
+    transform: none;
   }
 }
 

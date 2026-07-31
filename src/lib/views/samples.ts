@@ -283,6 +283,17 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
       "Desde el Posgrado impulsamos la formación, la investigación y el liderazgo al servicio del desarrollo regional.",
   },
   {
+    kind: "homenaje",
+    occasion: "1 de mayo · Día del Trabajador",
+    badge: "Homenaje institucional",
+    title: "A quienes construyen cada día el futuro del Beni",
+    quote: "El trabajo comprometido transforma la educación y nuestra región.",
+    message:
+      "El Vicerrectorado de Posgrado saluda y reconoce a cada trabajadora y trabajador de nuestra comunidad universitaria por su dedicación, vocación de servicio y aporte permanente.",
+    name: "Dr. Camilo Antonio Rosas Ardaya, Ph.D.",
+    authority: "Vicerrector de Posgrado · UABJB",
+  },
+  {
     kind: "sincronizacion",
     steps: [
       "Descargando contenidos",

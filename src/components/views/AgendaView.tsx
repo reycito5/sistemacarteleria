@@ -8,6 +8,7 @@ import {
   SigBadge,
   SigCard,
 } from "@/components/signage/primitives";
+import { VerticalPager } from "@/components/signage/VerticalPager";
 
 const STATUS_BADGE = {
   en_curso: { kind: "onlight-live" as const, label: "En curso" },
@@ -34,8 +35,9 @@ export function AgendaView({ content }: { content: AgendaContent }) {
       <SigCard span={5}>
         <CardHead eyebrow={content.badge} title={content.sectionTitle} />
         <CardBody>
-          <div className="flex flex-1 flex-col overflow-hidden">
-            {content.items.slice(0, 5).map((item, i) => {
+          <VerticalPager
+            pageSize={4}
+            items={content.items.map((item, i) => {
               const badge = STATUS_BADGE[item.status];
               return (
                 <AgendaRow
@@ -47,7 +49,7 @@ export function AgendaView({ content }: { content: AgendaContent }) {
                 />
               );
             })}
-          </div>
+          />
         </CardBody>
         {content.nextLabel && <NextStrip label={content.nextLabel} />}
       </SigCard>

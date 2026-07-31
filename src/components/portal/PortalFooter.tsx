@@ -22,11 +22,14 @@ export function PortalFooter() {
                 UAB
               </span>
               <div>
-                <p className="text-[10px] font-bold tracking-[0.2em] text-brand-red">
-                  {INSTITUTION.systemName}
+                <p className="text-[11px] font-bold leading-[1.25] text-white">
+                  {INSTITUTION.university}
                 </p>
-                <p className="text-[15px] font-black leading-tight">
-                  {INSTITUTION.commercialName}
+                <p className="mt-0.5 text-[11px] font-bold leading-[1.25] text-white">
+                  {INSTITUTION.vicerrectorate}
+                </p>
+                <p className="mt-0.5 text-[11px] font-bold leading-[1.25] text-brand-red">
+                  Acreditado internacionalmente · CIEES – México
                 </p>
               </div>
             </div>
@@ -137,7 +140,7 @@ export function PortalFooter() {
 
         <div className="border-t border-white/10">
           <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-2 px-4 py-4 text-[11px] text-white/45 sm:px-6">
-            <p>{INSTITUTION.university}</p>
+            <p>© 2026 Vicerrectorado de Posgrado UABJB</p>
             <p>Grupo {INSTITUTION.generalGroup}</p>
           </div>
         </div>

@@ -128,6 +128,11 @@ interface PhotoPanelProps {
   /** Distintivo «Video» cuando el medio es un video (se calcula solo). */
   showMediaKind?: boolean;
   children?: ReactNode;
+  /** Control de reproducción para secuencias editoriales. */
+  mediaActive?: boolean;
+  mediaLoop?: boolean;
+  onMediaEnded?: () => void;
+  onMediaError?: () => void;
 }
 
 /**
@@ -142,6 +147,10 @@ export function PhotoPanel({
   sub,
   badge,
   children,
+  mediaActive = true,
+  mediaLoop = true,
+  onMediaEnded,
+  onMediaError,
 }: PhotoPanelProps) {
   // Regla de arquitectura: el texto NUNCA va encima del medio. El medio ocupa
   // su propia área limpia (arriba) y, si hay rótulo, éste va en un bloque
@@ -155,7 +164,14 @@ export function PhotoPanel({
     >
       {/* Área del medio: foto o video, TOTALMENTE limpia, sin NADA encima. */}
       <div className="relative min-h-0 flex-1 overflow-hidden">
-        <SignageMedia media={media} overlayText={false} />
+        <SignageMedia
+          media={media}
+          overlayText={false}
+          active={mediaActive}
+          loop={mediaLoop}
+          onEnded={onMediaEnded}
+          onPlaybackError={onMediaError}
+        />
       </div>
 
       {/* Bloque de texto: sólido, separado del medio (nunca superpuesto). */}
@@ -539,7 +555,7 @@ export function ProgramTicket({ program }: { program: ProgramLike }) {
   return (
     <div className="flex items-center gap-5 border-b border-sig-rule py-[18px] last:border-b-0">
       <div className="relative w-[92px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep [aspect-ratio:4/5]">
-        <SignageMedia media={program.media} fallbackLabel="" />
+        <SignageMedia media={program.media} fallbackLabel="" active={false} />
       </div>
       <div className="min-w-0 flex-1">
         {program.type && (
@@ -590,7 +606,7 @@ export function ProgramMini({ program }: { program: ProgramLike }) {
   return (
     <div className="flex min-w-0 flex-1 flex-col">
       <div className="relative max-h-[300px] shrink-0 overflow-hidden [aspect-ratio:4/5]">
-        <SignageMedia media={program.media} fallbackLabel="" />
+        <SignageMedia media={program.media} fallbackLabel="" active={false} />
         <span
           aria-hidden
           className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/85 to-transparent"
@@ -661,7 +677,7 @@ export function NewsRow({
   return (
     <div className="flex min-h-0 flex-1 gap-6 overflow-hidden border-b border-sig-rule py-5 last:border-b-0">
       <div className="relative h-[124px] w-[124px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep">
-        <SignageMedia media={media} fallbackLabel="" />
+        <SignageMedia media={media} fallbackLabel="" active={false} />
         {video && (
           <>
             <span className="absolute inset-0 z-[2] grid place-items-center text-[30px] text-white drop-shadow">

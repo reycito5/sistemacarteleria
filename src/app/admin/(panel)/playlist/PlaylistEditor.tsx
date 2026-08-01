@@ -23,6 +23,7 @@ import { SortablePlaylist } from "./SortablePlaylist";
 export interface EditorItem {
   id: string;
   contentTitle: string;
+  contentKind: string;
   durationSeconds: number;
 }
 export interface EditorContent {
@@ -142,7 +143,7 @@ export function PlaylistEditor({
           <CardHeader
             icon={<ListVideo size={18} />}
             title="Orden de reproducción"
-            description="El ciclo se repite indefinidamente. Arrastre para reordenar; la duración se mide en segundos."
+            description="Arrastre para ordenar. Noticias reproduce toda su cola antes de avanzar; las demás plantillas usan los segundos configurados."
           />
 
           {items.length === 0 ? (
@@ -182,7 +183,7 @@ export function PlaylistEditor({
                 disabled={pending}
               >
                 <Sparkles size={14} aria-hidden />
-                Cargar ejemplos
+                Crear o actualizar ejemplos
               </Button>
             }
           />

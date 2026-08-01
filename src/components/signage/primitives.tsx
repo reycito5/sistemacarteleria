@@ -347,7 +347,7 @@ export function FieldGrid({
               {String(i + 1).padStart(2, "0")}
             </span>
             <span
-              className="truncate font-semibold uppercase tracking-[.1em] text-sig-text-faint"
+              className="font-semibold uppercase leading-tight tracking-[.1em] text-sig-text-faint"
               style={{ fontSize: 16 }}
             >
               {f.label}
@@ -395,12 +395,14 @@ export function QrStrip({
         >
           Escanea el código
         </p>
-        <p
-          className="mt-1 line-clamp-2 font-serif font-bold leading-[1.15] text-white"
-          style={{ fontSize: 30 }}
+        <AutoFitText
+          className="mt-1 font-serif font-bold leading-[1.15] text-white"
+          maxSize={30}
+          minSize={17}
+          maxHeight={72}
         >
           {label}
-        </p>
+        </AutoFitText>
       </div>
     </div>
   );
@@ -416,12 +418,14 @@ export function NextStrip({ label }: { label: string }) {
         >
           A continuación
         </p>
-        <p
-          className="mt-1 truncate font-semibold text-sig-ink"
-          style={{ fontSize: T.meta }}
+        <AutoFitText
+          className="mt-1 font-semibold leading-[1.2] text-sig-ink"
+          maxSize={T.meta}
+          minSize={14}
+          maxHeight={52}
         >
           {label}
-        </p>
+        </AutoFitText>
       </div>
       <span aria-hidden className="text-[34px] leading-none text-sig-red">
         →
@@ -569,7 +573,15 @@ export function LogroList({ items }: { items: string[] }) {
           <span className="shrink-0 pt-1 font-mono text-[22px] font-bold text-sig-red">
             {String(i + 1).padStart(2, "0")}
           </span>
-          <span className="line-clamp-2">{text}</span>
+          <AutoFitText
+            as="span"
+            className="leading-[1.4]"
+            maxSize={T.body}
+            minSize={15}
+            maxHeight={72}
+          >
+            {text}
+          </AutoFitText>
         </li>
       ))}
     </ul>
@@ -601,7 +613,7 @@ export function ProgramTicket({ program }: { program: ProgramLike }) {
       <div className="min-w-0 flex-1">
         {program.type && (
           <p
-            className="truncate font-semibold uppercase tracking-[.1em] text-sig-red"
+            className="font-semibold uppercase leading-tight tracking-[.1em] text-sig-red"
             style={{ fontSize: 18 }}
           >
             {program.type}
@@ -616,14 +628,16 @@ export function ProgramTicket({ program }: { program: ProgramLike }) {
         >
           {program.name}
         </AutoFitText>
-        <p
-          className="mt-1.5 line-clamp-1 text-sig-text-soft"
-          style={{ fontSize: 21 }}
+        <AutoFitText
+          className="mt-1.5 leading-[1.2] text-sig-text-soft"
+          maxSize={21}
+          minSize={14}
+          maxHeight={48}
         >
           {[program.modality, program.duration, program.credits]
             .filter(Boolean)
             .join(" · ")}
-        </p>
+        </AutoFitText>
       </div>
       <div className="w-[212px] shrink-0 text-right">
         <SigBadge kind={open ? "onlight-open" : "onlight-soon"}>
@@ -685,14 +699,16 @@ export function ProgramMini({ program }: { program: ProgramLike }) {
         >
           {program.name}
         </AutoFitText>
-        <p
-          className="line-clamp-2 text-sig-text-soft"
-          style={{ fontSize: 21 }}
+        <AutoFitText
+          className="leading-[1.2] text-sig-text-soft"
+          maxSize={21}
+          minSize={14}
+          maxHeight={62}
         >
           {[program.modality, program.duration, program.credits]
             .filter(Boolean)
             .join(" · ")}
-        </p>
+        </AutoFitText>
         <div className="mt-auto">
           <SigBadge kind={open ? "onlight-live" : "onlight-soon"}>
             {open ? "Inicio próximo" : "Próximamente"}
@@ -743,16 +759,23 @@ export function NewsRow({
         >
           {video ? "Video" : "Noticia"}
         </p>
-        <p
-          className="mt-1.5 line-clamp-5 break-words font-serif font-bold leading-[1.18] text-sig-ink"
-          style={{ fontSize: T.itemTitle }}
+        <AutoFitText
+          className="mt-1.5 font-serif font-bold leading-[1.18] text-sig-ink"
+          maxSize={T.itemTitle}
+          minSize={17}
+          maxHeight={118}
         >
           {title}
-        </p>
+        </AutoFitText>
         {meta && (
-          <p className="mt-2 line-clamp-2 text-sig-text-soft" style={{ fontSize: T.meta }}>
+          <AutoFitText
+            className="mt-2 leading-[1.2] text-sig-text-soft"
+            maxSize={T.meta}
+            minSize={14}
+            maxHeight={54}
+          >
             {meta}
-          </p>
+          </AutoFitText>
         )}
       </div>
     </div>

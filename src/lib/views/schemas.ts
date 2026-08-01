@@ -32,6 +32,13 @@ export const mediaRefSchema = z.object({
 });
 export type MediaRef = z.infer<typeof mediaRefSchema>;
 
+function displaySecondsSchema(defaultSeconds: number) {
+  return z.preprocess(
+    (value) => (value === "" || value === null ? undefined : value),
+    z.coerce.number().min(4).max(120).default(defaultSeconds),
+  );
+}
+
 export const offerItemSchema = z.object({
   title: z.string().min(1),
   modality: z.string().default(""),
@@ -78,6 +85,7 @@ export const programEntrySchema = z.object({
   credits: z.string().default(""),
   dateShort: z.string().default(""),
   status: z.enum(["open", "soon"]).default("open"),
+  displaySeconds: displaySecondsSchema(10),
   media: mediaRefSchema.optional(),
 });
 
@@ -87,6 +95,8 @@ export const newsEntrySchema = z.object({
   meta: z.string().default(""),
   kind: z.enum(["noticia", "video"]).default("noticia"),
   duration: z.string().default(""),
+  /** Tiempo visible para una noticia con imagen; un video usa su fin real. */
+  displaySeconds: displaySecondsSchema(12),
   media: mediaRefSchema.optional(),
 });
 
@@ -235,7 +245,13 @@ export const eventoVivoSchema = z.object({
   kind: z.literal("evento_vivo"),
   badge: z.string().default("EN VIVO"),
   title: z.string().min(1),
+  eventType: z.string().default("Transmisión institucional"),
   speaker: z.string().default(""),
+  dateLabel: z.string().default(""),
+  timeLabel: z.string().default(""),
+  place: z.string().default(""),
+  /** YouTube Live, YouTube, Vimeo o un archivo MP4/WebM directo. */
+  streamUrl: z.string().default(""),
   media: mediaRefSchema.optional(),
   schedule: z
     .array(z.object({ time: z.string().default(""), label: z.string() }))

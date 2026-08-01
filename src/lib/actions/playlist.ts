@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getContext, writeAudit, type ActionResult } from "./helpers";
 import { SAMPLE_VIEWS } from "@/lib/views/samples";
 import { viewNumberForKind, labelForKind } from "@/lib/views/registry";
+import { suggestedContentDuration } from "@/lib/player/contentDuration";
 
 function revalidate() {
   revalidatePath("/admin/playlist");
@@ -35,7 +36,8 @@ export async function createWorkingPlaylist(): Promise<ActionResult<string>> {
 
 /**
  * Crea contenidos de ejemplo a partir de las plantillas (para poder armar una
- * playlist de inmediato). Idempotente por título.
+ * playlist de inmediato). Los ejemplos viven en su propio espacio y pueden
+ * actualizarse sin tocar contenidos reales del usuario.
  */
 export async function seedSampleContent(): Promise<ActionResult<number>> {
   const ctx = await getContext();
@@ -56,14 +58,21 @@ export async function seedSampleContent(): Promise<ActionResult<number>> {
     const templateId = templateByView.get(viewNumber);
     if (!templateId) continue;
 
-    const title = labelForKind(content.kind);
+    const title = `EJEMPLO · ${labelForKind(content.kind)}`;
     const { data: exists } = await supabase
       .from("content_items")
       .select("id")
       .eq("title", title)
       .limit(1)
       .maybeSingle();
-    if (exists) continue;
+    if (exists) {
+      const { error } = await supabase
+        .from("content_items")
+        .update({ content_data: content as never, status: "aprobado" })
+        .eq("id", exists.id);
+      if (!error) created++;
+      continue;
+    }
 
     const { error } = await supabase.from("content_items").insert({
       template_id: templateId,
@@ -98,12 +107,17 @@ export async function addPlaylistItem(
     .maybeSingle();
 
   const position = (last?.position ?? -1) + 1;
+  const { data: content } = await supabase
+    .from("content_items")
+    .select("content_data")
+    .eq("id", contentItemId)
+    .maybeSingle();
 
   const { error } = await supabase.from("playlist_items").insert({
     playlist_id: playlistId,
     content_item_id: contentItemId,
     position,
-    duration_seconds: 15,
+    duration_seconds: suggestedContentDuration(content?.content_data),
     muted: true,
   });
   if (error) return { ok: false, error: error.message };

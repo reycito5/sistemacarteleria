@@ -67,7 +67,10 @@ export function AutoFitText({
         ...style,
         fontSize: maxSize,
         maxHeight,
-        overflow: "hidden",
+        // No se recorta: el cálculo reduce la fuente hasta el máximo editorial.
+        // `visible` evita que el redondeo subpíxel del lienzo escalado corte
+        // acentos o descendentes aunque el texto sí quepa.
+        overflow: "visible",
         overflowWrap: "anywhere",
       }}
     >

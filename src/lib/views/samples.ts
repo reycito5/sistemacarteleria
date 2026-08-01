@@ -124,23 +124,27 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
         title: "Convenio de cooperación académica con CEMLA",
         meta: "Fortalece la oferta de diplomados en tributación.",
         kind: "noticia",
+        displaySeconds: 12,
       },
       {
         title: "Resumen del año académico 2025",
         meta: "Memoria audiovisual de logros institucionales",
         kind: "video",
         duration: "2:14",
+        displaySeconds: 12,
       },
       {
         title: "Nueva convocatoria: Maestría en Educación Superior",
         meta: "Inscripciones abiertas hasta el 17 de agosto de 2026",
         kind: "noticia",
+        displaySeconds: 14,
       },
       {
         title: "Testimonios de egresados 2025",
         meta: "Historias de titulación y aplicación profesional",
         kind: "video",
         duration: "3:08",
+        displaySeconds: 12,
       },
     ],
     stats: [
@@ -251,8 +255,13 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
   {
     kind: "evento_vivo",
     badge: "En vivo",
+    eventType: "Defensa doctoral",
     title: "Defensa pública de tesis doctoral",
     speaker: 'Modelo de Gestión Educativa "COMUNICA" · Doctorado en Educación Superior',
+    dateLabel: "Viernes, 31 de julio de 2026",
+    timeLabel: "09:00",
+    place: "Sala de Defensas · Posgrado UABJB",
+    streamUrl: "",
     schedule: [
       { time: "08:30", label: "Apertura y presentación del tribunal" },
       { time: "09:00", label: "Exposición del sustentante" },

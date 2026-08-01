@@ -95,6 +95,7 @@ export interface ContentItemSummary {
 
 export interface PlaylistItemDetail extends PlaylistItemRow {
   contentTitle: string;
+  contentKind: string;
 }
 
 export interface WorkingPlaylist {
@@ -235,20 +236,27 @@ export async function getWorkingPlaylist(): Promise<WorkingPlaylist | null> {
 
   const rows = items ?? [];
   const contentIds = rows.map((r) => r.content_item_id);
-  const titleById = new Map<string, string>();
+  const contentById = new Map<string, { title: string; kind: string }>();
   if (contentIds.length > 0) {
     const { data: contents } = await supabase
       .from("content_items")
-      .select("id, title")
+      .select("id, title, content_data")
       .in("id", contentIds);
-    for (const c of contents ?? []) titleById.set(c.id, c.title);
+    for (const c of contents ?? []) {
+      const raw = c.content_data as { kind?: unknown } | null;
+      contentById.set(c.id, {
+        title: c.title,
+        kind: typeof raw?.kind === "string" ? raw.kind : "",
+      });
+    }
   }
 
   return {
     playlist,
     items: rows.map((r) => ({
       ...r,
-      contentTitle: titleById.get(r.content_item_id) ?? "—",
+      contentTitle: contentById.get(r.content_item_id)?.title ?? "—",
+      contentKind: contentById.get(r.content_item_id)?.kind ?? "",
     })),
   };
 }

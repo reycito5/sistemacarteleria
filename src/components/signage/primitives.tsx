@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { MediaRef } from "@/lib/views/schemas";
 import { SignageMedia } from "./SignageMedia";
+import { AutoFitText } from "./AutoFitText";
 import { isVideoRef } from "./mediaKind";
 import { QrCode } from "./QrCode";
 import { T } from "./scale";
@@ -128,6 +129,13 @@ interface PhotoPanelProps {
   /** Distintivo «Video» cuando el medio es un video (se calcula solo). */
   showMediaKind?: boolean;
   children?: ReactNode;
+  /** Control de reproducción para secuencias editoriales. */
+  mediaActive?: boolean;
+  mediaLoop?: boolean;
+  onMediaEnded?: () => void;
+  onMediaError?: () => void;
+  /** Conserva afiches verticales 4:5 completos dentro de un marco editorial. */
+  posterFrame?: boolean;
 }
 
 /**
@@ -142,6 +150,11 @@ export function PhotoPanel({
   sub,
   badge,
   children,
+  mediaActive = true,
+  mediaLoop = true,
+  onMediaEnded,
+  onMediaError,
+  posterFrame = false,
 }: PhotoPanelProps) {
   // Regla de arquitectura: el texto NUNCA va encima del medio. El medio ocupa
   // su propia área limpia (arriba) y, si hay rótulo, éste va en un bloque
@@ -154,37 +167,59 @@ export function PhotoPanel({
       style={{ gridColumn: `span ${span}` }}
     >
       {/* Área del medio: foto o video, TOTALMENTE limpia, sin NADA encima. */}
-      <div className="relative min-h-0 flex-1 overflow-hidden">
-        <SignageMedia media={media} overlayText={false} />
+      <div
+        className={`relative min-h-0 flex-1 overflow-hidden ${
+          posterFrame ? "bg-[#eef0f5] p-[26px]" : ""
+        }`}
+      >
+        <SignageMedia
+          media={media}
+          overlayText={false}
+          active={mediaActive}
+          loop={mediaLoop}
+          onEnded={onMediaEnded}
+          onPlaybackError={onMediaError}
+          fit={posterFrame ? "contain" : "cover"}
+          className={
+            posterFrame
+              ? "!inset-[26px] rounded-[8px] bg-white shadow-[0_18px_45px_rgba(7,19,66,.18)] ring-2 ring-white"
+              : ""
+          }
+        />
       </div>
 
       {/* Bloque de texto: sólido, separado del medio (nunca superpuesto). */}
       {hasCaption && (
-        <div className="max-h-[30%] shrink-0 overflow-hidden bg-sig-ink px-[38px] py-[18px]">
-          {badge && <div className="mb-2">{badge}</div>}
+        <div className="max-h-[26%] shrink-0 overflow-hidden bg-sig-ink px-[34px] py-[16px]">
+          {badge && <div className="mb-1.5">{badge}</div>}
           {eyebrow && (
             <p
-              className="font-bold uppercase tracking-[.14em] text-white/55"
-              style={{ fontSize: 18 }}
+              className="font-semibold uppercase tracking-[.16em] text-sig-red"
+              style={{ fontSize: 15 }}
             >
               {eyebrow}
             </p>
           )}
           {title && (
-            <h4
-              className="mt-1 line-clamp-2 font-serif font-bold leading-[1.06] text-white"
-              style={{ fontSize: 32 }}
+            <AutoFitText
+              as="h4"
+              className="mt-0.5 font-serif font-semibold leading-[1.08] text-white"
+              maxSize={26}
+              minSize={17}
+              maxHeight={58}
             >
               {title}
-            </h4>
+            </AutoFitText>
           )}
           {sub && (
-            <p
-              className="mt-1 line-clamp-1 max-w-[96%] font-medium text-white/65"
-              style={{ fontSize: 20 }}
+            <AutoFitText
+              className="mt-1 max-w-[96%] font-medium leading-[1.2] text-white/65"
+              maxSize={18}
+              minSize={13}
+              maxHeight={44}
             >
               {sub}
-            </p>
+            </AutoFitText>
           )}
           {children}
         </div>
@@ -227,13 +262,34 @@ export function CardHead({
   title: ReactNode;
   right?: ReactNode;
 }) {
+  const titleSize =
+    typeof title === "string" && title.length > 72
+      ? 31
+      : typeof title === "string" && title.length > 42
+        ? 34
+        : T.cardTitle;
+
   return (
-    <div className="flex items-start justify-between gap-6 px-[38px] pb-2 pt-[34px]">
-      <div className="min-w-0">
+    <div className="flex shrink-0 items-start justify-between gap-6 px-[38px] pb-2 pt-[30px]">
+      <div className="min-w-0 flex-1">
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
-        <SerifTitle className="mt-2.5">{title}</SerifTitle>
+        {typeof title === "string" ? (
+          <AutoFitText
+            as="h3"
+            className="mt-2 font-serif font-bold leading-[1.08] text-sig-ink"
+            maxSize={titleSize}
+            minSize={22}
+            maxHeight={112}
+          >
+            {title}
+          </AutoFitText>
+        ) : (
+          <SerifTitle size={titleSize} className="mt-2">
+            {title}
+          </SerifTitle>
+        )}
       </div>
-      {right}
+      {right && <div className="max-w-[240px] shrink-0">{right}</div>}
     </div>
   );
 }
@@ -280,26 +336,32 @@ export function FieldGrid({
       {fields.map((f, i) => (
         <div
           key={`${f.label}-${i}`}
-          className="flex min-w-0 flex-col gap-2 bg-sig-card px-[24px] pb-[24px] pt-[20px]"
+          className="flex min-w-0 flex-col gap-[7px] bg-sig-card px-[22px] pb-[17px] pt-[16px]"
         >
-          <span
-            className="font-mono font-bold tracking-[.12em] text-sig-red"
-            style={{ fontSize: 18 }}
-          >
-            {String(i + 1).padStart(2, "0")}
+          {/* Número y etiqueta en una sola línea: gana altura y se lee como ficha. */}
+          <span className="flex min-w-0 items-baseline gap-2">
+            <span
+              className="shrink-0 font-mono font-bold tracking-[.1em] text-sig-red"
+              style={{ fontSize: 15 }}
+            >
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <span
+              className="font-semibold uppercase leading-tight tracking-[.1em] text-sig-text-faint"
+              style={{ fontSize: 16 }}
+            >
+              {f.label}
+            </span>
           </span>
-          <span
-            className="font-bold uppercase tracking-[.08em] text-sig-text-faint"
-            style={{ fontSize: 19 }}
-          >
-            {f.label}
-          </span>
-          <span
-            className="break-words font-serif font-bold leading-[1.25] text-sig-ink"
-            style={{ fontSize: T.meta }}
+          <AutoFitText
+            as="span"
+            className="break-words font-serif font-bold leading-[1.18] text-sig-ink"
+            maxSize={23}
+            minSize={15}
+            maxHeight={58}
           >
             {f.value}
-          </span>
+          </AutoFitText>
         </div>
       ))}
       {Array.from({ length: remainder }).map((_, i) => (
@@ -320,25 +382,27 @@ export function QrStrip({
   url?: string;
 }) {
   return (
-    <div className="mt-auto flex items-center gap-6 bg-sig-ink px-[38px] py-[26px]">
+    <div className="mt-auto flex items-center gap-6 bg-sig-ink px-[38px] py-[22px]">
       {url && (
         <div className="shrink-0 rounded-[4px] bg-white p-2.5">
-          <QrCode value={url} size={124} />
+          <QrCode value={url} size={108} />
         </div>
       )}
       <div className="min-w-0">
         <p
-          className="font-bold uppercase tracking-[.14em] text-white/60"
-          style={{ fontSize: 19 }}
+          className="font-semibold uppercase tracking-[.16em] text-white/55"
+          style={{ fontSize: 17 }}
         >
           Escanea el código
         </p>
-        <p
-          className="mt-1 font-serif font-bold leading-tight text-white"
-          style={{ fontSize: T.itemTitle }}
+        <AutoFitText
+          className="mt-1 font-serif font-bold leading-[1.15] text-white"
+          maxSize={30}
+          minSize={17}
+          maxHeight={72}
         >
           {label}
-        </p>
+        </AutoFitText>
       </div>
     </div>
   );
@@ -354,12 +418,14 @@ export function NextStrip({ label }: { label: string }) {
         >
           A continuación
         </p>
-        <p
-          className="mt-1 truncate font-semibold text-sig-ink"
-          style={{ fontSize: T.meta }}
+        <AutoFitText
+          className="mt-1 font-semibold leading-[1.2] text-sig-ink"
+          maxSize={T.meta}
+          minSize={14}
+          maxHeight={52}
         >
           {label}
-        </p>
+        </AutoFitText>
       </div>
       <span aria-hidden className="text-[34px] leading-none text-sig-red">
         →
@@ -410,17 +476,20 @@ export function InfoList({ rows }: { rows: FieldEntry[] }) {
           className="flex items-baseline justify-between gap-6 border-b border-sig-rule py-[20px] last:border-b-0"
         >
           <span
-            className="font-semibold text-sig-text-soft"
+            className="shrink-0 font-semibold text-sig-text-soft"
             style={{ fontSize: T.meta }}
           >
             {r.label}
           </span>
-          <span
-            className="text-right font-bold text-sig-ink"
-            style={{ fontSize: T.body }}
+          <AutoFitText
+            as="span"
+            className="text-right font-bold leading-[1.2] text-sig-ink"
+            maxSize={T.body}
+            minSize={15}
+            maxHeight={58}
           >
             {r.value}
-          </span>
+          </AutoFitText>
         </div>
       ))}
     </div>
@@ -447,19 +516,23 @@ export function AgendaRow({
         {time}
       </span>
       <div className="min-w-0 flex-1">
-        <p
-          className="font-serif font-bold leading-[1.2] text-sig-ink"
-          style={{ fontSize: T.itemTitle }}
+        <AutoFitText
+          className="font-serif font-bold leading-[1.18] text-sig-ink"
+          maxSize={T.itemTitle}
+          minSize={18}
+          maxHeight={68}
         >
           {title}
-        </p>
+        </AutoFitText>
         {meta && (
-          <p
-            className="mt-1.5 text-sig-text-soft"
-            style={{ fontSize: T.meta }}
+          <AutoFitText
+            className="mt-1.5 leading-[1.2] text-sig-text-soft"
+            maxSize={T.meta}
+            minSize={14}
+            maxHeight={42}
           >
             {meta}
-          </p>
+          </AutoFitText>
         )}
       </div>
       {badge}
@@ -494,13 +567,21 @@ export function LogroList({ items }: { items: string[] }) {
       {items.map((text, i) => (
         <li
           key={i}
-          className="flex items-start gap-4 leading-[1.45] text-sig-text-soft"
+          className="flex items-start gap-4 leading-[1.4] text-sig-text-soft"
           style={{ fontSize: T.body }}
         >
           <span className="shrink-0 pt-1 font-mono text-[22px] font-bold text-sig-red">
             {String(i + 1).padStart(2, "0")}
           </span>
-          <span>{text}</span>
+          <AutoFitText
+            as="span"
+            className="leading-[1.4]"
+            maxSize={T.body}
+            minSize={15}
+            maxHeight={72}
+          >
+            {text}
+          </AutoFitText>
         </li>
       ))}
     </ul>
@@ -525,40 +606,47 @@ export interface ProgramLike {
 export function ProgramTicket({ program }: { program: ProgramLike }) {
   const open = program.status !== "soon";
   return (
-    <div className="flex items-center gap-6 border-b border-sig-rule py-[22px] last:border-b-0">
-      <div className="relative w-[104px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep [aspect-ratio:4/5]">
-        <SignageMedia media={program.media} fallbackLabel="" />
+    <div className="flex items-center gap-5 border-b border-sig-rule py-[18px] last:border-b-0">
+      <div className="relative w-[92px] shrink-0 overflow-hidden rounded-[5px] border border-sig-rule bg-white p-1 [aspect-ratio:4/5]">
+        <SignageMedia media={program.media} fallbackLabel="" active={false} fit="contain" className="!inset-1" />
       </div>
       <div className="min-w-0 flex-1">
         {program.type && (
           <p
-            className="font-bold uppercase tracking-[.1em] text-sig-red"
-            style={{ fontSize: 20 }}
+            className="font-semibold uppercase leading-tight tracking-[.1em] text-sig-red"
+            style={{ fontSize: 18 }}
           >
             {program.type}
             {program.version ? ` · ${program.version}` : ""}
           </p>
         )}
-        <p
-          className="mt-1 line-clamp-2 font-serif font-bold leading-[1.2] text-sig-ink"
-          style={{ fontSize: T.itemTitle }}
+        <AutoFitText
+          className="mt-1 font-serif font-bold leading-[1.15] text-sig-ink"
+          maxSize={30}
+          minSize={19}
+          maxHeight={72}
         >
           {program.name}
-        </p>
-        <p className="mt-2 text-sig-text-soft" style={{ fontSize: T.meta }}>
+        </AutoFitText>
+        <AutoFitText
+          className="mt-1.5 leading-[1.2] text-sig-text-soft"
+          maxSize={21}
+          minSize={14}
+          maxHeight={48}
+        >
           {[program.modality, program.duration, program.credits]
             .filter(Boolean)
             .join(" · ")}
-        </p>
+        </AutoFitText>
       </div>
-      <div className="w-[230px] shrink-0 text-right">
+      <div className="w-[212px] shrink-0 text-right">
         <SigBadge kind={open ? "onlight-open" : "onlight-soon"}>
           {open ? "Inscripción abierta" : "Próximamente"}
         </SigBadge>
         {program.dateShort && (
           <p
-            className="mt-3 whitespace-nowrap font-mono font-bold text-sig-ink"
-            style={{ fontSize: T.meta }}
+            className="mt-2.5 whitespace-nowrap font-mono font-bold text-sig-ink"
+            style={{ fontSize: 21 }}
           >
             {program.dateShort}
           </p>
@@ -574,8 +662,8 @@ export function ProgramMini({ program }: { program: ProgramLike }) {
   const open = program.status !== "soon";
   return (
     <div className="flex min-w-0 flex-1 flex-col">
-      <div className="relative max-h-[300px] shrink-0 overflow-hidden [aspect-ratio:4/5]">
-        <SignageMedia media={program.media} fallbackLabel="" />
+      <div className="relative max-h-[300px] shrink-0 overflow-hidden border-b border-sig-rule bg-white p-3 [aspect-ratio:4/5]">
+        <SignageMedia media={program.media} fallbackLabel="" active={false} fit="contain" className="!inset-3" />
         <span
           aria-hidden
           className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/85 to-transparent"
@@ -603,17 +691,24 @@ export function ProgramMini({ program }: { program: ProgramLike }) {
             {program.type}
           </p>
         )}
-        <p
-          className="font-serif font-bold leading-[1.2] text-sig-ink"
-          style={{ fontSize: 30 }}
+        <AutoFitText
+          className="font-serif font-bold leading-[1.15] text-sig-ink"
+          maxSize={29}
+          minSize={17}
+          maxHeight={102}
         >
           {program.name}
-        </p>
-        <p className="text-sig-text-soft" style={{ fontSize: 22 }}>
+        </AutoFitText>
+        <AutoFitText
+          className="leading-[1.2] text-sig-text-soft"
+          maxSize={21}
+          minSize={14}
+          maxHeight={62}
+        >
           {[program.modality, program.duration, program.credits]
             .filter(Boolean)
             .join(" · ")}
-        </p>
+        </AutoFitText>
         <div className="mt-auto">
           <SigBadge kind={open ? "onlight-live" : "onlight-soon"}>
             {open ? "Inicio próximo" : "Próximamente"}
@@ -641,9 +736,9 @@ export function NewsRow({
 }) {
   const video = isVideo ?? isVideoRef(media);
   return (
-    <div className="flex gap-6 border-b border-sig-rule py-6 last:border-b-0">
+    <div className="flex min-h-0 flex-1 gap-6 overflow-hidden border-b border-sig-rule py-5 last:border-b-0">
       <div className="relative h-[124px] w-[124px] shrink-0 overflow-hidden rounded-[3px] bg-sig-ink-deep">
-        <SignageMedia media={media} fallbackLabel="" />
+        <SignageMedia media={media} fallbackLabel="" active={false} />
         {video && (
           <>
             <span className="absolute inset-0 z-[2] grid place-items-center text-[30px] text-white drop-shadow">
@@ -657,23 +752,30 @@ export function NewsRow({
           </>
         )}
       </div>
-      <div className="min-w-0">
+      <div className="min-w-0 flex-1 overflow-hidden">
         <p
           className="font-bold uppercase tracking-[.1em] text-sig-red"
           style={{ fontSize: 19 }}
         >
           {video ? "Video" : "Noticia"}
         </p>
-        <p
-          className="mt-1.5 font-serif font-bold leading-[1.2] text-sig-ink"
-          style={{ fontSize: T.itemTitle }}
+        <AutoFitText
+          className="mt-1.5 font-serif font-bold leading-[1.18] text-sig-ink"
+          maxSize={T.itemTitle}
+          minSize={17}
+          maxHeight={118}
         >
           {title}
-        </p>
+        </AutoFitText>
         {meta && (
-          <p className="mt-2 text-sig-text-soft" style={{ fontSize: T.meta }}>
+          <AutoFitText
+            className="mt-2 leading-[1.2] text-sig-text-soft"
+            maxSize={T.meta}
+            minSize={14}
+            maxHeight={54}
+          >
             {meta}
-          </p>
+          </AutoFitText>
         )}
       </div>
     </div>

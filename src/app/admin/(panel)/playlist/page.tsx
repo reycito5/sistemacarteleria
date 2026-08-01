@@ -54,6 +54,7 @@ async function loadData(): Promise<LoadedData | null> {
         working?.items.map((i) => ({
           id: i.id,
           contentTitle: i.contentTitle,
+          contentKind: i.contentKind,
           durationSeconds: i.duration_seconds,
         })) ?? [],
       available,
@@ -96,8 +97,8 @@ export default async function PlaylistPage() {
 
       <p className="flex items-center gap-2 text-xs text-ui-muted">
         <ListVideo size={14} aria-hidden />
-        La programación se sincroniza por hora oficial: las cuatro pantallas
-        muestran el mismo elemento al mismo tiempo.
+        Las pantallas reciben el mismo orden publicado. Las colas de noticias y
+        programas terminan completas antes de dar paso al siguiente contenido.
       </p>
     </div>
   );

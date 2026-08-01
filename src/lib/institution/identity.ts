@@ -32,7 +32,7 @@ export const DEFAULT_IDENTITY: InstitutionIdentity = {
   phones: ["61948267", "72814772"],
   email: "escuelaposgrado@uabjb.edu.bo",
   location: "Zona Virgen de Loreto, Trinidad",
-  social: ["Facebook", "Instagram", "YouTube"],
+  social: ["Facebook", "Instagram", "TikTok"],
   tickerLabel: "Posgrado UABJB",
   tickerText:
     "Formar posgraduados con pertinencia amazónica es nuestro compromiso.",

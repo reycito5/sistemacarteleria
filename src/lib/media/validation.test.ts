@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildStoragePath,
   classifyMediaType,
+  hasRecommendedAspect,
   is16by9,
   validateFile,
 } from "./validation";
@@ -47,12 +48,32 @@ describe("is16by9", () => {
   });
 });
 
+describe("proporciones por plantilla", () => {
+  it("acepta afiches 4:5 para programa destacado", () => {
+    expect(
+      hasRecommendedAspect(1080, 1350, "image", "programa_destacado"),
+    ).toBe(true);
+    expect(
+      hasRecommendedAspect(1920, 1080, "image", "programa_destacado"),
+    ).toBe(false);
+  });
+});
+
 describe("buildStoragePath", () => {
   it("genera rutas seguras con prefijo por tipo", () => {
     const path = buildStoragePath("video", "Spot Institucional 2026.mp4");
-    expect(path.startsWith("video/")).toBe(true);
+    expect(path.startsWith("plantillas/general/video/")).toBe(true);
     expect(path.endsWith(".mp4")).toBe(true);
     expect(path).toMatch(/spot-institucional-2026/);
+  });
+
+  it("separa los archivos por plantilla", () => {
+    const path = buildStoragePath(
+      "image",
+      "Afiche Educacion Superior.png",
+      "programa_destacado",
+    );
+    expect(path.startsWith("plantillas/programa_destacado/image/")).toBe(true);
   });
 
   it("normaliza acentos y caracteres especiales", () => {

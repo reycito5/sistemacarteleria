@@ -7,6 +7,7 @@ import {
   SigCard,
 } from "@/components/signage/primitives";
 import { T } from "@/components/signage/scale";
+import { AutoFitText } from "@/components/signage/AutoFitText";
 
 /**
  * Vista 5 — Comunicado importante.
@@ -15,50 +16,59 @@ import { T } from "@/components/signage/scale";
 export function ComunicadoView({ content }: { content: ComunicadoContent }) {
   return (
     <>
-      <SigCard span={8} center>
-        <CardBody className="px-[42px] py-[36px]">
+      <SigCard span={8}>
+        <CardBody className="justify-center px-[46px] py-[38px]">
           <div className="mb-4">
             <SigBadge kind="onlight-soon">{content.badge}</SigBadge>
           </div>
 
-          <h2
-            className="font-serif font-bold leading-[1.08] text-sig-ink"
-            style={{ fontSize: T.hero }}
+          <AutoFitText
+            as="h2"
+            className="font-serif font-bold leading-[1.06] text-sig-ink"
+            maxSize={60}
+            minSize={30}
+            maxHeight={190}
           >
             {content.title}
-          </h2>
+          </AutoFitText>
 
           {content.subtitle && (
-            <p
-              className="mt-5 max-w-[900px] font-medium leading-[1.35] text-sig-ink-soft"
-              style={{ fontSize: T.bodyLg }}
+            <AutoFitText
+              className="mt-4 max-w-[920px] font-medium leading-[1.3] text-sig-ink-soft"
+              maxSize={T.bodyLg}
+              minSize={18}
+              maxHeight={82}
             >
               {content.subtitle}
-            </p>
+            </AutoFitText>
           )}
 
           {content.highlight && (
-            <p
-              className="mt-6 font-serif font-bold leading-none text-sig-red"
-              style={{ fontSize: T.stat }}
+            <AutoFitText
+              className="mt-5 font-serif font-bold leading-none text-sig-red"
+              maxSize={52}
+              minSize={25}
+              maxHeight={62}
             >
               {content.highlight}
-            </p>
+            </AutoFitText>
           )}
 
           {content.body && (
-            <p
-              className="mt-6 max-w-[900px] leading-[1.45] text-sig-text-soft"
-              style={{ fontSize: T.body }}
+            <AutoFitText
+              className="mt-5 max-w-[920px] leading-[1.4] text-sig-text-soft"
+              maxSize={T.body}
+              minSize={16}
+              maxHeight={118}
             >
               {content.body}
-            </p>
+            </AutoFitText>
           )}
 
           {content.specs.length > 0 && (
-            <div className="mt-6">
+            <div className="mt-5">
               <InfoList
-                rows={content.specs.map((s) => ({
+                rows={content.specs.slice(0, 4).map((s) => ({
                   label: s.label,
                   value: s.value,
                 }))}

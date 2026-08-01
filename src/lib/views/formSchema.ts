@@ -167,7 +167,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         id: "listado",
         title: "Listado de programas",
         description:
-          "Hasta cuatro programas. Cada uno puede llevar su propia miniatura.",
+          "Hasta doce programas; se paginan automáticamente en pantalla.",
         fields: [
           { type: "text", key: "cardEyebrow", label: "Antetítulo de la ficha" },
           { type: "text", key: "sectionTitle", label: "Título de la ficha" },
@@ -175,7 +175,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
             type: "list",
             key: "programs",
             label: "Programas",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "name", label: "Nombre del programa" },
               { key: "type", label: "Nivel (Maestría, Diplomado…)" },
@@ -184,8 +184,9 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
               { key: "duration", label: "Duración" },
               { key: "credits", label: "Créditos" },
               { key: "dateShort", label: "Inicio (corto: 17 AGO 2026)" },
+              { key: "displaySeconds", label: "Segundos en pantalla" },
               { key: "status", label: "Estado", type: "select", options: STATUS_OPTIONS },
-              { key: "media", label: "Miniatura", type: "media" },
+              { key: "media", label: "Afiche vertical 4:5", type: "media" },
             ],
           },
         ],
@@ -213,7 +214,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
       {
         id: "actividades",
         title: "Actividades",
-        description: "Hasta cinco actividades ordenadas por hora.",
+        description: "Hasta doce actividades ordenadas por hora.",
         fields: [
           { type: "text", key: "badge", label: "Antetítulo de la ficha" },
           { type: "text", key: "sectionTitle", label: "Título de la ficha" },
@@ -221,7 +222,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
             type: "list",
             key: "items",
             label: "Actividades",
-            max: 5,
+            max: 12,
             itemFields: [
               { key: "time", label: "Hora (08:30)" },
               { key: "title", label: "Actividad" },
@@ -291,8 +292,6 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
           { type: "text", key: "credits", label: "Créditos" },
           { type: "text", key: "hours", label: "Horas académicas" },
           { type: "text", key: "phones", label: "Teléfonos" },
-          { type: "text", key: "audience", label: "Dirigido a" },
-          { type: "text", key: "address", label: "Dirección" },
           {
             type: "boolean",
             key: "enrollmentOpen",
@@ -319,25 +318,29 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
     purpose: "Titular institucional, lista de noticias o videos, y métricas.",
     titleKey: "title",
     steps: [
-      coverStep(),
       {
         id: "entradas",
-        title: "Noticias",
+        title: "Secuencia de noticias",
         description:
-          "Hasta cuatro entradas. Cada una puede ser una noticia o un video con su portada.",
+          "Hasta doce entradas. Cada noticia lleva su propio texto y medio; termina una y recién entonces entra la siguiente.",
         fields: [
-          { type: "text", key: "badge", label: "Antetítulo de la ficha" },
-          { type: "text", key: "title", label: "Título de la ficha" },
           {
             type: "list",
             key: "entries",
             label: "Entradas",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "title", label: "Titular" },
               { key: "meta", label: "Detalle" },
               { key: "kind", label: "Tipo", type: "select", options: NEWS_KIND_OPTIONS },
-              { key: "duration", label: "Duración (si es video)" },
+              {
+                key: "displaySeconds",
+                label: "Segundos en pantalla (imagen)",
+              },
+              {
+                key: "maxVideoSeconds",
+                label: "Límite de seguridad del video (segundos)",
+              },
               { key: "media", label: "Portada", type: "media" },
             ],
           },
@@ -437,13 +440,13 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
       {
         id: "ubicaciones",
         title: "Ubicaciones",
-        description: "Hasta seis dependencias con su piso o sala.",
+        description: "Hasta doce dependencias con su piso o sala.",
         fields: [
           {
             type: "list",
             key: "locations",
             label: "Dependencias",
-            max: 6,
+            max: 12,
             itemFields: [
               { key: "label", label: "Dependencia" },
               { key: "place", label: "Ubicación" },
@@ -481,7 +484,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
             type: "list",
             key: "items",
             label: "Reconocimientos",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "name", label: "Nombre o logro" },
               { key: "role", label: "Cargo o distinción" },
@@ -503,12 +506,29 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
       {
         id: "evento",
         title: "Evento",
-        description: "Qué se está transmitiendo.",
+        description:
+          "Pegue el enlace de YouTube Live, YouTube, Vimeo o un video directo. La transmisión se abrirá dentro del marco institucional.",
         fields: [
-          { type: "media", key: "media", label: "Video o imagen" },
+          {
+            type: "text",
+            key: "streamUrl",
+            label: "Enlace de la transmisión",
+            placeholder: "https://www.youtube.com/live/...",
+            hint: "En YouTube pulse Compartir y pegue aquí el enlace. Vacío: se usa el medio de respaldo.",
+          },
+          {
+            type: "media",
+            key: "media",
+            label: "Imagen o video de respaldo",
+            hint: "Se muestra antes del inicio o cuando no hay enlace en vivo.",
+          },
           { type: "text", key: "badge", label: "Distintivo (En vivo)" },
+          { type: "text", key: "eventType", label: "Tipo de evento" },
           { type: "text", key: "title", label: "Título del evento" },
           { type: "text", key: "speaker", label: "Sustentante o expositor" },
+          { type: "text", key: "dateLabel", label: "Fecha" },
+          { type: "text", key: "timeLabel", label: "Hora" },
+          { type: "text", key: "place", label: "Lugar o sala" },
         ],
       },
       {
@@ -520,7 +540,7 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
             type: "list",
             key: "schedule",
             label: "Momentos",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "time", label: "Hora" },
               { key: "label", label: "Momento" },
@@ -586,13 +606,13 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         id: "programas",
         title: "Programas",
         description:
-          "Hasta cuatro. La fecha corta se pinta grande sobre la portada.",
+          "Hasta doce. Se muestran cuatro por página con movimiento automático.",
         fields: [
           {
             type: "list",
             key: "programs",
             label: "Programas",
-            max: 4,
+            max: 12,
             itemFields: [
               { key: "name", label: "Nombre del programa" },
               { key: "type", label: "Nivel" },
@@ -677,6 +697,39 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
         fields: [
           { type: "textarea", key: "quote", label: "Frase institucional" },
           { type: "textarea", key: "message", label: "Mensaje" },
+          ...qrFields(),
+        ],
+      },
+    ],
+  },
+
+  homenaje: {
+    kind: "homenaje",
+    label: "Fecha especial u homenaje",
+    purpose:
+      "Saludos por fechas festivas, homenajes y mensajes especiales con video de una autoridad.",
+    titleKey: "title",
+    steps: [
+      {
+        id: "ocasion",
+        title: "Fecha y mensaje",
+        description: "La ocasión y el texto principal que se leerá en pantalla.",
+        fields: [
+          { type: "text", key: "occasion", label: "Fecha u ocasión" },
+          { type: "text", key: "badge", label: "Distintivo" },
+          { type: "text", key: "title", label: "Título del homenaje" },
+          { type: "textarea", key: "quote", label: "Frase destacada" },
+          { type: "textarea", key: "message", label: "Mensaje completo" },
+        ],
+      },
+      {
+        id: "autoridad",
+        title: "Video y firma",
+        description: "Video o imagen de la autoridad que brinda el mensaje.",
+        fields: [
+          { type: "media", key: "media", label: "Video o imagen del homenaje" },
+          { type: "text", key: "name", label: "Nombre de la autoridad" },
+          { type: "text", key: "authority", label: "Cargo" },
           ...qrFields(),
         ],
       },

@@ -13,6 +13,7 @@ import { GaleriaView } from "./GaleriaView";
 import { MantenimientoView } from "./MantenimientoView";
 import { EmergenciaView } from "./EmergenciaView";
 import { BackupView } from "./BackupView";
+import { HomenajeView } from "./HomenajeView";
 import {
   BienvenidaView,
   ReconocimientosView,
@@ -25,16 +26,23 @@ import {
  * Selecciona la plantilla institucional según el tipo de contenido. Ante un
  * tipo desconocido muestra el respaldo institucional (nunca pantalla negra).
  */
-export function ViewRenderer({ content }: { content: ViewContent }) {
+export function ViewRenderer({
+  content,
+  onComplete,
+}: {
+  content: ViewContent;
+  /** La vista avisa cuando agotó su cola interna o terminó su medio. */
+  onComplete?: () => void;
+}) {
   switch (content.kind) {
     case "programacion_general":
-      return <ProgramacionGeneralView content={content} />;
+      return <ProgramacionGeneralView content={content} onComplete={onComplete} />;
     case "agenda":
       return <AgendaView content={content} />;
     case "programa_destacado":
       return <ProgramaDestacadoView content={content} />;
     case "noticias":
-      return <NoticiasView content={content} />;
+      return <NoticiasView content={content} onComplete={onComplete} />;
     case "comunicado":
       return <ComunicadoView content={content} />;
     case "proximos_inicios":
@@ -53,6 +61,8 @@ export function ViewRenderer({ content }: { content: ViewContent }) {
       return <TestimonioView content={content} />;
     case "mensaje":
       return <MensajeView content={content} />;
+    case "homenaje":
+      return <HomenajeView content={content} />;
     case "galeria":
       return <GaleriaView content={content} />;
     case "sincronizacion":

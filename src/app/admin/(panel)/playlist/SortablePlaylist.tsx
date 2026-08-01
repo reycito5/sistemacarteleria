@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/Field";
 export interface SortableItem {
   id: string;
   contentTitle: string;
+  contentKind: string;
   durationSeconds: number;
 }
 
@@ -92,11 +93,20 @@ function Row({
         {index + 1}
       </span>
 
-      <span className="min-w-0 flex-1 truncate text-sm font-semibold text-ui-ink">
-        {item.contentTitle}
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-semibold text-ui-ink">
+          {item.contentTitle}
+        </span>
+        <span className="mt-0.5 block text-[11px] font-medium text-ui-muted">
+          {item.contentKind === "noticias"
+            ? "Duración automática: reproduce toda la cola"
+            : item.contentKind === "evento_vivo"
+              ? "En vivo: permanece durante el tiempo indicado"
+              : "Duración de la plantilla"}
+        </span>
       </span>
 
-      <span className="flex shrink-0 items-center gap-1">
+      <span className={`shrink-0 items-center gap-1 ${item.contentKind === "noticias" ? "hidden" : "flex"}`}>
         <Input
           type="number"
           min={1}

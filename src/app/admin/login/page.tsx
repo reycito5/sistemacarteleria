@@ -39,7 +39,7 @@ export default function LoginPage() {
         <div>
           <div className="flex items-center gap-3">
             <span className="grid h-12 w-12 place-items-center rounded-[12px] border border-brand-red/50 bg-white/10 text-base font-black text-brand-red">
-              UB
+              UAB
             </span>
             <div>
               <p className="text-[11px] font-bold tracking-[0.24em] text-brand-red">
@@ -94,7 +94,7 @@ export default function LoginPage() {
           {/* Marca compacta, sólo en móvil (la columna azul está oculta). */}
           <div className="mb-7 flex items-center gap-3 lg:hidden">
             <span className="grid h-11 w-11 place-items-center rounded-[12px] bg-brand-ink-deep text-sm font-black text-brand-red">
-              UB
+              UAB
             </span>
             <div>
               <p className="text-[10px] font-bold tracking-[0.2em] text-brand-red">

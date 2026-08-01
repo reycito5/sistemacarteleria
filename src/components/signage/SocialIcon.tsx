@@ -16,7 +16,7 @@ const PATHS: Record<string, string> = {
   youtube:
     "M21.58 7.19a2.5 2.5 0 0 0-1.76-1.77C18.25 5 12 5 12 5s-6.25 0-7.82.42A2.5 2.5 0 0 0 2.42 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .42 4.81 2.5 2.5 0 0 0 1.76 1.77C5.75 19 12 19 12 19s6.25 0 7.82-.42a2.5 2.5 0 0 0 1.76-1.77A26 26 0 0 0 22 12a26 26 0 0 0-.42-4.81ZM10 15.02V8.98L15.2 12 10 15.02Z",
   tiktok:
-    "M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5 2.59 2.59 0 1 1 .77-5.06V9.7a5.68 5.68 0 0 0-.77-.05A5.65 5.65 0 1 0 15.54 15.3V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.28 4.28 0 0 1-3.24-1.48Z",
+    "M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07Z",
   x: "M17.53 3h3.2l-6.99 7.99L22 21h-6.44l-5.05-6.6L4.73 21H1.53l7.48-8.55L1.5 3h6.6l4.56 6.03L17.53 3Zm-1.12 16.06h1.77L7.68 4.85H5.78l10.63 14.21Z",
   twitter:
     "M17.53 3h3.2l-6.99 7.99L22 21h-6.44l-5.05-6.6L4.73 21H1.53l7.48-8.55L1.5 3h6.6l4.56 6.03L17.53 3Zm-1.12 16.06h1.77L7.68 4.85H5.78l10.63 14.21Z",
@@ -32,6 +32,24 @@ const ALIASES: Record<string, string> = {
   yt: "youtube",
   "twitter/x": "x",
   wa: "whatsapp",
+  "tik tok": "tiktok",
+  "tik-tok": "tiktok",
+};
+
+/**
+ * Fondo de marca de cada red para el badge redondeado. Instagram lleva su
+ * degradado característico; el resto, su color sólido oficial.
+ */
+const BRAND_BG: Record<string, string> = {
+  facebook: "#1877F2",
+  instagram:
+    "radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%)",
+  tiktok: "#010101",
+  youtube: "#FF0000",
+  x: "#010101",
+  twitter: "#010101",
+  linkedin: "#0A66C2",
+  whatsapp: "#25D366",
 };
 
 /** Normaliza el nombre escrito por el usuario a una clave de icono. */
@@ -49,25 +67,46 @@ export function SocialIcon({
   name,
   size = 34,
   className = "",
+  variant = "badge",
 }: {
   name: string;
   size?: number;
   className?: string;
+  /** `badge`: sello redondeado con el color de la marca. `glyph`: sólo trazo. */
+  variant?: "badge" | "glyph";
 }) {
   const key = keyFor(name);
   if (!key) return null;
-  return (
+
+  const glyph = (
     <svg
       viewBox="0 0 24 24"
-      width={size}
-      height={size}
+      width={variant === "badge" ? Math.round(size * 0.6) : size}
+      height={variant === "badge" ? Math.round(size * 0.6) : size}
       fill="currentColor"
       role="img"
       aria-label={name}
-      className={className}
+      className={variant === "badge" ? "" : className}
     >
       <path d={PATHS[key]} />
     </svg>
+  );
+
+  if (variant === "glyph") return glyph;
+
+  return (
+    <span
+      aria-label={name}
+      role="img"
+      className={`inline-grid shrink-0 place-items-center rounded-[26%] text-white ring-1 ring-white/15 ${className}`}
+      style={{
+        width: size,
+        height: size,
+        background: BRAND_BG[key] ?? "#334155",
+      }}
+    >
+      {glyph}
+    </span>
   );
 }
 

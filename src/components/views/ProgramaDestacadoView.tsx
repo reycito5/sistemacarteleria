@@ -4,13 +4,11 @@ import {
   CardHead,
   FieldGrid,
   PhotoPanel,
-  PullQuote,
   QrStrip,
   SigBadge,
   SigCard,
   type FieldEntry,
 } from "@/components/signage/primitives";
-import { T } from "@/components/signage/scale";
 
 /**
  * Vista 3 — Programa destacado.
@@ -32,8 +30,6 @@ export function ProgramaDestacadoView({
       ["Créditos", content.credits],
       ["Horas académicas", content.hours],
       ["Teléfonos", content.phones],
-      ["Dirigido a", content.audience],
-      ["Dirección", content.address],
     ] as const
   )
     .filter(([, value]) => Boolean(value))
@@ -47,7 +43,12 @@ export function ProgramaDestacadoView({
   return (
     <>
       {/* Medio limpio: se ve el afiche o el video sin texto encima. */}
-      <PhotoPanel span={4} media={content.media} flag={false} />
+      <PhotoPanel
+        span={4}
+        media={content.media}
+        flag={false}
+        posterFrame
+      />
 
       <SigCard span={8}>
         <CardHead
@@ -79,22 +80,16 @@ export function ProgramaDestacadoView({
 
           {content.description && (
             <p
-              className="line-clamp-4 max-w-[96%] leading-[1.45] text-sig-text-soft"
-              style={{ fontSize: T.body }}
+              className="max-w-[97%] leading-[1.35] text-sig-text-soft"
+              style={{ fontSize: content.description.length > 180 ? 19 : content.description.length > 110 ? 22 : 25 }}
             >
               {content.description}
             </p>
           )}
 
-          <div className="mt-4.5">
+          <div className="mt-4">
             <FieldGrid fields={fields.slice(0, 8)} columns={4} />
           </div>
-
-          {content.quote && (
-            <div className="mt-5">
-              <PullQuote size={16.5}>{content.quote}</PullQuote>
-            </div>
-          )}
         </CardBody>
         {content.qrCaption && (
           <QrStrip label={content.qrCaption} url={content.qrUrl} />

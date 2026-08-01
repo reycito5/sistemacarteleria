@@ -106,8 +106,6 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
     credits: "20 créditos",
     hours: "800 horas académicas",
     phones: "72811478 · 71125341",
-    audience: "Todos los profesionales",
-    address: "Oficinas del Vicerrectorado de Posgrado",
     enrollmentOpen: true,
     quote: "Excelencia académica · Compromiso · Gestión",
     qrCaption: "Ver ficha completa e inscribirse",
@@ -126,23 +124,27 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
         title: "Convenio de cooperación académica con CEMLA",
         meta: "Fortalece la oferta de diplomados en tributación.",
         kind: "noticia",
+        displaySeconds: 12,
       },
       {
         title: "Resumen del año académico 2025",
         meta: "Memoria audiovisual de logros institucionales",
         kind: "video",
         duration: "2:14",
+        displaySeconds: 12,
       },
       {
         title: "Nueva convocatoria: Maestría en Educación Superior",
         meta: "Inscripciones abiertas hasta el 17 de agosto de 2026",
         kind: "noticia",
+        displaySeconds: 14,
       },
       {
         title: "Testimonios de egresados 2025",
         meta: "Historias de titulación y aplicación profesional",
         kind: "video",
         duration: "3:08",
+        displaySeconds: 12,
       },
     ],
     stats: [
@@ -253,8 +255,13 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
   {
     kind: "evento_vivo",
     badge: "En vivo",
+    eventType: "Defensa doctoral",
     title: "Defensa pública de tesis doctoral",
     speaker: 'Modelo de Gestión Educativa "COMUNICA" · Doctorado en Educación Superior',
+    dateLabel: "Viernes, 31 de julio de 2026",
+    timeLabel: "09:00",
+    place: "Sala de Defensas · Posgrado UABJB",
+    streamUrl: "",
     schedule: [
       { time: "08:30", label: "Apertura y presentación del tribunal" },
       { time: "09:00", label: "Exposición del sustentante" },
@@ -281,6 +288,17 @@ const SAMPLE_INPUTS: ViewContentInput[] = [
       "Formar posgraduados con pertinencia amazónica es nuestro compromiso: cada programa responde a una necesidad real del Beni y de Bolivia.",
     message:
       "Desde el Posgrado impulsamos la formación, la investigación y el liderazgo al servicio del desarrollo regional.",
+  },
+  {
+    kind: "homenaje",
+    occasion: "1 de mayo · Día del Trabajador",
+    badge: "Homenaje institucional",
+    title: "A quienes construyen cada día el futuro del Beni",
+    quote: "El trabajo comprometido transforma la educación y nuestra región.",
+    message:
+      "El Vicerrectorado de Posgrado saluda y reconoce a cada trabajadora y trabajador de nuestra comunidad universitaria por su dedicación, vocación de servicio y aporte permanente.",
+    name: "Dr. Camilo Antonio Rosas Ardaya, Ph.D.",
+    authority: "Vicerrector de Posgrado · UABJB",
   },
   {
     kind: "sincronizacion",

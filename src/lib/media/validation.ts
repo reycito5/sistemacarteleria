@@ -1,4 +1,5 @@
 import type { MediaType } from "@/lib/supabase/database.types";
+import type { MediaCategory } from "@/lib/media/categories";
 
 /**
  * Validación de archivos multimedia (secciones 24 y 25 del prompt maestro).
@@ -21,6 +22,7 @@ export const MEDIA_LIMITS = {
 
 /** Resolución institucional recomendada (Full HD 16:9). */
 export const RECOMMENDED = { width: 1920, height: 1080, aspect: 16 / 9 } as const;
+export const RECOMMENDED_POSTER = { width: 1080, height: 1350, aspect: 4 / 5 } as const;
 
 export interface FileMeta {
   name: string;
@@ -93,8 +95,29 @@ export function is16by9(width: number, height: number, tolerance = 0.02): boolea
   return Math.abs(width / height - RECOMMENDED.aspect) <= tolerance;
 }
 
+export function is4by5(width: number, height: number, tolerance = 0.03): boolean {
+  if (width <= 0 || height <= 0) return false;
+  return Math.abs(width / height - RECOMMENDED_POSTER.aspect) <= tolerance;
+}
+
+export function hasRecommendedAspect(
+  width: number,
+  height: number,
+  mediaType: MediaType,
+  category: MediaCategory,
+): boolean {
+  if (mediaType === "image" && category === "programa_destacado") {
+    return is4by5(width, height);
+  }
+  return is16by9(width, height);
+}
+
 /** Genera una ruta de almacenamiento segura y única para el asset. */
-export function buildStoragePath(mediaType: MediaType, fileName: string): string {
+export function buildStoragePath(
+  mediaType: MediaType,
+  fileName: string,
+  category: MediaCategory = "general",
+): string {
   const ext = extensionOf(fileName) || (mediaType === "video" ? ".mp4" : ".jpg");
   const slug = fileName
     .slice(0, fileName.lastIndexOf(".") === -1 ? undefined : fileName.lastIndexOf("."))
@@ -106,5 +129,5 @@ export function buildStoragePath(mediaType: MediaType, fileName: string): string
     .slice(0, 40) || "archivo";
   const stamp = Date.now().toString(36);
   const rand = Math.random().toString(36).slice(2, 8);
-  return `${mediaType}/${stamp}-${rand}-${slug}${ext}`;
+  return `plantillas/${category}/${mediaType}/${stamp}-${rand}-${slug}${ext}`;
 }

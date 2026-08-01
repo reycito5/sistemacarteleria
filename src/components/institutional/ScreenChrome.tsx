@@ -50,14 +50,14 @@ function HeaderClock() {
     : "--:--";
 
   return (
-    <div className="ml-auto shrink-0 whitespace-nowrap pl-12 text-right">
+    <div className="ml-auto shrink-0 whitespace-nowrap border-l border-white/15 pl-10 text-right">
       <p
         className="font-semibold capitalize text-white/60"
         style={{ fontSize: T.meta }}
       >
         {date}
       </p>
-      <p className="mt-1 font-mono text-[76px] font-bold leading-none tracking-tight text-white">
+      <p className="mt-1 font-mono text-[62px] font-bold leading-none tracking-tight text-white">
         {time}
       </p>
     </div>
@@ -80,13 +80,13 @@ function LogoSlot({
       <img
         src={url}
         alt=""
-        className="h-[104px] w-auto max-w-[230px] shrink-0 object-contain"
+        className="h-[112px] w-auto max-w-[190px] shrink-0 object-contain"
       />
     );
   }
   return (
     <div
-      className={`grid h-[104px] w-[104px] shrink-0 place-items-center border-2 border-white/55 font-serif text-[30px] font-bold text-white ${
+      className={`grid h-[104px] w-[104px] shrink-0 place-items-center border-2 border-white/55 font-serif text-[28px] font-extrabold text-white ${
         round ? "rounded-full" : "rounded-[6px]"
       }`}
     >
@@ -108,7 +108,7 @@ export function ScreenHeader({
 }) {
   return (
     <header
-      className={`relative flex h-[206px] shrink-0 items-center overflow-hidden px-[52px] ${
+      className={`relative flex h-[184px] shrink-0 items-center overflow-hidden px-[52px] ${
         emergency ? "bg-sig-red-deep" : "bg-sig-ink"
       }`}
     >
@@ -121,39 +121,37 @@ export function ScreenHeader({
       />
 
       <div className="relative z-[2] flex w-full items-center">
-        <div className="flex shrink-0 items-center gap-6">
-          <LogoSlot url={identity.logoPrimaryUrl} fallback="UAB" />
-          <span aria-hidden className="h-[68px] w-px bg-white/25" />
-          {identity.logoSecondaryUrl ? (
-            <LogoSlot url={identity.logoSecondaryUrl} fallback="" round={false} />
+        {/* Una sola marca, acompañada por una jerarquía institucional de tres niveles. */}
+        <div className="flex shrink-0 items-center">
+          {identity.logoPrimaryUrl || identity.logoSecondaryUrl ? (
+            <LogoSlot
+              url={identity.logoPrimaryUrl ?? identity.logoSecondaryUrl}
+              fallback="UAB"
+              round={false}
+            />
           ) : (
-            <p className="font-serif text-[26px] font-bold leading-[1.2] text-white/85">
-              Posgrado
-              <br />
-              UABJB
-            </p>
+            <LogoSlot url={null} fallback="UAB" round={false} />
           )}
         </div>
 
-        <div className="min-w-0 pl-[34px]">
+        <div className="min-w-0 pl-[30px]">
           <p
-            className="truncate font-medium text-white/60"
-            style={{ fontSize: T.meta }}
+            className="truncate font-sans font-extrabold leading-[1.08] tracking-[-0.025em] text-white"
+            style={{ fontSize: 30 }}
           >
             {identity.universityName}
           </p>
-          <p className="mt-1 font-serif text-[50px] font-bold leading-none text-white">
+          <p
+            className="mt-1 truncate font-sans font-bold leading-[1.12] tracking-[-0.015em] text-white/90"
+            style={{ fontSize: 24 }}
+          >
             {identity.vicerrectorateName}
           </p>
           <p
-            className="mt-2.5 inline-flex items-center gap-2.5 font-semibold uppercase tracking-[0.1em] text-white/75"
-            style={{ fontSize: 20 }}
+            className="mt-1.5 truncate font-sans font-semibold uppercase leading-[1.15] tracking-[.055em] text-[#b8c3e8]"
+            style={{ fontSize: 17 }}
           >
-            <span
-              aria-hidden
-              className="h-[9px] w-[9px] shrink-0 rounded-full bg-sig-red"
-            />
-            Acreditado internacionalmente · CIEES (México)
+            Acreditado internacionalmente · CIEES – México
           </p>
         </div>
 
@@ -169,21 +167,26 @@ export function ScreenHeader({
  */
 export function ScreenTicker({ identity }: { identity: InstitutionIdentity }) {
   return (
-    <div className="relative flex h-[100px] shrink-0 items-center gap-7 overflow-hidden bg-sig-ink px-[52px]">
+    <div className="relative flex h-[84px] shrink-0 items-center gap-6 overflow-hidden bg-sig-ink px-[52px]">
       <span aria-hidden className="absolute inset-x-0 top-0 h-[4px] bg-sig-red" />
 
       <span
-        className="shrink-0 bg-sig-red px-6 py-3 font-bold uppercase tracking-[.12em] text-white"
-        style={{ fontSize: T.eyebrow }}
+        className="shrink-0 bg-sig-red px-5 py-2.5 font-bold uppercase tracking-[.12em] text-white"
+        style={{ fontSize: 19 }}
       >
         {identity.tickerLabel}
       </span>
-      <p
-        className="min-w-0 flex-1 truncate font-serif font-medium italic text-white/90"
-        style={{ fontSize: T.bodyLg }}
-      >
-        {identity.tickerText}
-      </p>
+      {/* Una sola instancia en movimiento: nunca aparecen dos frases simultáneas. */}
+      <div className="sig-marquee-mask min-w-0 flex-1 overflow-hidden">
+        <div className="sig-marquee">
+          <span
+            className="font-sans font-medium text-white/90"
+            style={{ fontSize: 27 }}
+          >
+            {identity.tickerText}
+          </span>
+        </div>
+      </div>
 
       {/* Contacto compacto + redes (lo esencial del antiguo pie). */}
       <div className="flex shrink-0 items-center gap-6">

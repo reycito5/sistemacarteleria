@@ -6,6 +6,7 @@ import {
   FileVideo,
   ImageIcon,
   LibraryBig,
+  FolderOpen,
   Play,
   Search,
   Trash2,
@@ -19,6 +20,11 @@ import { Button } from "@/components/ui/Button";
 import { Alert } from "@/components/ui/Alert";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Input } from "@/components/ui/Field";
+import {
+  MEDIA_CATEGORIES,
+  categoryLabel,
+  type MediaCategory,
+} from "@/lib/media/categories";
 
 function humanSize(bytes: number | null): string {
   if (!bytes) return "—";
@@ -47,6 +53,7 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("todos");
+  const [category, setCategory] = useState<MediaCategory | "todos">("todos");
   const [preview, setPreview] = useState<MediaAssetSummary | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
 
@@ -62,8 +69,9 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
 
   const visible = assets.filter((a) => {
     const matchesType = filter === "todos" || a.type === filter;
+    const matchesCategory = category === "todos" || a.category === category;
     const matchesQuery = a.title.toLowerCase().includes(query.trim().toLowerCase());
-    return matchesType && matchesQuery;
+    return matchesType && matchesCategory && matchesQuery;
   });
 
   if (assets.length === 0) {
@@ -112,6 +120,36 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
               ].join(" ")}
             >
               {f.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex max-w-full gap-1 overflow-x-auto rounded-[10px] border border-ui-border bg-ui-raised p-1">
+          <button
+            type="button"
+            onClick={() => setCategory("todos")}
+            className={`whitespace-nowrap rounded-[7px] px-3 py-1.5 text-xs font-bold transition ${
+              category === "todos"
+                ? "bg-ui-surface text-brand-ink shadow-[var(--shadow-ui-sm)]"
+                : "text-ui-muted hover:text-ui-ink"
+            }`}
+          >
+            Todas las plantillas
+          </button>
+          {MEDIA_CATEGORIES.filter((item) =>
+            assets.some((asset) => asset.category === item.id),
+          ).map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setCategory(item.id)}
+              className={`whitespace-nowrap rounded-[7px] px-3 py-1.5 text-xs font-bold transition ${
+                category === item.id
+                  ? "bg-ui-surface text-brand-ink shadow-[var(--shadow-ui-sm)]"
+                  : "text-ui-muted hover:text-ui-ink"
+              }`}
+            >
+              {item.label}
             </button>
           ))}
         </div>
@@ -195,6 +233,10 @@ export function MediaList({ assets }: { assets: MediaAssetSummary[] }) {
                   </div>
 
                   <p className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs text-ui-muted">
+                    <span className="flex items-center gap-1 font-semibold text-brand-ink-soft">
+                      <FolderOpen size={12} aria-hidden />
+                      {categoryLabel(a.category)}
+                    </span>
                     <span className="flex items-center gap-1">
                       {a.type === "video" ? (
                         <FileVideo size={12} aria-hidden />

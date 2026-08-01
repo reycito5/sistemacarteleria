@@ -73,6 +73,30 @@ export default function PreviewPage() {
       </section>
 
       <section className="mx-auto max-w-[1180px] px-4 py-12 sm:px-6 sm:py-16">
+        <div className="mb-10 grid gap-4 md:grid-cols-3">
+          <div className="ui-card p-6">
+            <p className="text-[11px] font-black uppercase tracking-[.16em] text-brand-red">Noticias</p>
+            <h2 className="mt-2 text-lg font-black text-brand-ink">Una cola, sin mezclas</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ui-muted">
+              Empieza por la primera entrada. Las imágenes respetan sus segundos; los videos esperan su final. La playlist avanza después de la última.
+            </p>
+          </div>
+          <div className="ui-card p-6">
+            <p className="text-[11px] font-black uppercase tracking-[.16em] text-brand-red">Oferta académica</p>
+            <h2 className="mt-2 text-lg font-black text-brand-ink">Un programa por pantalla</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ui-muted">
+              Cada afiche 4:5 se muestra completo con su ficha, estado, fecha y QR. Al terminar la cola continúa la programación.
+            </p>
+          </div>
+          <div className="ui-card p-6">
+            <p className="text-[11px] font-black uppercase tracking-[.16em] text-brand-red">Transmisión en vivo</p>
+            <h2 className="mt-2 text-lg font-black text-brand-ink">Pegue el enlace y publique</h2>
+            <p className="mt-2 text-sm leading-relaxed text-ui-muted">
+              En la plantilla «Evento en vivo», pegue el enlace compartido de YouTube Live, YouTube, Vimeo o un MP4 directo y defina su tiempo en la playlist.
+            </p>
+          </div>
+        </div>
+
         <div className="grid gap-8 lg:grid-cols-2">
           {SAMPLE_VIEWS.map((content, i) => {
             const meta = metaFor(content.kind);

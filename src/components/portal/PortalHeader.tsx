@@ -17,36 +17,31 @@ export function PortalHeader({ logoUrl = null }: { logoUrl?: string | null }) {
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
-    <header className="sticky top-0 z-40">
-      {/* Franja institucional superior */}
-      <div className="ui-gradient-inst px-4 py-1.5 sm:px-6">
-        <p className="mx-auto max-w-[1180px] text-center text-[10px] font-bold tracking-[0.16em] text-brand-white/85 sm:text-[11px]">
-          {INSTITUTION.university}
-        </p>
-      </div>
-      <div className="inst-rule" />
-
+    <header className="sticky top-0 z-40 border-t-[3px] border-brand-red">
       <div className="border-b border-ui-border bg-ui-surface/92 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-[1180px] items-center gap-4 px-4 sm:px-6">
+        <div className="mx-auto flex h-[82px] max-w-[1180px] items-center gap-4 px-4 sm:px-6">
           <Link href="/" className="flex items-center gap-3 transition hover:opacity-85">
             {logoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={logoUrl}
                 alt="Vicerrectorado de Posgrado — UABJB"
-                className="h-11 w-auto max-w-[150px] shrink-0 object-contain"
+                className="h-[62px] w-auto max-w-[92px] shrink-0 object-contain"
               />
             ) : (
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-brand-ink-deep text-sm font-black text-brand-red">
-                UB
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-[10px] bg-brand-ink-deep text-sm font-black text-brand-red">
+                UAB
               </span>
             )}
-            <span className="min-w-0">
-              <span className="block text-[9px] font-bold tracking-[0.2em] text-brand-red">
+            <span className="min-w-0 leading-none">
+              <span className="block truncate text-[12px] font-extrabold leading-[1.1] tracking-[-0.02em] text-brand-ink sm:text-[14px]">
+                {INSTITUTION.university}
+              </span>
+              <span className="mt-1 block truncate text-[10px] font-bold leading-[1.15] tracking-[-0.01em] text-brand-ink/85 sm:text-[12px]">
                 {INSTITUTION.vicerrectorate}
               </span>
-              <span className="block truncate text-[15px] font-black leading-tight text-brand-ink">
-                {INSTITUTION.commercialName}
+              <span className="mt-1 block truncate text-[8px] font-semibold uppercase leading-[1.15] tracking-[.04em] text-brand-red sm:text-[9px]">
+                Acreditado internacionalmente · CIEES – México
               </span>
             </span>
           </Link>

@@ -15,6 +15,7 @@ interface FieldRendererProps {
   values: Values;
   mediaOptions: MediaOption[];
   onChange: (key: string, value: unknown) => void;
+  contentKind: string;
 }
 
 /**
@@ -28,6 +29,7 @@ export function FieldRenderer({
   values,
   mediaOptions,
   onChange,
+  contentKind,
 }: FieldRendererProps) {
   const id = `f-${field.key}`;
 
@@ -111,6 +113,7 @@ export function FieldRenderer({
       >
         <MediaPicker
           options={mediaOptions}
+          expectedCategory={contentKind}
           value={values[field.key] as { assetId?: string } | undefined}
           onChange={(media: SelectedMedia | undefined) =>
             onChange(field.key, media)
@@ -194,6 +197,7 @@ export function FieldRenderer({
                         <Field label={itf.label}>
                           <MediaPicker
                             options={mediaOptions}
+                            expectedCategory={contentKind}
                             value={
                               item[itf.key] as { assetId?: string } | undefined
                             }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { MessageCircle, Phone } from "lucide-react";
+import { ExternalLink, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { INSTITUTION, INSTITUTIONAL_CONTACTS } from "@/lib/design/tokens";
 import { PORTAL_LINKS } from "@/lib/portal/navigation";
 
@@ -15,18 +15,21 @@ export function PortalFooter() {
     <footer className="mt-auto">
       <div className="inst-rule" />
       <div className="ui-gradient-inst text-brand-white">
-        <div className="mx-auto grid max-w-[1180px] gap-8 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr]">
+        <div className="mx-auto grid max-w-[1180px] gap-9 px-4 py-12 sm:px-6 md:grid-cols-2 xl:grid-cols-[1.05fr_0.72fr_1.2fr_1.15fr]">
           <div>
             <div className="flex items-center gap-3">
               <span className="grid h-11 w-11 place-items-center rounded-[10px] border border-brand-red/45 bg-white/10 text-sm font-black text-brand-red">
-                UB
+                UAB
               </span>
               <div>
-                <p className="text-[10px] font-bold tracking-[0.2em] text-brand-red">
-                  {INSTITUTION.systemName}
+                <p className="text-[13px] font-extrabold leading-[1.15] text-white">
+                  {INSTITUTION.university}
                 </p>
-                <p className="text-[15px] font-black leading-tight">
-                  {INSTITUTION.commercialName}
+                <p className="mt-1 text-[11px] font-bold leading-[1.2] text-white/85">
+                  {INSTITUTION.vicerrectorate}
+                </p>
+                <p className="mt-1 text-[9px] font-semibold uppercase leading-[1.2] tracking-[.04em] text-brand-red">
+                  Acreditado internacionalmente · CIEES – México
                 </p>
               </div>
             </div>
@@ -63,10 +66,7 @@ export function PortalFooter() {
                 </li>
               ))}
             </ul>
-          </nav>
-
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
+            <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
               Sistema
             </p>
             <ul className="mt-3 space-y-2">
@@ -81,9 +81,11 @@ export function PortalFooter() {
                 </li>
               ))}
             </ul>
+          </nav>
 
-            <p className="mt-6 text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
-              Informaciones
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
+              Contacto
             </p>
             <ul className="mt-3 space-y-2">
               {INSTITUTIONAL_CONTACTS.phones.map((phone, i) => (
@@ -99,13 +101,46 @@ export function PortalFooter() {
                   <span className="ui-tnum">{phone}</span>
                 </li>
               ))}
+              <li className="flex items-start gap-2 text-[13px] leading-relaxed text-white/70">
+                <Mail size={14} className="mt-0.5 shrink-0 text-brand-red" aria-hidden />
+                <span className="break-all">escuelaposgrado@uabjb.edu.bo</span>
+              </li>
+              <li className="flex items-start gap-2 text-[13px] leading-relaxed text-white/70">
+                <MapPin size={14} className="mt-0.5 shrink-0 text-brand-red" aria-hidden />
+                <span>Zona Virgen de Loreto, intersección Av. 6 de Agosto, Trinidad</span>
+              </li>
             </ul>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-red">
+                Ubicación
+              </p>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Vicerrectorado+de+Posgrado+UABJB+Trinidad+Bolivia"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-[11px] font-semibold text-white/65 transition hover:text-white"
+              >
+                Abrir mapa <ExternalLink size={12} aria-hidden />
+              </a>
+            </div>
+            <div className="mt-3 overflow-hidden rounded-[14px] border border-white/15 bg-white/5 p-1.5 shadow-2xl">
+              <iframe
+                title="Ubicación del Vicerrectorado de Posgrado UABJB"
+                src="https://www.google.com/maps?q=Vicerrectorado%20de%20Posgrado%20UABJB%20Trinidad%20Bolivia&output=embed"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                className="h-[180px] w-full rounded-[10px] border-0"
+              />
+            </div>
           </div>
         </div>
 
         <div className="border-t border-white/10">
           <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-2 px-4 py-4 text-[11px] text-white/45 sm:px-6">
-            <p>{INSTITUTION.university}</p>
+            <p>© 2026 Vicerrectorado de Posgrado UABJB</p>
             <p>Grupo {INSTITUTION.generalGroup}</p>
           </div>
         </div>

@@ -15,19 +15,19 @@ export const T = {
   /** Texto secundario: metadatos, pies, notas. */
   meta: 24,
   /** Cuerpo de lectura. */
-  body: 28,
+  body: 26,
   /** Cuerpo destacado. */
-  bodyLg: 32,
+  bodyLg: 30,
   /** Título de tarjeta. */
-  cardTitle: 42,
+  cardTitle: 38,
   /** Nombre de programa, fila de listado. */
-  itemTitle: 34,
+  itemTitle: 31,
   /** Titular de pantalla. */
-  headline: 64,
+  headline: 58,
   /** Titular de máximo impacto (comunicado, emergencia). */
-  hero: 84,
+  hero: 76,
   /** Cifras y datos protagonistas. */
-  stat: 72,
+  stat: 64,
 } as const;
 
 /** Grosores tipográficos usados en la cartelería. */

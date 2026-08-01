@@ -7,6 +7,7 @@ import {
   type PlaylistItemLike,
 } from "@/lib/player/manifest";
 import { signMediaPaths } from "@/lib/media/storage";
+import { collectStoredMediaRefs } from "@/lib/media/walkMedia";
 import { emergenciaSchema, type EmergenciaContent } from "@/lib/views/schemas";
 
 type Client = SupabaseClient<Database>;
@@ -104,30 +105,26 @@ async function signManifestMedia(
   supabase: Client,
   manifest: PlayerManifest,
 ): Promise<void> {
-  type MediaLike = {
-    path?: string;
-    src?: string;
-    subtitlePath?: string;
-    subtitleSrc?: string;
-  };
   const paths = new Set<string>();
   for (const item of manifest.items) {
-    const media = (item.content as { media?: MediaLike }).media;
-    if (media?.path) paths.add(media.path);
-    if (media?.subtitlePath) paths.add(media.subtitlePath);
+    for (const media of collectStoredMediaRefs(item.content)) {
+      if (media.path) paths.add(media.path);
+      if (media.subtitlePath) paths.add(media.subtitlePath);
+    }
   }
   if (paths.size === 0) return;
 
   const signed = await signMediaPaths(supabase, [...paths]);
   for (const item of manifest.items) {
-    const media = (item.content as { media?: MediaLike }).media;
-    if (media?.path) {
-      const url = signed.get(media.path);
-      if (url) media.src = url;
-    }
-    if (media?.subtitlePath) {
-      const url = signed.get(media.subtitlePath);
-      if (url) media.subtitleSrc = url;
+    for (const media of collectStoredMediaRefs(item.content)) {
+      if (media.path) {
+        const url = signed.get(media.path);
+        if (url) media.src = url;
+      }
+      if (media.subtitlePath) {
+        const url = signed.get(media.subtitlePath);
+        if (url) media.subtitleSrc = url;
+      }
     }
   }
 }

@@ -27,16 +27,21 @@ interface PlayerClientProps {
  * Reproductor institucional (Fases 5/6/7/8).
  *
  *  - Offline-first: arranca desde la caché local y refresca el manifiesto.
- *  - Sincronización por hora oficial: todas las pantallas coinciden (1–3 s).
+ *  - Alineación inicial por hora oficial y avance por final real de contenido.
  *  - Prioridad absoluta de emergencia (sección 16).
  *  - Heartbeats periódicos (sección 27). Nunca deja la pantalla en negro.
  */
 export function PlayerClient({ screenCode }: PlayerClientProps) {
   const [manifest, setManifest] = useState<PlayerManifest | null>(null);
   const [index, setIndex] = useState(0);
+  // Distingue cada reproducción aunque la playlist vuelva al mismo índice.
+  // Es imprescindible cuando existe una sola plantilla: 0 -> 0 también debe
+  // desmontar la vista y reiniciar su cola interna.
+  const [playbackCycle, setPlaybackCycle] = useState(0);
   const [online, setOnline] = useState(true);
   const manifestRef = useRef<PlayerManifest | null>(null);
   const indexRef = useRef(0);
+  const manifestKeyRef = useRef("");
 
   // Identidad de la pantalla: prop de la URL o la guardada al activarse.
   const [resolvedCode] = useState<string | undefined>(() => {
@@ -67,6 +72,22 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
       if (cancelled) return;
       manifestRef.current = next;
       setManifest(next);
+      const key = `${next.playlistId}:${next.version}`;
+      if (manifestKeyRef.current !== key && next.items.length > 0) {
+        const syncItems: SyncItem[] = next.items.map((item) => ({
+          id: item.id,
+          durationSeconds: item.durationSeconds,
+        }));
+        const initial = computePosition(
+          syncItems,
+          next.officialStartAt,
+          Date.now(),
+        );
+        const initialIndex = initial?.index ?? 0;
+        indexRef.current = initialIndex;
+        setIndex(initialIndex);
+        manifestKeyRef.current = key;
+      }
     };
 
     const fetchManifest = async () => {
@@ -98,23 +119,13 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
     };
   }, []);
 
-  // Bucle de sincronización (1 s).
-  useEffect(() => {
-    const tick = () => {
-      const m = manifestRef.current;
-      if (!m || m.items.length === 0) return;
-      const syncItems: SyncItem[] = m.items.map((it) => ({
-        id: it.id,
-        durationSeconds: it.durationSeconds,
-      }));
-      const pos = computePosition(syncItems, m.officialStartAt, Date.now());
-      const next = pos ? pos.index : 0;
-      indexRef.current = next;
-      setIndex(next);
-    };
-    tick();
-    const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+  const advance = useCallback(() => {
+    const currentManifest = manifestRef.current;
+    if (!currentManifest || currentManifest.items.length === 0) return;
+    const next = (indexRef.current + 1) % currentManifest.items.length;
+    indexRef.current = next;
+    setIndex(next);
+    setPlaybackCycle((cycle) => cycle + 1);
   }, []);
 
   // Heartbeats de estado (sección 27).
@@ -146,6 +157,21 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
     const id = setInterval(sendHeartbeat, HEARTBEAT_MS);
     return () => clearInterval(id);
   }, [resolvedCode, sendHeartbeat]);
+
+  const currentItem = manifest?.items[Math.min(index, manifest.items.length - 1)];
+  const controlsOwnCompletion =
+    currentItem?.content.kind === "noticias" ||
+    currentItem?.content.kind === "programacion_general";
+
+  useEffect(() => {
+    indexRef.current = index;
+    if (!currentItem || controlsOwnCompletion) return;
+    const timer = window.setTimeout(
+      advance,
+      Math.max(1, currentItem.durationSeconds) * 1000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [advance, controlsOwnCompletion, currentItem, index]);
 
   // Identidad institucional: llega en el manifiesto (también desde la caché).
   const identity = manifest?.identity ?? DEFAULT_IDENTITY;
@@ -184,13 +210,19 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
   }
 
   // 3) Programación normal.
-  const item = manifest.items[Math.min(index, manifest.items.length - 1)];
+  const item = currentItem ?? manifest.items[0];
   const mode = screenModeFor(item.content);
 
   return (
     <div className="kiosk-root">
       <ScreenFrame identity={identity} {...mode}>
-        <ViewRenderer content={item.content} />
+        {/* Una pieza nueva desmonta por completo la anterior: ningún video
+            oculto puede continuar reproduciéndose o conservando audio. */}
+        <ViewRenderer
+          key={`${item.id}:${manifest.version}:${playbackCycle}`}
+          content={item.content}
+          onComplete={advance}
+        />
       </ScreenFrame>
       {!online && (
         <div className="pointer-events-none absolute right-3 top-3 rounded bg-black/60 px-3 py-1 text-xs font-bold text-white">

@@ -57,6 +57,7 @@ export function SignageMedia({
   fit = "cover",
 }: SignageMediaProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const completedSrcRef = useRef<string | undefined>(undefined);
   const [brokenSrc, setBrokenSrc] = useState<string | undefined>();
   // El sonido está pedido pero el navegador lo bloquea hasta un gesto: se
   // muestra un aviso para tocar y activarlo (garantía en cualquier navegador).
@@ -69,6 +70,16 @@ export function SignageMedia({
   // a mano en el editor). Nota: el valor histórico por defecto era `true`, así
   // que aquí el sonido se considera deseado salvo que se marque `silent`.
   const wantsSound = media?.silent !== true;
+
+  useEffect(() => {
+    completedSrcRef.current = undefined;
+  }, [src]);
+
+  const completePlayback = () => {
+    if (!src || completedSrcRef.current === src) return;
+    completedSrcRef.current = src;
+    onEnded?.();
+  };
 
   useEffect(() => {
     if (!video) return;
@@ -241,7 +252,16 @@ export function SignageMedia({
             setBrokenSrc(src);
             onPlaybackError?.();
           }}
-          onEnded={onEnded}
+          onEnded={completePlayback}
+          onTimeUpdate={(event) => {
+            // Algunos televisores/navegadores no emiten `ended` en archivos
+            // remotos. El tiempo real ofrece una segunda señal determinista.
+            if (loop) return;
+            const { currentTime, duration } = event.currentTarget;
+            if (Number.isFinite(duration) && duration > 0 && currentTime >= duration - 0.25) {
+              completePlayback();
+            }
+          }}
           onPlay={(event) =>
             claimExclusivePlayback(event.currentTarget, !event.currentTarget.muted)
           }

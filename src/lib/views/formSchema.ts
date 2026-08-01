@@ -337,6 +337,10 @@ export const FORM_SCHEMAS: Record<EditableKind, FormSchema> = {
                 key: "displaySeconds",
                 label: "Segundos en pantalla (imagen)",
               },
+              {
+                key: "maxVideoSeconds",
+                label: "Límite de seguridad del video (segundos)",
+              },
               { key: "media", label: "Portada", type: "media" },
             ],
           },

@@ -32,12 +32,15 @@ export const mediaRefSchema = z.object({
 });
 export type MediaRef = z.infer<typeof mediaRefSchema>;
 
-function displaySecondsSchema(defaultSeconds: number) {
+function secondsSchema(defaultSeconds: number, min = 4, max = 120) {
   return z.preprocess(
     (value) => (value === "" || value === null ? undefined : value),
-    z.coerce.number().min(4).max(120).default(defaultSeconds),
+    z.coerce.number().min(min).max(max).default(defaultSeconds),
   );
 }
+
+const displaySecondsSchema = (defaultSeconds: number) =>
+  secondsSchema(defaultSeconds);
 
 export const offerItemSchema = z.object({
   title: z.string().min(1),
@@ -97,6 +100,8 @@ export const newsEntrySchema = z.object({
   duration: z.string().default(""),
   /** Tiempo visible para una noticia con imagen; un video usa su fin real. */
   displaySeconds: displaySecondsSchema(12),
+  /** Respaldo si el navegador o el archivo nunca notifican el final real. */
+  maxVideoSeconds: secondsSchema(900, 15, 7200),
   media: mediaRefSchema.optional(),
 });
 

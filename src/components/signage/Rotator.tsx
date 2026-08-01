@@ -66,11 +66,14 @@ export function useSequentialRotator(
     typeof seconds === "function" ? seconds(safeIndex) : seconds;
 
   useEffect(() => {
-    if (itemCount <= 1) return;
+    if (itemCount <= 0) return;
+    // Una cola finita con un solo elemento sí debe terminar. Sólo un rotador
+    // infinito de un elemento puede quedarse quieto sin temporizador.
+    if (itemCount === 1 && loop) return;
     if (!shouldAutoAdvance) return;
     const id = window.setTimeout(advance, Math.max(1, activeSeconds) * 1000);
     return () => window.clearTimeout(id);
-  }, [activeSeconds, advance, itemCount, safeIndex, shouldAutoAdvance]);
+  }, [activeSeconds, advance, itemCount, loop, safeIndex, shouldAutoAdvance]);
 
   return { index: safeIndex, advance };
 }

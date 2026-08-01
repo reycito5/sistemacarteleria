@@ -6,7 +6,6 @@ import type {
   MensajeContent,
 } from "@/lib/views/schemas";
 import {
-  AgendaRow,
   CardBody,
   CardHead,
   Eyebrow,
@@ -25,6 +24,7 @@ import { T } from "@/components/signage/scale";
 import { VerticalPager } from "@/components/signage/VerticalPager";
 import { AutoFitText } from "@/components/signage/AutoFitText";
 import { LiveStreamMedia } from "@/components/signage/LiveStreamMedia";
+import { QrCode } from "@/components/signage/QrCode";
 
 /** Vista 7 — Bienvenida y orientación al visitante. */
 export function BienvenidaView({ content }: { content: BienvenidaContent }) {
@@ -176,17 +176,20 @@ export function EventoVivoView({ content }: { content: EventoVivoContent }) {
 
       <SigCard span={4}>
         <CardHead eyebrow={content.eventType} title="Ficha del evento" />
-        <CardBody>
+        <CardBody className="px-[30px] pb-[22px] pt-[14px]">
           {eventDetails.length > 0 && (
-            <div className="mb-5 grid gap-px bg-sig-rule">
+            <div
+              className="mb-5 grid shrink-0 gap-px overflow-hidden rounded-md border border-sig-rule bg-sig-rule"
+              style={{ gridTemplateColumns: `repeat(${eventDetails.length}, minmax(0, 1fr))` }}
+            >
               {eventDetails.map(([label, value]) => (
-                <div key={label} className="grid grid-cols-[92px_1fr] gap-4 bg-sig-card px-5 py-4">
+                <div key={label} className="min-w-0 bg-[#faf9f6] px-4 py-3.5">
                   <Eyebrow>{label}</Eyebrow>
                   <AutoFitText
-                    className="font-serif font-bold leading-[1.15] text-sig-ink"
-                    maxSize={22}
-                    minSize={15}
-                    maxHeight={54}
+                    className="mt-2 font-serif font-bold leading-[1.12] text-sig-ink"
+                    maxSize={18}
+                    minSize={12}
+                    maxHeight={48}
                   >
                     {value}
                   </AutoFitText>
@@ -195,12 +198,40 @@ export function EventoVivoView({ content }: { content: EventoVivoContent }) {
             </div>
           )}
           {content.schedule.length > 0 ? (
-            <VerticalPager
-              pageSize={3}
-              items={content.schedule.map((s, i) => (
-                <AgendaRow key={i} time={s.time} title={s.label} />
-              ))}
-            />
+            <div className="flex min-h-0 flex-1 flex-col">
+              <div className="mb-2 flex shrink-0 items-center justify-between">
+                <Eyebrow>Desarrollo del evento</Eyebrow>
+                <span className="font-mono text-[13px] font-bold uppercase tracking-[.12em] text-sig-text-faint">
+                  Agenda en curso
+                </span>
+              </div>
+              <VerticalPager
+                pageSize={2}
+                seconds={8}
+                className="rounded-md border border-sig-rule bg-[#fcfbf8] px-4"
+                items={content.schedule.map((s, i) => (
+                  <div
+                    key={i}
+                    className="grid min-h-0 flex-1 grid-cols-[52px_78px_1fr] items-center gap-3 border-b border-sig-rule py-3 last:border-b-0"
+                  >
+                    <span className="grid h-9 w-9 place-items-center rounded-full bg-sig-ink font-mono text-[13px] font-bold text-white">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="font-mono text-[19px] font-bold text-sig-red">
+                      {s.time}
+                    </span>
+                    <AutoFitText
+                      className="font-serif font-bold leading-[1.12] text-sig-ink"
+                      maxSize={21}
+                      minSize={14}
+                      maxHeight={54}
+                    >
+                      {s.label}
+                    </AutoFitText>
+                  </div>
+                ))}
+              />
+            </div>
           ) : (
             <div className="flex flex-1 items-center justify-center text-center">
               <p className="max-w-[360px] text-[20px] leading-relaxed text-sig-text-soft">
@@ -210,7 +241,26 @@ export function EventoVivoView({ content }: { content: EventoVivoContent }) {
           )}
         </CardBody>
         {content.qrCaption && (
-          <QrStrip label={content.qrCaption} url={content.qrUrl || content.streamUrl} />
+          <div className="flex shrink-0 items-center gap-5 border-t-4 border-sig-red bg-sig-ink px-[30px] py-4 text-white">
+            {(content.qrUrl || content.streamUrl) && (
+              <div className="shrink-0 rounded bg-white p-2">
+                <QrCode value={content.qrUrl || content.streamUrl} size={76} />
+              </div>
+            )}
+            <div className="min-w-0">
+              <p className="font-mono text-[13px] font-bold uppercase tracking-[.16em] text-white/55">
+                Acceso directo
+              </p>
+              <AutoFitText
+                className="mt-1 font-serif font-bold leading-[1.08] text-white"
+                maxSize={23}
+                minSize={15}
+                maxHeight={52}
+              >
+                {content.qrCaption}
+              </AutoFitText>
+            </div>
+          </div>
         )}
       </SigCard>
     </>

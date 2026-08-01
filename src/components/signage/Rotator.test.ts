@@ -22,4 +22,8 @@ describe("nextSequenceStep", () => {
   it("avanza en orden antes del final", () => {
     expect(nextSequenceStep(0, 3, false)).toEqual({ index: 1, complete: false });
   });
+
+  it("finaliza una cola que contiene una sola pieza", () => {
+    expect(nextSequenceStep(0, 1, false)).toEqual({ index: 0, complete: true });
+  });
 });

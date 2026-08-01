@@ -34,6 +34,10 @@ interface PlayerClientProps {
 export function PlayerClient({ screenCode }: PlayerClientProps) {
   const [manifest, setManifest] = useState<PlayerManifest | null>(null);
   const [index, setIndex] = useState(0);
+  // Distingue cada reproducción aunque la playlist vuelva al mismo índice.
+  // Es imprescindible cuando existe una sola plantilla: 0 -> 0 también debe
+  // desmontar la vista y reiniciar su cola interna.
+  const [playbackCycle, setPlaybackCycle] = useState(0);
   const [online, setOnline] = useState(true);
   const manifestRef = useRef<PlayerManifest | null>(null);
   const indexRef = useRef(0);
@@ -121,6 +125,7 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
     const next = (indexRef.current + 1) % currentManifest.items.length;
     indexRef.current = next;
     setIndex(next);
+    setPlaybackCycle((cycle) => cycle + 1);
   }, []);
 
   // Heartbeats de estado (sección 27).
@@ -214,7 +219,7 @@ export function PlayerClient({ screenCode }: PlayerClientProps) {
         {/* Una pieza nueva desmonta por completo la anterior: ningún video
             oculto puede continuar reproduciéndose o conservando audio. */}
         <ViewRenderer
-          key={`${item.id}:${manifest.version}`}
+          key={`${item.id}:${manifest.version}:${playbackCycle}`}
           content={item.content}
           onComplete={advance}
         />

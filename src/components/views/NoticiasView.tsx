@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import type { NoticiasContent } from "@/lib/views/schemas";
 import {
   CardBody,
@@ -35,6 +36,7 @@ export function NoticiasView({
           kind: "noticia" as const,
           duration: "",
           displaySeconds: 12,
+          maxVideoSeconds: 900,
           media: undefined,
         }));
 
@@ -48,6 +50,7 @@ export function NoticiasView({
             kind: "noticia" as const,
             duration: "",
             displaySeconds: 12,
+            maxVideoSeconds: 900,
             media: content.media,
           },
         ];
@@ -74,6 +77,17 @@ export function NoticiasView({
   const entryMedia = entry.media ?? (index === 0 ? content.media : undefined);
   const playsVideo = entry.kind === "video" && isVideoRef(entryMedia);
   const queueLabel = `${String(index + 1).padStart(2, "0")} / ${String(normalized.length).padStart(2, "0")}`;
+
+  useEffect(() => {
+    if (!playsVideo) return;
+    // Última red de seguridad: un MP4 incompleto, un CDN interrumpido o un
+    // navegador que nunca emita `ended` no puede secuestrar la programación.
+    const timer = window.setTimeout(
+      advance,
+      Math.max(15, entry.maxVideoSeconds ?? 900) * 1000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [advance, entry.maxVideoSeconds, index, playsVideo]);
 
   return (
     <div
